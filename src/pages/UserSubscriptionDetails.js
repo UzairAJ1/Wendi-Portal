@@ -63,16 +63,14 @@ const UserSubscriptionDetails = () => {
     <Container component="main" maxWidth="100%" sx={{ width: '90%' }}>
       <StyledCard sx={{ width: "100%" }}>
       <Card>
-        <CardHeader title="User Subscription Details" style={{ fontSize: "55px" }} >
-        title={
-            <Typography variant="h6" sx={{ fontSize: "55px", }}>
-              User Subscription Details
-            </Typography>
-          }
-          </CardHeader >
+      
         <CardContent>
+
+        <Typography variant="h4" sx={{}}>
+              User Subscription Details
+            </Typography> 
         <Typography variant="h5">
-        Username:
+        Username: John
             {/* Username: {editedUser.username} */}
           </Typography>
           <PaymentPanel
@@ -89,16 +87,16 @@ const UserSubscriptionDetails = () => {
             color="primary"
             // onClick={() => onUpdatePaymentMethods(['Credit Card', 'PayPal', 'Bitcoin'])}
             onClick={()=>{
-                navigate("/dashboard/paymentdetailspage")
+                navigate("/subscribers")
             }}
             sx={{ margin: "15px 0px 20px 0px", background: '#4A276B' }}
           >
-            Back to subscriber details    
+            Back to subscribers    
           </StyledButton>
     {/* </CenteredContainer> */}
 
     </StyledCard>
-      </Container>
+      </Container> 
   );
 };
 
@@ -116,13 +114,13 @@ const PaymentPanel = ({ subscriptionStatus, paymentMethods, paymentHistory, onUp
 const SubscriptionStatus = ({ status, onUpdateSubscription }) => {
   return (
     <div>
-      <Typography variant="h6">Subscription Status</Typography>
-      <Typography>Status: {status}</Typography>
+      <Typography variant="h5">Subscription Status: Active</Typography>
+      {/* <Typography>Status: {status}</Typography> */}
       <StyledButton
             variant="contained"
             color="primary"
             onClick={() => onUpdateSubscription('Active')}
-            sx={{ margin: "5px 5px 10px 0px", background: '#4A276B' }}
+            sx={{ margin: "5px 10px 10px 0px", background: '#4A276B' }}
           >
           Activate
           </StyledButton>
@@ -156,7 +154,7 @@ const SubscriptionStatus = ({ status, onUpdateSubscription }) => {
 const PaymentMethods = ({ paymentMethods, onUpdatePaymentMethods }) => {
   return (
     <div>
-      <Typography variant="h6">Payment Methods</Typography>
+      <Typography variant="h5">Payment Methods:</Typography>
       <List>
         {paymentMethods.map((method, index) => (
           <ListItem key={index}>
@@ -172,7 +170,7 @@ const PaymentMethods = ({ paymentMethods, onUpdatePaymentMethods }) => {
 const PaymentHistory = ({ history }) => {
   return (
     <div>
-      <Typography variant="h6">Payment History</Typography>
+      <Typography variant="h5">Payment History:</Typography>
       <List>
         {history.map((entry, index) => (
           <ListItem key={index}>
@@ -187,7 +185,7 @@ const PaymentHistory = ({ history }) => {
 const AdminActions = () => {
   return (
     <div style={{display:"flex", flexDirection:"column"}}>
-      <Typography variant="h6">Subscription</Typography>
+      <Typography variant="h5">Subscription:</Typography>
       <FormControl fullWidth required margin="normal">
       <InputLabel sx={{width:"80%"}}>Select</InputLabel>
                 <Select

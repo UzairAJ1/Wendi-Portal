@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-
+import { faker } from '@faker-js/faker';
 import React, { useRef, useState, useEffect } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -41,11 +41,11 @@ import { useSuccess } from '../SuccessContext';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'report', label: 'Report', alignRight: false },
+//   { id: 'email', label: 'Email', alignRight: false },
   // { id: 'role', label: 'Role', alignRight: false },
   // { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+//   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
 
@@ -80,7 +80,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserPage() {
+export default function Reports() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(null);
   const [page, setPage] = useState(0);
@@ -88,7 +88,6 @@ export default function UserPage() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [isSuccessMessageShown, setSuccessMessageShown] = useState(false);
@@ -202,15 +201,15 @@ export default function UserPage() {
 }, [isSuccessMessageShown]);
   return (
     <>
-      <Helmet>
+      {/* <Helmet>
         <title> User | Wendi UI </title>
       
-      </Helmet>
+      </Helmet> */}
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Reports
           </Typography>
   
           {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} sx={{ background: '#4A276B' }}
@@ -222,9 +221,18 @@ export default function UserPage() {
           </Button> */}
         </Stack>
 
-        <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} placeholder="Search user..."/>
+        <Card> 
+            <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
 
+          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} placeholder="Filter Reports..."/>
+          <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginRight:"20px"}}
+          onClick={()=>{
+            // navigate('/reports');
+          }} 
+          >
+            Export
+          </Button>
+          </div>
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -239,15 +247,15 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, email, avatarUrl, isVerified } = row;
+                    const { id, name, fakeReportTitle, report ,role, status, email, avatarUrl, isVerified } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}
                       sx={{cursor: "pointer"}}
-                      onClick = {()=>{
-                        setShowUserDetails(true);
-                      }}
+                    //   onClick = {()=>{
+                    //     setShowUserDetails(true);
+                    //   }} 
                       >
                         {showUserDetails  && 
                           navigate('/userdetails')
@@ -264,12 +272,12 @@ export default function UserPage() {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar
+                            {/* <Avatar
                               sx={{ cursor: 'pointer' }}
                               alt={name}
                               src={avatarUrl}
-                              // onClick={() => fileInputRef.current.click()} 
-                            />
+                       
+                            /> */}
 
                             {/* Hidden file input */}
                             <input
@@ -294,24 +302,26 @@ export default function UserPage() {
                             )}
 
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                                {fakeReportTitle}
+                                {faker.lorem.words()}{" "}Report 
+                              {/* {name} */}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{email}</TableCell>
+                        {/* <TableCell align="left">{email}</TableCell> */}
 
                         {/* <TableCell align="left">{role}</TableCell> */}
 
                         {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell> */}
 
-                        <TableCell align="left">
+                        {/* <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell>
+                        </TableCell> */}
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                            <Iconify icon={'eva:more-vertical-fill'} />
+                            {/* <Iconify icon={'eva:more-vertical-fill'} /> */}
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -391,7 +401,13 @@ export default function UserPage() {
           Delete
         </MenuItem>
       </Popover>
-
+      <Button variant="contained" sx={{ background: '#4A276B',  margin:"30px 0px 30px 50px"}}
+          onClick={()=>{
+            navigate('/dashboard/reportandanalytics');
+          }}
+          >
+            Back to Report and analytics
+          </Button>
       <ToastContainer />
     </>
   );

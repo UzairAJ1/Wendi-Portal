@@ -144,6 +144,17 @@ function NewUser() {
         >
           Add New User
         </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ backgroundColor: '#4A276B', marginTop: '16px' }}
+          onClick = {()=>{
+            navigate("/dashboard/user")
+          }}
+        >
+          Cancel
+        </Button>
       </form>
       <ToastContainer />
     </Container>

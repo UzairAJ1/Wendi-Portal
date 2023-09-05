@@ -50,8 +50,8 @@ const useStyles = {
   },
 };
 
-function SupportAndFeedbackScreen() {
-  const navigate = useNavigate();
+function FeedbackManagement() {
+    const navigate = useNavigate();
   const theme = useTheme();
   const [tickets, setTickets] = useState([]);
   const [newTicket, setNewTicket] = useState('');
@@ -120,41 +120,38 @@ function SupportAndFeedbackScreen() {
     <>
     <FormContainer maxWidth="md" >
       <Typography variant="h5" gutterBottom sx={{paddingTop: "0px"}}>
-        Ticket Management
+        Feedback Management
       </Typography>
 
       {/* Display the list of tickets */}
       <div>
         {ticketsBackend.map((ticket, index) => (
           <StyledPaper elevation={3}>
-            <div key={ticket.id} style={{ marginTop: '20px' }}>
-              <strong>Ticket #{ticket.id}</strong> - {ticket.title}
-              <br />
-              User: {ticket.user}
-              <br />
-              Issue Description: {ticket.description}
-              <br />
-              Priority: {ticket.priority}
-              <br />
-              Agent assignedbgg: {ticket.agent} 
-              <br />
-              {/* Status: {ticket.status} */}
+            <div key={ticket.id}>
+
               {/* Additional ticket details */}
               <FormControl fullWidth required margin="normal">
-                <InputLabel>Agent</InputLabel>
-                <Select
-                  value={supportAgent[index]}
-                  onChange={(event) => {
-                    const newSupportAgents = [...supportAgent];
-                    newSupportAgents[index] = event.target.value;
-                    setSupportagent(newSupportAgents);
-                  }}
-                >
-                  <MenuItem value="agentOne">Agent 1</MenuItem>
-                  <MenuItem value="agentTwo">Agent 2</MenuItem>
-                  <MenuItem value="agentThree">Agent 3</MenuItem>
-                </Select>
-                <StyledButton
+              <Typography variant="h6" gutterBottom sx={{paddingTop: "0px"}}>
+        User name:
+      </Typography>
+           
+                <Typography variant="h6" gutterBottom style={{ marginTop: '5px' }}>
+                  Feedback: {ticket.feedback}
+                </Typography>
+                <TextareaAutosize
+      aria-label="Message for user"
+      placeholder="Enter your message here"
+      style={{ width: '100%', height: '100px', resize: 'none'  }} 
+      rowsMin={3}  
+      required
+      margin="normal"
+      onChange={(event) => {
+        const newMessage = [...message];
+        newMessage[index] = event.target.value;
+        setMessage(newMessage);
+      }}
+        />
+              <StyledButton
             variant="contained"
             color="primary"
             // onClick={() => onUpdatePaymentMethods(['Credit Card', 'PayPal', 'Bitcoin'])}
@@ -163,27 +160,25 @@ function SupportAndFeedbackScreen() {
             }}
             sx={{ margin: "15px 0px 20px 0px", background: '#4A276B' }}
           >
-            Assign Agent
+            Send Message
           </StyledButton>
-                <Typography variant="h6" gutterBottom style={{ marginTop: '10px' }}>
-                  Status: {ticket.status}
-                </Typography>
               </FormControl>
             </div>
           </StyledPaper>
         ))}
       </div>
-      <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginRight:"20px", width:"195px", marginTop:"20px"}}
+      <Button variant="contained" sx={{ background: '#4A276B', marginTop:"20px", height: "50px", marginRight:"20px", width:"195px"}}
           onClick={()=>{
             navigate('/dashboard/supportfour'); 
           }}
           > 
             Back 
           </Button>
-     
+      {/* ... other functionalities ... */}
     </FormContainer>
+  
 </>
   );
 }
 
-export default SupportAndFeedbackScreen;
+export default FeedbackManagement;

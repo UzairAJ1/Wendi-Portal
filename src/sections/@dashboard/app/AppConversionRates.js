@@ -42,8 +42,8 @@ export default function AppConversionRates({ title, subheader, chartData, ...oth
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
 
-      <Box sx={{ mx: 3 }} dir="ltr">
-        <ReactApexChart type="bar" series={[{ data: chartSeries }]} options={chartOptions} height={364} />
+      <Box sx={{ mx: 3, }} dir="ltr">
+        <ReactApexChart type="bar" series={[{ data: chartSeries, color: '#4A276B', fontSize:"33px" }]} options={chartOptions} height={364} />
       </Box>
     </Card>
   );

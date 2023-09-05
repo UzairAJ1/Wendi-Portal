@@ -65,12 +65,15 @@ export default function LoginForm() {
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+          <div>
         <Checkbox name="remember" label="Remember me"  
         onChange = {(e)=>{
           setRememberMe(e.target.checked)
         }}
         />
-        <Link variant="subtitle2" to="/forgotpassword" underline="hover" style={{cursor:"pointer"}}>
+       <Link style={{textDecoration:"none"}} onClick={handleForgotPasswordClick}>Remember me</Link> 
+       </div>
+        <Link variant="subtitle2" to="" underline="hover" style={{cursor:"pointer"}}>
          <Link onClick={handleForgotPasswordClick}>Forgot password?</Link> 
         </Link>
       </Stack>

@@ -121,7 +121,7 @@ function TaskItem({ task, checked, onChange }) {
       />
 
       <IconButton size="large" color="inherit" sx={{ opacity: 0.48 }} onClick={handleOpenMenu}>
-        <Iconify icon={'eva:more-vertical-fill'} />
+        {/* <Iconify icon={'eva:more-vertical-fill'} /> */}
       </IconButton>
 
       <Popover

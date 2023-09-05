@@ -99,7 +99,6 @@ export default function UserPage() {
 
  // tostify
  const { showSuccess, setShowSuccess } = useSuccess();
-
  
   // Existing state variables
   const [selectedFile, setSelectedFile] = useState(null);
@@ -390,8 +389,14 @@ export default function UserPage() {
           Delete
         </MenuItem>
       </Popover>
-
-      <ToastContainer />
+          <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginLeft: "40px", marginTop: "30px"}}
+          onClick={()=>{
+            navigate("/dashboard/payments")
+          }} 
+          >
+            Back to Payment menu
+          </Button>
+      <ToastContainer /> 
     </>
   );
 }

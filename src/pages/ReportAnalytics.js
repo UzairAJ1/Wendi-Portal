@@ -2,7 +2,8 @@ import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography } from '@mui/material';
+import { Grid, Container, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 // components
 import Iconify from '../components/iconify';
 // sections
@@ -21,13 +22,91 @@ import {
 
 function ReportAnalytics() {
     const theme = useTheme();
+    const navigate = useNavigate();
 
   return (
     <Container maxWidth="lg">
+      <div style={{
+        display:"flex",
+        justifyContent: "space-between",
+        margin :"0px 0px 70px 0px", 
+      }}> 
       <Typography variant="h4" gutterBottom>
         Reporting and Analytics
       </Typography>
+      <Button variant="contained" sx={{ background: '#4A276B',  }}
+          onClick={()=>{
+            navigate('/reports');
+          }}
+          >
+            Reports
+          </Button>
+          </div>
 
+          <Grid container spacing={4} >
+          <Grid container spacing={3} justifyContent="space-around" style={{margin :"0px 0px 70px 0px",}}  >
+          <Grid item xs={12} sm={6} md={3} sx={{ m: 0, pd:0,   }}>
+            <AppWidgetSummary title="Total number of registered users" total={9000} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <AppWidgetSummary title="Active users currently using the app" total={1352831} color="info" icon={'ant-design:heart-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <AppWidgetSummary title="new user sign-ups within a specified time period" total={1723315} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+          </Grid>
+
+          {/* <Grid item xs={12} sm={6} md={3}>
+            <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
+          </Grid> */}
+          </Grid>
+          </Grid>
+          <Grid item xs={12} md={6} lg={8}>
+            <AppWebsiteVisits
+              title="User Statistics:"
+              subheader="(+43%) than last year"
+              chartLabels={[
+                '01/01/2003',
+                '02/01/2003',
+                '03/01/2003',
+                '04/01/2003',
+                '05/01/2003',
+                '06/01/2003',
+                '07/01/2003',
+                '08/01/2003',
+                '09/01/2003',
+                '10/01/2003',
+                '11/01/2003',
+              ]}
+              chartData={[
+                // {
+                //   name: 'User Retention',
+                //   type: 'column',
+                //   fill: 'solid',
+                //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                // },
+                {
+                  name: 'User Engagement',
+                  type: 'area',
+                  fill: 'gradient',
+                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                },
+                // {
+                //   name: 'Male',
+                //   type: 'line',
+                //   fill: 'solid',
+                //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                // },
+                    {
+                  name: 'User Retention',
+                  type: 'column',
+                  fill: 'solid',
+                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                },
+              ]}
+            />
+          </Grid>
 
       <Grid item xs={12} md={6} lg={8}>
             <AppConversionRates
@@ -94,7 +173,7 @@ function ReportAnalytics() {
             />
           </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppTrafficBySite
               title="Traffic by Site"
               list={[
@@ -120,7 +199,7 @@ function ReportAnalytics() {
                 },
               ]}
             />
-          </Grid>
+          </Grid> */}
 
           {/* <Grid item xs={12} md={6} lg={8}>
             <AppTasks

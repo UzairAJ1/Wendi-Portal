@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Card, CardContent, Typography, Button, Container, TextField } from '@mui/material';
+import { Card, CardContent, Typography, Button, Container, TextField, Grid, Paper, Box } from '@mui/material';
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,48 +11,88 @@ const StyledCard = styled(Card)({
 });
 
 const StyledButton = styled(Button)({
+  fontSize: '15px',
   marginTop: theme => theme.spacing(2),
 });
 
 const UserDetail = ({ user }) => {
+  const [image, setImage] = useState(null);
+  const [imageError, setImageError] = useState(false);
+
   const dispatch = useDispatch();
   const [editedUser, setEditedUser] = useState({ ...user });
   const [edit, setEdit] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
   const handleSave = () => {
     // Dispatch your Redux action here for updating user details
     // dispatch(updateUserDetails(editedUser));
   };
 
+  const handleImageChange = (event) => {
+    const selectedImage = event.target.files[0];
+    setImage(selectedImage);
+    setImageError(!selectedImage); // Set imageError to true if no image is selected
+  };
+
   return (
-    <Container component="main" maxWidth="100%" sx={{ width: '90%' }}>
-      <StyledCard sx={{ width: "100%" }}>
+    <Container component="main" maxWidth="lg" sx={{ width: '100%' }}>
+      <StyledCard sx={{ width: '95%' }}>
         <CardContent>
           <Typography variant="h5" gutterBottom>
             User Details
           </Typography>
-          <Typography variant="body1">
-            Username: {editedUser.username}
-          </Typography>
-          <Typography variant="body1">
-            Gender: {editedUser.gender}
-          </Typography>
-          <Typography variant="body1">
-            Sexual Orientation: {editedUser.gender}
-          </Typography>
-          <Typography variant="body1">
-            Email: {editedUser.gender}
-          </Typography>
-          <Typography variant="body1">
-            Profile Picture: {editedUser.gender}
-          </Typography>
-          <Typography variant="body1">
-            {editedUser.gender}
-          </Typography>
-          <Typography variant="body1">
-            Bio: {editedUser.gender}
-          </Typography>
-          {/* Display other fields like sexual orientation, email, etc. */}
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Paper elevation={3} sx={{ padding: 2 }}>
+                <Typography variant="subtitle1">
+                  Profile Picture: {editedUser.pic}
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <Paper elevation={3} sx={{ padding: 2 }}>
+                <Typography variant="subtitle1">
+                  Username: {editedUser.username}
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <Paper elevation={3} sx={{ padding: 2 }}>
+                <Typography variant="subtitle1">
+                  Gender: {editedUser.gender}
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <Paper elevation={3} sx={{ padding: 2 }}>
+                <Typography variant="subtitle1">
+                  Sexual Orientation: {editedUser.sex_orientation}
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <Paper elevation={3} sx={{ padding: 2 }}>
+                <Typography variant="subtitle1">
+                  Email: {editedUser.email}
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper elevation={3} sx={{ padding: 2 }}>
+                <Typography variant="subtitle1">
+                  Bio: {editedUser.bio}
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper elevation={3} sx={{ padding: 2 }}>
+                <Typography variant="subtitle1">
+                  Password: {editedUser.password}
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
           <StyledButton
             variant="contained"
             color="primary"
@@ -60,7 +100,7 @@ const UserDetail = ({ user }) => {
               handleSave();
               setEdit(true);
             }}
-            sx={{ margin: "10px 10px 0px 0px", background: '#4A276B'  }}
+            sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
           >
             Edit
           </StyledButton>
@@ -71,7 +111,7 @@ const UserDetail = ({ user }) => {
             onClick={() => {
               handleSave();
             }}
-            sx={{ margin: "10px 10px 0px 0px", background: '#4A276B'  }}
+            sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
           >
             Delete User
           </StyledButton>
@@ -80,41 +120,44 @@ const UserDetail = ({ user }) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              // handleSave();
-              // setEdit(true);
-              navigate("/userpayment")
+              navigate("/userpayment");
             }}
-            sx={{ margin: "10px 10px 0px 0px", background: '#4A276B'  }}
+            sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
           >
             Payment Details
           </StyledButton>
+          <StyledButton
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  navigate("/dashboard/user");
+                }}
+                sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
+              >
+                Back
+              </StyledButton>
         </CardContent>
-        
       </StyledCard>
-      <StyledButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              handleSave();
-              navigate('/dashboard/user');
-            }}
-            sx={{ margin: "10px 10px 0px 0px", background: '#4A276B'  }}
-          >
-            Back to users list
-          </StyledButton>
-
       {edit && (
-        <Container component="main" maxWidth="100%" sx={{ width: '100%', marginTop:"50px" }}>
-          <StyledCard sx={{ width: "100%" }}>
+        <Container component="main" maxWidth="lg" sx={{ width: '100%', marginTop: '50px' }}>
+          <StyledCard sx={{ width: '100%' }}>
             <CardContent>
               <Typography variant="h5" gutterBottom>
-                User Details
+                Edit Details
               </Typography>
-              {/* <Button>okk</Button> */}
+              <Button variant="outlined" component="label" htmlFor="image-input">
+                Upload Image
+                <input
+                  id="image-input"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: 'none' }}
+                />
+              </Button>
               <TextField
                 label="Username"
                 value={editedUser.username}
-                // onChange={e => handleInputChange('username', e.target.value)}
                 disabled={!edit}
                 fullWidth
                 margin="normal"
@@ -122,39 +165,34 @@ const UserDetail = ({ user }) => {
               <TextField
                 label="Gender"
                 value={editedUser.gender}
-                // onChange={e => handleInputChange('gender', e.target.value)}
                 disabled={!edit}
                 fullWidth
                 margin="normal"
               />
-                            <TextField
+              <TextField
                 label="Sexual Orientation"
                 value={editedUser.sexual_orientation}
-                // onChange={e => handleInputChange('gender', e.target.value)}
                 disabled={!edit}
                 fullWidth
                 margin="normal"
               />
-                            <TextField
-                label="Gender"
-                value={editedUser.gender}
-                // onChange={e => handleInputChange('gender', e.target.value)}
+              <TextField
+                label="Email"
+                value={editedUser.email}
                 disabled={!edit}
                 fullWidth
                 margin="normal"
               />
-                            <TextField
-                label="Profile Picture"
-                value={editedUser.profile_pic}
-                // onChange={e => handleInputChange('gender', e.target.value)}
-                disabled={!edit}
-                fullWidth
-                margin="normal"
-              />
-                            <TextField
+              <TextField
                 label="Bio"
                 value={editedUser.bio}
-                // onChange={e => handleInputChange('gender', e.target.value)}
+                disabled={!edit}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="New password"
+                value={editedUser.password}
                 disabled={!edit}
                 fullWidth
                 margin="normal"
@@ -165,9 +203,8 @@ const UserDetail = ({ user }) => {
                 onClick={() => {
                   handleSave();
                   setEdit(false);
-
                 }}
-                sx={{ margin: "10px 10px 0px 0px", background: '#4A276B'  }}
+                sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
               >
                 Save Changes
               </StyledButton>
@@ -177,9 +214,8 @@ const UserDetail = ({ user }) => {
                 onClick={() => {
                   handleSave();
                   setEdit(false);
-
                 }}
-                sx={{ margin: "10px 10px 0px 0px", background: '#4A276B'  }}
+                sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
               >
                 Cancel
               </StyledButton>

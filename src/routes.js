@@ -17,6 +17,15 @@ import NewUser from './pages/NewUser';
 import UserDetail from './pages/UserDetail';
 import UserPayment from './pages/UserPayment';
 import UserSubscriptionDetails from './pages/UserSubscriptionDetails';
+import Reports from './pages/Reports';
+import PaymentsFour from './pages/PaymentsFour'
+import PaymentGateway from './pages/PaymentGateway';
+import PaymentPlans from './pages/PaymentPlans';
+import PremiumFeatures from './pages/PremiumFeatures'; 
+import Supportfour from './pages/SupportFour';
+import FeedbackManagement from './pages/FeedbackManagement';
+import ZodiacMachine from './pages/ZodiacMachine';
+import Likes from './pages/Likes';
 
 // ----------------------------------------------------------------------
 
@@ -26,16 +35,31 @@ export default function Router() {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-
         // { element: <Navigate to="/dashboard/app" />, index: true },
+        {
+          path: 'zodiacmachine',
+          element: <ZodiacMachine/>,
+        },
+        {
+          path: 'likes',
+          element: <Likes/>,
+        },
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
-        { path: 'paymentdetailspage', element: <PaymentDetailsPage /> },
+        { path: 'payments', element: <PaymentsFour /> },
         { path: 'supportfeedback', element: <SupportFeedback /> },
-        { path: 'reportandanalytics', element: <ReportAnalytics /> },
+        {
+          path: 'reportandanalytics',
+          element: <ReportAnalytics />,
+          children: [
+      // Nested route under reportandanalytics
+          ],
+        },
+         {path: 'supportfour', element: <Supportfour/>, }, 
       ],
+  
     },
     { path:'/',
       element: <LoginPage/>, index: true
@@ -72,6 +96,39 @@ export default function Router() {
       path: '/usersubscriptiondetails',
       element: <UserSubscriptionDetails/>,
     },
+    { path: 'reports', element:
+            
+    <Reports /> 
+  }, 
+  {
+    path: '/userdetails',
+    element: <UserDetail/>,
+  },
+  {
+    path: '/subscribers',
+    element: <PaymentDetailsPage/>,
+  },
+  {
+    path: '/paymentgateway',
+    element: <PaymentGateway/>,
+  },
+  {
+    path: '/paymentplans',
+    element: <PaymentPlans/>,
+  }, 
+  {
+    path: '/premiumfeatures',
+    element: <PremiumFeatures/>,
+  }, 
+  {
+    path: '/supportandfeedback',
+    element: <SupportFeedback/>,
+  }, 
+  {
+    path: '/feedbackmanagement',
+    element: <FeedbackManagement/>,
+  }, 
+  
   ]);
 
   return routes;

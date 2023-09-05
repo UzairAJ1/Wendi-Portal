@@ -11,6 +11,16 @@ const navConfig = [
   //   path: '/login',
   //   icon: icon('ic_lock'), 
   // },
+    {
+    title: 'Zodiac Machine',
+    path: '/dashboard/zodiacmachine',
+    icon: <img src="/assets/icons/navbar/imported_icons/lever.png" alt="Support and Feedback" />,
+  },
+  {
+    title: 'Likes',
+    path: '/dashboard/likes',
+    icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/likes.svg" alt="Support and Feedback" />,
+  },
   { 
     title: 'dashboard',
     path: '/dashboard/app',
@@ -19,12 +29,12 @@ const navConfig = [
   {
     title: 'user management',
     path: '/dashboard/user',
-    icon: icon('ic_user'),
+    icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/manage.svg" alt="Support and Feedback" />,
   },
   {
     title: 'Reporting and Analytic',
     path: '/dashboard/reportandanalytics',
-    icon: icon('ic_user'),
+    icon: icon('ic_notification_mail'),
   },
   // {
   //   title: 'product',
@@ -37,27 +47,18 @@ const navConfig = [
   //   icon: icon('ic_blog'),
   // },
 
-
   {
     title: 'Support And Feedback',
-    path: '/dashboard/supportfeedback',
-    icon: icon('ic_disabled'),
+    path: '/dashboard/supportfour',
+    icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/fdback.svg" alt="Support and Feedback" />,
   },
   {
     title: 'Payments',
-    path: '/dashboard/paymentdetailspage',
-    icon: icon('ic_lock'),
+    path: '/dashboard/payments',
+    icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/payment.svg" alt="Support and Feedback" />,
   },
-  // {
-  //   title: 'Not found',
-  //   path: '/404',
-  //   icon: icon('ic_disabled'),
-  // },
-  // {
-  //   title: 'Forgot Password',
-  //   path: '/forgot-password',
-  //   icon: icon(''),
-  // },
+
+  
 ];
 
 export default navConfig;
