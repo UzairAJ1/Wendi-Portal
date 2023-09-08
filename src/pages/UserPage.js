@@ -37,7 +37,6 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 import USERLIST from '../_mock/user';
 import { useSuccess } from '../SuccessContext';
 
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -93,12 +92,11 @@ export default function UserPage() {
 
   const [isSuccessMessageShown, setSuccessMessageShown] = useState(false);
 
-  const [showUserDetails, setShowUserDetails] = useState(false)
+  const [showUserDetails, setShowUserDetails] = useState(false);
 
- // tostify
- const { showSuccess, setShowSuccess } = useSuccess();
+  // tostify
+  const { showSuccess, setShowSuccess } = useSuccess();
 
- 
   // Existing state variables
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null); // For previewing selected image
@@ -195,16 +193,16 @@ export default function UserPage() {
 
   useEffect(() => {
     if (showSuccess) {
-        toast.success('Form submitted successfully!', {
-            autoClose: 3000,
-        });
+      toast.success('Form submitted successfully!', {
+        autoClose: 3000,
+      });
     }
-}, [isSuccessMessageShown]);
+  }, [isSuccessMessageShown]);
+
   return (
     <>
       <Helmet>
         <title> User | Wendi UI </title>
-      
       </Helmet>
 
       <Container>
@@ -212,7 +210,7 @@ export default function UserPage() {
           <Typography variant="h4" gutterBottom>
             User
           </Typography>
-  
+
           {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} sx={{ background: '#4A276B' }}
           onClick={()=>{
             navigate('/newuser');
@@ -223,7 +221,12 @@ export default function UserPage() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} placeholder="Search user..."/>
+          <UserListToolbar
+            numSelected={selected.length}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            placeholder="Search user..."
+          />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -243,15 +246,20 @@ export default function UserPage() {
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="none" selected={selectedUser}
-                      sx={{cursor: "pointer",}}
-                      onClick = {()=>{
-                        setShowUserDetails(true);
-                        navigate('/userdetails');
-                      }}
+                      <TableRow
+                        hover
+                        key={id}
+                        tabIndex={-1}
+                        role="none"
+                        selected={selectedUser}
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          setShowUserDetails(true);
+                          navigate('/userdetails');
+                        }}
                       >
                         {/* {showUserDetails  &&  */}
-                          
+
                         {/* } */}
 
                         {/* <TableCell padding="checkbox"
@@ -269,7 +277,7 @@ export default function UserPage() {
                               sx={{ cursor: 'pointer' }}
                               alt={name}
                               src={avatarUrl}
-                              // onClick={() => fileInputRef.current.click()} 
+                              // onClick={() => fileInputRef.current.click()}
                             />
 
                             {/* Hidden file input */}

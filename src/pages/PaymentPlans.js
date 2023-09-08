@@ -24,20 +24,22 @@ const paymentPlans = [
 ];
 
 const PaymentPlans = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
-    <div style={{margin:"40px"}}>
-        <div style={{display:"flex", justifyContent:"space-between"}}>
-
-      <h1>Payment Plans</h1>
-      <Button variant="contained" endIcon={<Iconify icon="eva:plus-fill" />} sx={{ background: '#4A276B',  height: "50px", marginTop:"20px"}}
-          onClick={()=>{
+    <div style={{ margin: '40px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h1>Payment Plans</h1>
+        <Button
+          variant="contained"
+          endIcon={<Iconify icon="eva:plus-fill" />}
+          sx={{ background: '#4A276B', height: '50px', marginTop: '20px' }}
+          onClick={() => {
             // navigate('/dashboard/payments');
-          }} 
-          > 
-             Add
-          </Button>
-          </div>
+          }}
+        >
+          Add
+        </Button>
+      </div>
       <Grid container spacing={2}>
         {paymentPlans.map((plan, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
@@ -49,22 +51,20 @@ const PaymentPlans = () => {
                 <Typography variant="body2" color="text.secondary">
                   {plan.description}
                 </Typography>
-                <Typography variant="h5">
-                  Amount: ${plan.amount}
-                </Typography>
+                <Typography variant="h5">Amount: ${plan.amount}</Typography>
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
-      <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginTop:"20px"}}
+      {/* <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginTop:"20px"}}
           onClick={()=>{
             navigate('/dashboard/payments');
             // navigate(-1); 
           }} 
           > 
              Back to Payments Menu
-          </Button>
+          </Button> */}
     </div>
   );
 };

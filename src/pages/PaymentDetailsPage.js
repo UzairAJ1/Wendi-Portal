@@ -37,7 +37,6 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 import USERLIST from '../_mock/user';
 import { useSuccess } from '../SuccessContext';
 
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -47,7 +46,7 @@ const TABLE_HEAD = [
   // { id: 'isVerified', label: 'Verified', alignRight: false },
   { id: 'expiration', label: 'Expiration Date', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
-  
+
   // { id: '' },
 ];
 
@@ -95,11 +94,11 @@ export default function UserPage() {
 
   const [isSuccessMessageShown, setSuccessMessageShown] = useState(false);
 
-  const [showUserDetails, setShowUserDetails] = useState(false)
+  const [showUserDetails, setShowUserDetails] = useState(false);
 
- // tostify
- const { showSuccess, setShowSuccess } = useSuccess();
- 
+  // tostify
+  const { showSuccess, setShowSuccess } = useSuccess();
+
   // Existing state variables
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null); // For previewing selected image
@@ -196,21 +195,21 @@ export default function UserPage() {
 
   useEffect(() => {
     if (showSuccess) {
-        toast.success('Form submitted successfully!', {
-            autoClose: 3000,
-         
-        });
+      toast.success('Form submitted successfully!', {
+        autoClose: 3000,
+      });
     }
-    console.log("exp====", USERLIST)
-}, [isSuccessMessageShown]);
+    console.log('exp====', USERLIST);
+  }, [isSuccessMessageShown]);
+
   return (
     <>
-    <Container>
+      <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Subscribers
           </Typography>
-  
+
           {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} sx={{ background: '#4A276B' }}
           onClick={()=>{
             navigate('/newuser');
@@ -221,7 +220,12 @@ export default function UserPage() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} placeholder="Search subscriber..."/>
+          <UserListToolbar
+            numSelected={selected.length}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            placeholder="Search subscriber..."
+          />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -237,16 +241,21 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, expiration , avatarUrl, isVerified } = row;
+                    const { id, name, role, status, expiration, avatarUrl, isVerified } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}
-                      sx={{cursor: "pointer"}}
-                      onClick = {()=>{
-                        setShowUserDetails(true);
-                        navigate('/usersubscriptiondetails');
-                      }}
+                      <TableRow
+                        hover
+                        key={id}
+                        tabIndex={-1}
+                        role="checkbox"
+                        selected={selectedUser}
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          setShowUserDetails(true);
+                          navigate('/usersubscriptiondetails');
+                        }}
                       >
                         {/* {showUserDetails  && 
                        
@@ -267,7 +276,7 @@ export default function UserPage() {
                               sx={{ cursor: 'pointer' }}
                               alt={name}
                               src={avatarUrl}
-                              // onClick={() => fileInputRef.current.click()} 
+                              // onClick={() => fileInputRef.current.click()}
                             />
 
                             {/* Hidden file input */}
@@ -319,7 +328,7 @@ export default function UserPage() {
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
-                    </TableRow> 
+                    </TableRow>
                   )}
                 </TableBody>
 
@@ -381,7 +390,7 @@ export default function UserPage() {
         }}
       >
         <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} ref={anchorRef}/>
+          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} ref={anchorRef} />
           Edit
         </MenuItem>
 
@@ -390,15 +399,17 @@ export default function UserPage() {
           Delete
         </MenuItem>
       </Popover>
-          <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginLeft: "40px", marginTop: "30px"}}
-          onClick={()=>{
-            navigate("/dashboard/payments")
-            // navigate(-1); 
-          }} 
-          >
-            Back to Payment menu
-          </Button>
-      <ToastContainer /> 
+      {/* <Button
+        variant="contained"
+        sx={{ background: '#4A276B', height: '50px', marginLeft: '760px', marginTop: '30px' }}
+        onClick={() => {
+          navigate('/dashboard/payments');
+          // navigate(-1);
+        }}
+      >
+        Back to Payment menu
+      </Button> */}
+      <ToastContainer />
     </>
   );
 }

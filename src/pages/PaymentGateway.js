@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import {
-  Container,
-  Paper,
-  Typography,
-  TextField,
-  Button,
-  Grid,
-} from '@mui/material';
+import { Container, Paper, Typography, TextField, Button, Grid } from '@mui/material';
 
 function PaymentForm() {
   const navigate = useNavigate();
-  const [name, setName] = useState ('');
-  const [lastName, setLastName] = useState ('');
+  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
@@ -26,19 +19,18 @@ function PaymentForm() {
 
   const formatExpiryDate = (input) => {
     const numericInput = input.replace(/\D/g, '');
-  
+
     if (numericInput.length === 0) {
       return '';
     }
-  
+
     if (numericInput.length <= 2) {
       return numericInput;
     }
-  
+
     const formattedInput = `${numericInput.slice(0, 2)}/${numericInput.slice(2)}`;
     return formattedInput;
   };
-  
 
   const formatCvv = (input) => {
     const numericInput = input.replace(/\D/g, '');
@@ -89,7 +81,7 @@ function PaymentForm() {
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-          <Grid item xs={6}>
+            <Grid item xs={6}>
               <TextField
                 label="First Name"
                 fullWidth
@@ -103,7 +95,7 @@ function PaymentForm() {
                 }}
               />
             </Grid>
-              <Grid item xs={6}>
+            <Grid item xs={6}>
               <TextField
                 label="Last Name"
                 fullWidth
@@ -129,7 +121,7 @@ function PaymentForm() {
                 }}
               />
             </Grid>
-            
+
             <Grid item xs={6}>
               <TextField
                 label="Expiry Date (mm/yy)"
@@ -157,17 +149,17 @@ function PaymentForm() {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" color="primary" sx={{background:"#4A276B"}}>
+              <Button type="submit" variant="contained" color="primary" sx={{ background: '#4A276B' }}>
                 Submit
               </Button>
-              <Button variant="contained" sx={{ background: '#4A276B', marginLeft:"20px"}}
+              {/* <Button variant="contained" sx={{ background: '#4A276B', marginLeft:"20px"}}
           onClick={()=>{
             navigate('/dashboard/payments');
             // navigate(-1); 
           }} 
           > 
             Back to Payments Menu
-          </Button>
+          </Button> */}
             </Grid>
           </Grid>
         </form>
