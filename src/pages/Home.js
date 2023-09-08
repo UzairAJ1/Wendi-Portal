@@ -63,6 +63,7 @@ const Home = () => {
   };
 
   const handleSetLikeInteraction = () => {
+    setIsEditedLikeInteraction(true);
     // You can implement logic here to send the new values to the server
     // For now, we'll just display an alert
     alert(`Set Likes to ${likes}, Amount to ${amount}, Gift Renewal Time to ${duration} hours`);
@@ -150,7 +151,7 @@ const Home = () => {
                   value={likes}
                   onChange={handlelikesChange}
                   fullWidth
-                  disabled={isEditedLikeInteraction}
+                  disabled={!isEditedLikeInteraction}
                 />
               </Grid>
               <Grid item xs={3}>
@@ -160,7 +161,7 @@ const Home = () => {
                   value={amount}
                   onChange={handleAmountChange}
                   fullWidth
-                  disabled={isEditedLikeInteraction}
+                  disabled={!isEditedLikeInteraction}
                 />
               </Grid>
               <Grid item xs={3}>
@@ -170,7 +171,7 @@ const Home = () => {
                   value={duration}
                   onChange={handleDurationChange}
                   fullWidth
-                  disabled={isEditedLikeInteraction}
+                  disabled={!isEditedLikeInteraction}
                 />
               </Grid>
               <Grid item xs={3}>
