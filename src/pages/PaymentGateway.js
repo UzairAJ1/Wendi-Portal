@@ -163,6 +163,7 @@ function PaymentForm() {
               <Button variant="contained" sx={{ background: '#4A276B', marginLeft:"20px"}}
           onClick={()=>{
             navigate('/dashboard/payments');
+            // navigate(-1); 
           }} 
           > 
             Back to Payments Menu

@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchApi } from '../../../redux/slice/ApiCalls';
-import Iconify from '../../../components/iconify';
+// import { fetchApi } from '../../../redux/slice/ApiCalls';
 
+import { useGetDummyDataQuery } from '../../../redux/slice/ApiCalls';
+import Iconify from '../../../components/iconify';
 
 export default function LoginForm() {
   const dispatch =  useDispatch();
@@ -15,6 +16,9 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+ 
+
+  const { data, error, isLoading } = useGetDummyDataQuery();
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -25,7 +29,7 @@ export default function LoginForm() {
       rememberMe,
     };
 
-    dispatch(fetchApi(data))
+    // dispatch(fetchApi(data))
     
   console.log("data to redux", data)
   };
@@ -81,7 +85,7 @@ export default function LoginForm() {
       <LoadingButton fullWidth size="large" type="submit" variant="contained" 
      onClick={() => {
       handleClick();
-      navigate('/dashboard/app')
+      navigate('/dashboard/home')
     }}
         loading={loading} sx={{background:"#4A276B"}}>
         Login

@@ -26,6 +26,7 @@ import Supportfour from './pages/SupportFour';
 import FeedbackManagement from './pages/FeedbackManagement';
 import ZodiacMachine from './pages/ZodiacMachine';
 import Likes from './pages/Likes';
+import Home from './pages/Home';
 
 // ----------------------------------------------------------------------
 
@@ -36,27 +37,14 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         // { element: <Navigate to="/dashboard/app" />, index: true },
-        {
-          path: 'zodiacmachine',
-          element: <ZodiacMachine/>,
-        },
-        {
-          path: 'likes',
-          element: <Likes/>,
-        },
+        { path: 'home',element: <Home/>, index: true },
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
         { path: 'payments', element: <PaymentsFour /> },
         { path: 'supportfeedback', element: <SupportFeedback /> },
-        {
-          path: 'reportandanalytics',
-          element: <ReportAnalytics />,
-          children: [
-      // Nested route under reportandanalytics
-          ],
-        },
+        {path: 'reportandanalytics',element: <ReportAnalytics />},
          {path: 'supportfour', element: <Supportfour/>, }, 
       ],
   
@@ -83,10 +71,6 @@ export default function Router() {
     {
       path: '/newuser',
       element: <NewUser />,
-    },
-    {
-      path: '/userdetails',
-      element: <UserDetail />,
     },
     {
       path: '/userpayment',
@@ -128,6 +112,7 @@ export default function Router() {
     path: '/feedbackmanagement',
     element: <FeedbackManagement/>,
   }, 
+
   
   ]);
 

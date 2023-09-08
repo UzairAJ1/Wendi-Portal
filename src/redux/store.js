@@ -1,8 +1,13 @@
+// src/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import ApiCalls from './slice/ApiCalls'
+import { api } from './slice/ApiCalls';
+
+
 
 export const store = configureStore({
   reducer: {
-        Apicall: ApiCalls,
+    [api.reducerPath]: api.reducer,
   },
-})
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
+});

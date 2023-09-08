@@ -41,12 +41,12 @@ import { useSuccess } from '../SuccessContext';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'report', label: 'Report', alignRight: false },
+  { id: 'report', label: 'Report:', alignRight: false, width:"100%" },
 //   { id: 'email', label: 'Email', alignRight: false },
   // { id: 'role', label: 'Role', alignRight: false },
   // { id: 'isVerified', label: 'Verified', alignRight: false },
 //   { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
+  // { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -96,8 +96,15 @@ export default function Reports() {
 
  // tostify
  const { showSuccess, setShowSuccess } = useSuccess();
+const [reports, setReports] = useState([
+  { name: "Monthly" },
+  { name: "Weekly" },
+  { name: "Annually" },
+  { name: "Annually" },
+  { name: "Annually" },
+]);
 
- 
+  
   // Existing state variables
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null); // For previewing selected image
@@ -201,24 +208,11 @@ export default function Reports() {
 }, [isSuccessMessageShown]);
   return (
     <>
-      {/* <Helmet>
-        <title> User | Wendi UI </title>
-      
-      </Helmet> */}
-
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Reports
           </Typography>
-  
-          {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} sx={{ background: '#4A276B' }}
-          onClick={()=>{
-            navigate('/newuser');
-          }}
-          >
-            New User
-          </Button> */}
         </Stack>
 
         <Card> 
@@ -246,20 +240,19 @@ export default function Reports() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, fakeReportTitle, report ,role, status, email, avatarUrl, isVerified } = row;
+                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                    const { id, name, fakeReportTitle ,role, status, email, avatarUrl, isVerified,type } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}
+                      <TableRow hover key={id} tabIndex={-1} role="none" selected={selectedUser}
                       sx={{cursor: "pointer"}}
-                    //   onClick = {()=>{
-                    //     setShowUserDetails(true);
-                    //   }} 
+                      onClick = {()=>{
+                        // setShowUserDetails(true);
+                        // navigate('/userdetails')
+                      }} 
                       >
-                        {showUserDetails  && 
-                          navigate('/userdetails')
-                        }
+                    
 
                         <TableCell padding="checkbox"
                         onClick={(e)=>{
@@ -270,7 +263,7 @@ export default function Reports() {
                           <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
 
-                        <TableCell component="th" scope="row" padding="none">
+                        <TableCell component="th" scope="row" padding="0px 0px 0px 40px">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             {/* <Avatar
                               sx={{ cursor: 'pointer' }}
@@ -287,23 +280,29 @@ export default function Reports() {
                               onChange={handleFileChange} // Handle file selection
                               ref={fileInputRef}
                             />
-                            {uploadTrue && (
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() => {
-                                  handleUpload();
-                                  setUploadTrue(false);
-                                }}
-                                sx={{ background: '#4A276B' }}
-                              >
-                                Upload
-                              </Button>
-                            )}
 
                             <Typography variant="subtitle2" noWrap>
-                                {fakeReportTitle}
-                                {faker.lorem.words()}{" "}Report 
+                                {/* {fakeReportTitle}
+                                {faker.lorem.words()} */}
+                                {/* {reports[index].name} */}
+                                {/* {reports?.map((item,index)=>{
+                                  return(
+                                    <div>
+                                      {item.name}
+                                    </div>
+                                  )
+                                })} */}
+                             {index === 0 ? 
+                             "Annual" :  
+                             index ===1 ? 
+                            "Monthly":
+                            index ===2 ? 
+
+                            "Weekly":
+                            index ===3 ? 
+                            "Daily":
+                            "Hourly"
+                            } Report
                               {/* {name} */}
                             </Typography>
                           </Stack>
@@ -311,19 +310,6 @@ export default function Reports() {
 
                         {/* <TableCell align="left">{email}</TableCell> */}
 
-                        {/* <TableCell align="left">{role}</TableCell> */}
-
-                        {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell> */}
-
-                        {/* <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell> */}
-
-                        <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                            {/* <Iconify icon={'eva:more-vertical-fill'} /> */}
-                          </IconButton>
-                        </TableCell>
                       </TableRow>
                     );
                   })}
@@ -404,6 +390,7 @@ export default function Reports() {
       <Button variant="contained" sx={{ background: '#4A276B',  margin:"30px 0px 30px 50px"}}
           onClick={()=>{
             navigate('/dashboard/reportandanalytics');
+            // navigate(-1); 
           }}
           >
             Back to Report and analytics

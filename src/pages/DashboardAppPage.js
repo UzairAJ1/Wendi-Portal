@@ -41,15 +41,15 @@ export default function DashboardAppPage() {
         </Typography>
         <Grid container spacing={3} justifyContent="space-around" >
           <Grid item xs={12} sm={6} md={3} sx={{ m: 0, pd:0,   }}>
-            <AppWidgetSummary title="Total number of registered users" total={9000} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Total number of registered users" total={100} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Active users currently using the app" total={1352831} color="info" icon={'ant-design:heart-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Active users currently using the app" total={831} color="info" icon={'ant-design:heart-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="new user sign-ups within a specified time period" total={1723315} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="new user sign-ups within a specified time period" total={315} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           {/* <Grid item xs={12} sm={6} md={3}>
@@ -127,15 +127,15 @@ export default function DashboardAppPage() {
         </Typography>
         <Grid container spacing={3} justifyContent="space-around" >
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Number of likes given by users on a daily basis" total={24000} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Number of likes given by users on a daily basis" total={240} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Number of likes given by male users" total={12831} color="info" icon={'ant-design:apple-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Number of likes given by male users" total={131} color="info" icon={'ant-design:apple-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Number of likes given by female users" total={11169} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Number of likes given by female users" total={119} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
           </Grid>
           <Grid item xs={12} md={6} lg={8}>
@@ -210,15 +210,15 @@ export default function DashboardAppPage() {
         </Typography>
         <Grid container spacing={3} justifyContent="space-around">
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Number of likes given by users on a monthly basis" total={714000} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Number of likes given by users on a monthly basis" total={710} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Number of likes given by male users" total={12831} color="info" icon={'ant-design:apple-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Number of likes given by male users" total={131} color="info" icon={'ant-design:apple-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Number of likes given by female users" total={11169} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Number of likes given by female users" total={119} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
           </Grid>
 
@@ -293,15 +293,15 @@ export default function DashboardAppPage() {
         </Typography>
         <Grid container spacing={3} justifyContent="space-around">
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Total number of active users on daily basis" total={714000} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Total number of active users on daily basis" total={710} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="User retention" total={1352831} color="info" icon={'ant-design:apple-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="User retention" total={131} color="info" icon={'ant-design:apple-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="User engagement" total={1723315} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="User engagement" total={115} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
           </Grid>
 
@@ -378,15 +378,15 @@ export default function DashboardAppPage() {
         </Typography>
         <Grid container spacing={3} justifyContent="space-around">
         <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Total number of active users on monthly basis"  total={714000} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Total number of active users on monthly basis"  total={576} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="User retention" total={1352831} color="info" icon={'ant-design:apple-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="User retention" total={977} color="info" icon={'ant-design:apple-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="User engagement"  total={1723315} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="User engagement"  total={543} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
           </Grid>
 
@@ -463,15 +463,15 @@ export default function DashboardAppPage() {
         </Typography>
         <Grid container spacing={3} justifyContent="space-around">
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Total number of registered users" total={714000} icon={'ant-design:android-filled'}  sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Total number of registered users" total={700} icon={'ant-design:android-filled'}  sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Active users currently using the app" total={1352831} color="info" icon={'ant-design:apple-filled'}  sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Active users currently using the app" total={831} color="info" icon={'ant-design:apple-filled'}  sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="new user sign-ups within a specified time period" total={1723315} color="warning" icon={'ant-design:windows-filled'}  sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="new user sign-ups within a specified time period" total={315} color="warning" icon={'ant-design:windows-filled'}  sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
           </Grid>
           <Grid item xs={12} md={6} lg={8}>

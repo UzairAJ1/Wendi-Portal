@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
+// import { useGetDummyDataQuery } from './apiSlice';
 // routes
 import Router from './routes';
 // theme

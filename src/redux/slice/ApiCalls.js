@@ -1,33 +1,15 @@
-import React from 'react';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { isError } from 'lodash';
+// src/apiSlice.js
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-// Action
-export const fetchApi = createAsyncThunk('fetchApi', async (payload) => {
-  console.log('DATA IN REDUX PAYLOAD ================', payload);
-  const response = await fetch('');
-  return response.json();
+export const api = createApi({
+  baseQuery: fetchBaseQuery({ baseUrl: 'localhost:3333' }), // Replace with your API base URL
+  endpoints: (builder) => ({
+    // Define your API endpoints here
+    getDummyData: builder.query({
+      query: () => '/login',
+    }),
+  }),
 });
 
-const ApiCalls = createSlice({
-  name: 'ApiCalls',
-  initialState: {
-    isLoading: false,
-    data: null,
-    isError: false,
-  },
+export const { useGetDummyDataQuery } = api;
 
-  extraReducers: (builder) => {
-    builder.addCase(fetchApi.pending, (state, action) => {
-      state.isLoading = true;
-    }).addCase(fetchApi.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.data = action.payload;
-    }).addCase(fetchApi.rejected, (state, action) => {
-      console.log('error', action.payload);
-    state.isLoading = false
-    });
-  },
-});
-
-export default ApiCalls.reducer;

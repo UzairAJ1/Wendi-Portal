@@ -52,6 +52,7 @@ const PremiumFeatures = () => {
       <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginTop:"20px"}}
           onClick={()=>{
             navigate('/dashboard/payments');
+            // navigate(-1); 
           }} 
           > 
               Back to Payments Menu

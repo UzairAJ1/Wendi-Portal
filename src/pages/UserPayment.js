@@ -67,6 +67,7 @@ const PaymentDetails = () => {
           // onClick={() => onUpdatePaymentMethods(['Credit Card', 'PayPal', 'Bitcoin'])}
           onClick={()=>{
               navigate("/userdetails")
+              // navigate(-1); 
           }}
           sx={{ margin: "15px 0px 20px 0px", background: '#4A276B' }}
         >

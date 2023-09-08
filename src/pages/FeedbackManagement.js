@@ -170,9 +170,10 @@ function FeedbackManagement() {
       <Button variant="contained" sx={{ background: '#4A276B', marginTop:"20px", height: "50px", marginRight:"20px", width:"195px"}}
           onClick={()=>{
             navigate('/dashboard/supportfour'); 
+            // navigate(-1); 
           }}
           > 
-            Back 
+            Back
           </Button>
       {/* ... other functionalities ... */}
     </FormContainer>

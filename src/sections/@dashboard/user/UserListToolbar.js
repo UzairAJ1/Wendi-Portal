@@ -45,15 +45,15 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
       sx={{
         ...(numSelected > 0 && {
           color: 'primary.main',
-          bgcolor: 'primary.lighter',
+          bgcolor: 'none',
         }),
       }}
     >
-      {numSelected > 0 ? (
+      {/* {numSelected > 0 ? (
         <Typography component="div" variant="subtitle1">
           {numSelected} selected
         </Typography>
-      ) : (
+      ) : ( */}
         <StyledSearch
           value={filterName}
           onChange={onFilterName}
@@ -64,21 +64,21 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
             </InputAdornment>
           }
         />
-      )}
+      {/* )} */}
 
-      {numSelected > 0 ? (
+      {/* {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
             <Iconify icon="eva:trash-2-fill" />
           </IconButton>
         </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
+      ) : ( */}
+        {/* <Tooltip title="Filter list">
           <IconButton>
             <Iconify icon="ic:round-filter-list" />
           </IconButton>
-        </Tooltip>
-      )}
+        </Tooltip> */}
+      {/* )} */}
     </StyledRoot>
   );
 }

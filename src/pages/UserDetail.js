@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Card, CardContent, Typography, Button, Container, TextField, Grid, Paper, Box } from '@mui/material';
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
+import man from '../assets/man.avif'
 
 const StyledCard = styled(Card)({
   width: '100%', // Set the width to 100% to match the parent Container
@@ -39,60 +40,91 @@ const UserDetail = ({ user }) => {
     <Container component="main" maxWidth="lg" sx={{ width: '100%' }}>
       <StyledCard sx={{ width: '95%' }}>
         <CardContent>
+          
           <Typography variant="h5" gutterBottom>
             User Details
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Paper elevation={3} sx={{ padding: 2 }}>
-                <Typography variant="subtitle1">
+              <Paper elevation={3} sx={{ padding: 2, width:"200px", height:"200px" }}>
+              <img src={man} alt="user_image" style={{width:"180px", height:"170px", objectFit:"cover"}}/>
+                {/* <Typography variant="subtitle1">
                   Profile Picture: {editedUser.pic}
-                </Typography>
+                </Typography> */}
               </Paper>
             </Grid>
             <Grid item xs={6}>
-              <Paper elevation={3} sx={{ padding: 2 }}>
+              <Paper elevation={3} sx={{ padding: 2, display:"flex", gap: "2px" }}>
                 <Typography variant="subtitle1">
-                  Username: {editedUser.username}
+                  Username: 
+               
                 </Typography>
+                <Typography variant="body1">
+               {editedUser.username} John
+                  </Typography>
               </Paper>
             </Grid>
             <Grid item xs={6}>
-              <Paper elevation={3} sx={{ padding: 2 }}>
+            <Paper elevation={3} sx={{ padding: 2, display:"flex", gap: "2px" }}>
                 <Typography variant="subtitle1">
-                  Gender: {editedUser.gender}
+                  Gender: 
                 </Typography>
+                <Typography variant="body1">
+                {editedUser.gender} Male
+                  </Typography>
               </Paper>
             </Grid>
             <Grid item xs={6}>
-              <Paper elevation={3} sx={{ padding: 2 }}>
+            <Paper elevation={3} sx={{ padding: 2, display:"flex", gap: "2px" }}>
                 <Typography variant="subtitle1">
-                  Sexual Orientation: {editedUser.sex_orientation}
+                  Sexual Orientation: 
                 </Typography>
+                <Typography variant="body1">
+                {editedUser.sex_orientation} Straight
+                  </Typography>
               </Paper>
             </Grid>
             <Grid item xs={6}>
-              <Paper elevation={3} sx={{ padding: 2 }}>
+            <Paper elevation={3} sx={{ padding: 2, display:"flex", gap: "2px" }}>
                 <Typography variant="subtitle1">
-                  Email: {editedUser.email}
+                  Email: 
+                </Typography>
+                <Typography variant="body1">
+                {editedUser.email} johndoe@gmail.com
+                  </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+            <Paper elevation={3} sx={{ padding: 2, display:"flex", gap: "2px" }}>
+                <Typography variant="subtitle1">
+                  Bio: 
+                </Typography>
+                <Typography variant="body1">
+                  Software Engineer {editedUser.bio}
                 </Typography>
               </Paper>
             </Grid>
             <Grid item xs={12}>
-              <Paper elevation={3} sx={{ padding: 2 }}>
+            <Paper elevation={3} sx={{ padding: 2, display:"flex", gap: "2px" }}>
                 <Typography variant="subtitle1">
-                  Bio: {editedUser.bio}
+                  Password: 
                 </Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper elevation={3} sx={{ padding: 2 }}>
-                <Typography variant="subtitle1">
-                  Password: {editedUser.password}
+                <Typography variant="body1">
+                  dontAsk {editedUser.password}
                 </Typography>
               </Paper>
             </Grid>
           </Grid>
+          <StyledButton
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  navigate("/dashboard/user");
+                }}
+                sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
+              >
+                Back
+              </StyledButton>
           <StyledButton
             variant="contained"
             color="primary"
@@ -100,7 +132,7 @@ const UserDetail = ({ user }) => {
               handleSave();
               setEdit(true);
             }}
-            sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
+            sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
           >
             Edit
           </StyledButton>
@@ -111,9 +143,19 @@ const UserDetail = ({ user }) => {
             onClick={() => {
               handleSave();
             }}
-            sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
+            sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
           >
             Delete User
+          </StyledButton>
+          <StyledButton
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              handleSave();
+            }}
+            sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
+          >
+            Suspend User
           </StyledButton>
 
           <StyledButton
@@ -122,20 +164,11 @@ const UserDetail = ({ user }) => {
             onClick={() => {
               navigate("/userpayment");
             }}
-            sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
+            sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
           >
             Payment Details
           </StyledButton>
-          <StyledButton
-                variant="contained"
-                color="primary"
-                onClick={() => {
-                  navigate("/dashboard/user");
-                }}
-                sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
-              >
-                Back
-              </StyledButton>
+
         </CardContent>
       </StyledCard>
       {edit && (

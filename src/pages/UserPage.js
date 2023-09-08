@@ -46,7 +46,7 @@ const TABLE_HEAD = [
   // { id: 'role', label: 'Role', alignRight: false },
   // { id: 'isVerified', label: 'Verified', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
+  // { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -243,26 +243,27 @@ export default function UserPage() {
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}
-                      sx={{cursor: "pointer"}}
+                      <TableRow hover key={id} tabIndex={-1} role="none" selected={selectedUser}
+                      sx={{cursor: "pointer",}}
                       onClick = {()=>{
                         setShowUserDetails(true);
+                        navigate('/userdetails');
                       }}
                       >
-                        {showUserDetails  && 
-                          navigate('/userdetails')
-                        }
+                        {/* {showUserDetails  &&  */}
+                          
+                        {/* } */}
 
-                        <TableCell padding="checkbox"
+                        {/* <TableCell padding="checkbox"
                         onClick={(e)=>{
                           e.stopPropagation()
                         }}
                         
                         >
                           <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
+                        </TableCell> */}
 
-                        <TableCell component="th" scope="row" padding="none">
+                        <TableCell component="th" scope="row" padding="0px 0px 0px 40px">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar
                               sx={{ cursor: 'pointer' }}
@@ -279,19 +280,6 @@ export default function UserPage() {
                               onChange={handleFileChange} // Handle file selection
                               ref={fileInputRef}
                             />
-                            {uploadTrue && (
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() => {
-                                  handleUpload();
-                                  setUploadTrue(false);
-                                }}
-                                sx={{ background: '#4A276B' }}
-                              >
-                                Upload
-                              </Button>
-                            )}
 
                             <Typography variant="subtitle2" noWrap>
                               {name}
@@ -309,11 +297,11 @@ export default function UserPage() {
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
-                        <TableCell align="right">
+                        {/* <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}
@@ -363,7 +351,7 @@ export default function UserPage() {
         </Card>
       </Container>
 
-      <Popover
+      {/* <Popover
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleCloseMenu}
@@ -390,7 +378,7 @@ export default function UserPage() {
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
           Delete
         </MenuItem>
-      </Popover>
+      </Popover> */}
 
       <ToastContainer />
     </>

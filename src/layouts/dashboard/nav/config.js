@@ -11,16 +11,21 @@ const navConfig = [
   //   path: '/login',
   //   icon: icon('ic_lock'), 
   // },
-    {
-    title: 'Zodiac Machine',
-    path: '/dashboard/zodiacmachine',
-    icon: <img src="/assets/icons/navbar/imported_icons/lever.png" alt="Support and Feedback" />,
-  },
   {
-    title: 'Likes',
-    path: '/dashboard/likes',
-    icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/likes.svg" alt="Support and Feedback" />,
+    title: 'Home',
+    path: '/dashboard/home',
+   icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/dashboard.svg" alt="Support and Feedback" />,
   },
+  //   {
+  //   title: 'Zodiac Machine',
+  //   path: '/dashboard/zodiacmachine',
+  //   icon: <img src="/assets/icons/navbar/imported_icons/lever.png" alt="Support and Feedback" />,
+  // },
+  // {
+  //   title: 'Likes',
+  //   path: '/dashboard/likes',
+  //   icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/likes.svg" alt="Support and Feedback" />,
+  // },
   { 
     title: 'dashboard',
     path: '/dashboard/app',
@@ -34,7 +39,7 @@ const navConfig = [
   {
     title: 'Reporting and Analytic',
     path: '/dashboard/reportandanalytics',
-    icon: icon('ic_notification_mail'),
+    icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/analytics.svg" alt="Support and Feedback" />,
   },
   // {
   //   title: 'product',

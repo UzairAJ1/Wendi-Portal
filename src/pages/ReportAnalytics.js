@@ -46,15 +46,15 @@ function ReportAnalytics() {
           <Grid container spacing={4} >
           <Grid container spacing={3} justifyContent="space-around" style={{margin :"0px 0px 70px 0px",}}  >
           <Grid item xs={12} sm={6} md={3} sx={{ m: 0, pd:0,   }}>
-            <AppWidgetSummary title="Total number of registered users" total={9000} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Total number of registered users" total={90} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Active users currently using the app" total={1352831} color="info" icon={'ant-design:heart-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="Active users currently using the app" total={131} color="info" icon={'ant-design:heart-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="new user sign-ups within a specified time period" total={1723315} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <AppWidgetSummary title="new user sign-ups within a specified time period" total={172} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
           </Grid>
 
           {/* <Grid item xs={12} sm={6} md={3}>

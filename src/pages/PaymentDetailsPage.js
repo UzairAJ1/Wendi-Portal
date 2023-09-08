@@ -48,7 +48,7 @@ const TABLE_HEAD = [
   { id: 'expiration', label: 'Expiration Date', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   
-  { id: '' },
+  // { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -245,22 +245,23 @@ export default function UserPage() {
                       sx={{cursor: "pointer"}}
                       onClick = {()=>{
                         setShowUserDetails(true);
+                        navigate('/usersubscriptiondetails');
                       }}
                       >
-                        {showUserDetails  && 
-                          navigate('/usersubscriptiondetails')
-                        }
+                        {/* {showUserDetails  && 
+                       
+                        } */}
 
-                        <TableCell padding="checkbox"
+                        {/* <TableCell padding="checkbox"
                         onClick={(e)=>{
                           e.stopPropagation()
                         }}
                         
                         >
                           <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
+                        </TableCell> */}
 
-                        <TableCell component="th" scope="row" padding="none">
+                        <TableCell component="th" scope="row" padding="0px 0px 0px 40px">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar
                               sx={{ cursor: 'pointer' }}
@@ -307,11 +308,11 @@ export default function UserPage() {
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
-                        <TableCell align="right">
+                        {/* <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}
@@ -392,6 +393,7 @@ export default function UserPage() {
           <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginLeft: "40px", marginTop: "30px"}}
           onClick={()=>{
             navigate("/dashboard/payments")
+            // navigate(-1); 
           }} 
           >
             Back to Payment menu

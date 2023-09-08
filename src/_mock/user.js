@@ -23,6 +23,7 @@ const users = [...Array(24)].map((_, index) => ({
     'Front End Developer',
     'Full Stack Developer',
   ]),
+  type:sample(["Hourly","Daily","Weekly","Monthly","Annually",])
 }));
 
 export default users;
