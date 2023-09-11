@@ -32,21 +32,21 @@ console.log("USER DATA =======",userData)
     const res = await loginApi(data)
     console.log("RESPONSE =====",res) 
 
-    // if(res?.error){
-    //   alert("no access");
-    // }
+    if(res?.error){
+      alert("no access");
+    }
 
-    // else if (res?.data?.status == 200){
-    //   dispatch(setUser({
-    //     _id: res?.data?.data?._id,
-    //     userType:res?.data?.data?.userType,
-    //     email: res?.data?.data?.email,
-    //   }))
-    //   navigate('/dashboard/home');
-    // } 
+    else if (res?.data?.status == 200){
+      dispatch(setUser({
+        _id: res?.data?.data?._id,
+        userType:res?.data?.data?.userType,
+        email: res?.data?.data?.email,
+      }))
+      navigate('/dashboard/home');
+    } 
   console.log("data to redux", data)
   
-  navigate('/dashboard/home');
+  // navigate('/dashboard/home');
 };
 
 

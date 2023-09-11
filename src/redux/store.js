@@ -18,6 +18,12 @@ export const store = configureStore({
     [reporting.reducerPath]: reporting.reducer,
   },
 
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware),
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware().concat(
+      authApi.middleware,
+      homeApi.middleware,
+      dashboardApi.middleware,
+      userManagement.middleware,
+      reporting.middleware
+    )
 });
