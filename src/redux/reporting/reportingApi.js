@@ -1,8 +1,8 @@
 // src/apiSlice.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-export const homeApi = createApi({
-  reducerPath: "homeApi",
+export const reporting = createApi({
+  reducerPath: "reportingApi",
   baseQuery: fetchBaseQuery({
       baseUrl: "http://192.168.18.122:3333/",
       prepareHeaders: (headers, { getState }) => {
@@ -19,12 +19,12 @@ export const homeApi = createApi({
   endpoints: (builder) => ({
     // Define your API endpoints here
 
-    globalSettings: builder.mutation({
-      query: (payload) => ({
-          url: 'global/globalSettings',
-          method: 'POST',
-          body: payload
-      }),
+    reportingApi: builder.query({
+        query: () => ({
+          url: 'user/reporting',
+          method: 'get',
+          // body: payload
+        }),
       }),
       // home: builder.mutation({
       //   query: (payload) => ({
@@ -36,4 +36,4 @@ export const homeApi = createApi({
   }),
 });
 
-export const { useGlobalSettingsMutation } = homeApi;
+export const { useUserManagementQuery } = reporting;

@@ -15,6 +15,9 @@ import {  useGlobalSettingsMutation } from '../redux/homeApi/homeApi';
 // import DeleteIcon from '@mui/icons-material/Delete';
 
 const Home = () => {
+// redux
+
+
     const [zodiacMachineLimit, setZodiacMachineLimit] = useState(5);
   // State for Like Interaction
 
@@ -44,30 +47,53 @@ const Home = () => {
   ]);
   const [reportText, setReportText] = useState('');
 
-  const GlobalSettingsCall = async ({type}) => {
+  // const GlobalSettingsCall = async ({type}) => {
 
-    // const dataToSend = {}
+  //   const dataToSend = {}
 
-    // if(type === "zodiac")
-    // {
-    //   dataToSend.zodiacLimit = zodiacMachineLimit
-    // }
+  //   if(type === "zodiac")
+  //   {
+  //     dataToSend.zodiacLimit = zodiacMachineLimit
+  //   }
 
-    const res = await adminApi({
-      "likeInteractionLimit": {
-          "freeGifts": "10",
-          "giftRenewalTime": "10",
-          "paidGifts": "10"
-      },
-      "likeTimerLimit": "10",
-      "zodiacLimit": "10"
-  })
+  //   const res = await adminApi({
+  //     "likeInteractionLimit": {
+  //         "freeGifts": "10",
+  //         "giftRenewalTime": "10",
+  //         "paidGifts": "10"
+  //     },
+  //     "likeTimerLimit": "10",
+  //     "zodiacLimit": "10"
+  // })
 
-    console.log("RES ========",res)
-    // You can implement logic here to send the new limit to the server
-    // For now, we'll just display an alert
-    // alert(`Set Zodiac Machine Limit to ${zodiacMachineLimit}`);
+  //   console.log("RES ========",res)
+  // };
+
+  const GlobalSettingsCall = async ({ type }) => {
+    const dataToSend = {};
+  
+    if (type === "zodiac") {
+      dataToSend.zodiacLimit = zodiacMachineLimit;
+    } else if (type === "likeInteractionLimit") {
+      dataToSend.likeInteractionLimit = {
+        freeGifts,
+        giftRenewalTime,
+        paidGifts,
+      };
+    } else if (type === "likeTimerLimit") {
+      dataToSend.likeTimerLimit = remainingTime;
+    }
+  
+    try {
+      const res = await adminApi(dataToSend);
+      console.log("RES ========", res);
+    } catch (error) {
+      // Handle API error here
+      console.error("API Error:", error);
+    }
   };
+  
+
   const handleFreeGiftsChange = (e) => {
     setFreeGifts(e.target.value);
   };
