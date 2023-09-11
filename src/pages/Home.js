@@ -11,15 +11,18 @@ import {
   IconButton,
 } from '@mui/material';
 
+import {  useGlobalSettingsMutation } from '../redux/homeApi/homeApi';
 // import DeleteIcon from '@mui/icons-material/Delete';
 
 const Home = () => {
     const [zodiacMachineLimit, setZodiacMachineLimit] = useState(5);
   // State for Like Interaction
+
+
   const [freeGifts, setFreeGifts] = useState(10);
   const [paidGifts, setPaidGifts] = useState(20);
   const [giftRenewalTime, setGiftRenewalTime] = useState(24);
-
+  const [adminApi] =  useGlobalSettingsMutation()
   // State for Like Timer
   const [remainingTime, setRemainingTime] = useState(60);
   const [reports, setReports] = useState([
@@ -41,11 +44,29 @@ const Home = () => {
   ]);
   const [reportText, setReportText] = useState('');
 
-  const handleSetZodiacMachineLimit = () => {
-    
+  const GlobalSettingsCall = async ({type}) => {
+
+    // const dataToSend = {}
+
+    // if(type === "zodiac")
+    // {
+    //   dataToSend.zodiacLimit = zodiacMachineLimit
+    // }
+
+    const res = await adminApi({
+      "likeInteractionLimit": {
+          "freeGifts": "10",
+          "giftRenewalTime": "10",
+          "paidGifts": "10"
+      },
+      "likeTimerLimit": "10",
+      "zodiacLimit": "10"
+  })
+
+    console.log("RES ========",res)
     // You can implement logic here to send the new limit to the server
     // For now, we'll just display an alert
-    alert(`Set Zodiac Machine Limit to ${zodiacMachineLimit}`);
+    // alert(`Set Zodiac Machine Limit to ${zodiacMachineLimit}`);
   };
   const handleFreeGiftsChange = (e) => {
     setFreeGifts(e.target.value);
@@ -67,6 +88,7 @@ const Home = () => {
   };
 
   const handleSetLikeInteraction = () => {
+
     // You can implement logic here to send the new values to the server
     // For now, we'll just display an alert
     alert(`Set Free Gifts to ${freeGifts}, Paid Gifts to ${paidGifts}, Gift Renewal Time to ${giftRenewalTime} hours`);
@@ -109,13 +131,14 @@ const Home = () => {
               value={zodiacMachineLimit}
               onChange={handleZodiacMachineLimitChange}
               fullWidth
+
             />
           </Grid>
           <Grid item xs={6}>
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSetZodiacMachineLimit}
+              onClick={()=> { GlobalSettingsCall({type:"zodiac"}) }}
               sx={{background:"#4A276B"}}
             >
               Set Limit

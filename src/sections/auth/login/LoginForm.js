@@ -4,9 +4,10 @@ import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@m
 import { LoadingButton } from '@mui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 // import { fetchApi } from '../../../redux/slice/ApiCalls';
-
-import { useGetDummyDataQuery } from '../../../redux/slice/ApiCalls';
+import { setUser } from '../../../redux/slices/auth';
+import { useGetDummyDataQuery, useLoginMutation } from '../../../redux/toolkitQuery/ApiCalls';
 import Iconify from '../../../components/iconify';
+
 
 export default function LoginForm() {
   const dispatch =  useDispatch();
@@ -16,21 +17,34 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
- 
+ const [loginApi] =  useLoginMutation()
+ const {userData} = useSelector(state=>state.auth)
+console.log("USER DATA =======",userData)
+  // const { data, error, isLoading, isFetching, isSuccess } = useGetDummyDataQuery();
 
-  const { data, error, isLoading } = useGetDummyDataQuery();
-
-  const handleClick = async (e) => {
-    e.preventDefault();
-
+  const HandleClick = async (e) => {
+    // e.preventDefault();
     const data = {
       email,
       password,
-      rememberMe,
     };
 
+    const res = await loginApi(data)
+    console.log("RESPONSE =====",res) 
+
+    if(res?.error){
+      alert("no access");
+    }
+
     // dispatch(fetchApi(data))
-    
+    else if (res?.data?.status == 200){
+      dispatch(setUser({
+        _id: res?.data?.data?._id,
+        userType:res?.data?.data?.userType,
+        email: res?.data?.data?.email,
+      }))
+      navigate('/dashboard/home');
+    } 
   console.log("data to redux", data)
   };
 
@@ -41,7 +55,7 @@ export default function LoginForm() {
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" 
+        <TextField name="email" label="Email" 
         onChange = {(e)=>{
           setEmail(e.target.value)
         }}
@@ -84,8 +98,8 @@ export default function LoginForm() {
 
       <LoadingButton fullWidth size="large" type="submit" variant="contained" 
      onClick={() => {
-      handleClick();
-      navigate('/dashboard/home')
+      HandleClick();
+      // navigate('/dashboard/home')
     }}
         loading={loading} sx={{background:"#4A276B"}}>
         Login
