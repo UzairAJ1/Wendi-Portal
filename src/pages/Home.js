@@ -122,7 +122,7 @@ const [adminGetApi] =  useGlobalSettingsGetQuery()
     setReports(updatedReports);
   };
 
-  const { data, error, isLoading } = useQuery(adminGetApi.endpointName);
+  const { data, error, isLoading } = useGlobalSettingsGetQuery();
 
   useEffect(() => {
   
