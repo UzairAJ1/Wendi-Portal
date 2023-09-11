@@ -1,62 +1,67 @@
-import React from 'react'
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 import {
-    Card,
-    Table,
-    Stack,
-    Paper,
-    Avatar,
-    Button,
-    Popover,
-    Checkbox,
-    TableRow,
-    MenuItem,
-    TableBody,
-    TableCell,
-    Container,
-    Typography,
-    IconButton,
-    TableContainer,
-    TablePagination,
-  } from '@mui/material';
+  Card,
+  Table,
+  Stack,
+  Paper,
+  Avatar,
+  Button,
+  Popover,
+  Checkbox,
+  TableRow,
+  MenuItem,
+  TableBody,
+  TableCell,
+  Container,
+  Typography,
+  IconButton,
+  TableContainer,
+  TablePagination,
+  Box,
+} from '@mui/material';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import Tab from '@mui/material/Tab';
+import PaymentForm from './PaymentGateway';
+import PremiumFeatures from './PremiumFeatures';
+import PaymentPlans from './PaymentPlans';
+import UserPage from './PaymentDetailsPage';
 
 const PaymentsFour = () => {
-    const navigate = useNavigate();
-  return (
-    <>
-    <div style={{display:"flex", justifyContent:"flex-start" , alignItems:"flex-start", flexDirection:"column", marginLeft:"50px", gap:"25px"}}>
-    <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginRight:"20px", width:"170px"}}
-          onClick={()=>{
-            navigate('/subscribers');
-          }}
-          > 
-            Subscribers List
-          </Button>
-    <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginRight:"20px", width:"170px"}}
-          onClick={()=>{
-            navigate('/paymentgateway');
-          }} 
-          > 
-            Payment Gateway
-          </Button>
-          <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginRight:"20px", width:"170px"}}
-          onClick={()=>{
-            navigate('/premiumfeatures');
-          }} 
-          > 
-            Premium feautures
-          </Button>
-          <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginRight:"20px", width:"170px"}}
-          onClick={()=>{
-            navigate('/paymentplans');
-          }} 
-          > 
-            Payment plans
-          </Button>
-    </div>
-    </>
-  )
-}
+  const navigate = useNavigate();
+  const [value, setValue] = React.useState('1');
 
-export default PaymentsFour
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <TabContext value={value}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <TabList onChange={handleChange} aria-label="lab API tabs example">
+          <Tab label="Subscribers List" value="1" />
+          <Tab label="Payment Gateway" value="2" />
+          <Tab label="Premium feautures" value="3" />
+          <Tab label="Payment plans" value="4" />
+        </TabList>
+      </Box>
+      <TabPanel value="1">
+        <UserPage />
+      </TabPanel>
+      <TabPanel value="2">
+        <PaymentForm />
+      </TabPanel>
+      <TabPanel value="3">
+        <PremiumFeatures />
+      </TabPanel>
+      <TabPanel value="4">
+        <PaymentPlans />
+      </TabPanel>
+    </TabContext>
+  );
+};
+
+export default PaymentsFour;

@@ -20,19 +20,22 @@ const premiumFeatures = [
 ];
 
 const PremiumFeatures = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
-    <div style={{margin:"40px"}}>
-         <div style={{display:"flex", justifyContent:"space-between"}}>
-      <h1>Premium Features</h1>
-      <Button variant="contained" endIcon={<Iconify icon="eva:plus-fill" />} sx={{ background: '#4A276B',  height: "50px", marginTop:"20px"}}
-          onClick={()=>{
+    <div style={{ margin: '40px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h1>Premium Features</h1>
+        <Button
+          variant="contained"
+          endIcon={<Iconify icon="eva:plus-fill" />}
+          sx={{ background: '#4A276B', height: '50px', marginTop: '20px' }}
+          onClick={() => {
             // navigate('/dashboard/payments');
-          }} 
-          > 
-             Add
-          </Button>
-          </div>
+          }}
+        >
+          Add
+        </Button>
+      </div>
       <Grid container spacing={2}>
         {premiumFeatures.map((feature, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
@@ -49,14 +52,14 @@ const PremiumFeatures = () => {
           </Grid>
         ))}
       </Grid>
-      <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginTop:"20px"}}
+      {/* <Button variant="contained" sx={{ background: '#4A276B',  height: "50px", marginTop:"20px"}}
           onClick={()=>{
             navigate('/dashboard/payments');
             // navigate(-1); 
           }} 
           > 
               Back to Payments Menu
-          </Button>
+          </Button> */}
     </div>
   );
 };
