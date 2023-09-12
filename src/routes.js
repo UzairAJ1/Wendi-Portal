@@ -1,4 +1,6 @@
 import { Navigate, useRoutes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getAuth } from './redux/slices/auth';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
@@ -25,13 +27,22 @@ import PremiumFeatures from './pages/PremiumFeatures';
 import Supportfour from './pages/SupportFour';
 import FeedbackManagement from './pages/FeedbackManagement';
 import ZodiacMachine from './pages/ZodiacMachine';
+
 import Likes from './pages/Likes';
 import Home from './pages/Home';
+
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const { isAuthenticated } = useSelector(getAuth);
+  const {userData} = useSelector(state=> state.auth)
   const routes = useRoutes([
+    !userData?._id?
+
+    { path:'/',
+    element: <LoginPage/>, index: true
+  }:
     {
       path: '/dashboard',
       element: <DashboardLayout />,
@@ -49,9 +60,7 @@ export default function Router() {
       ],
   
     },
-    { path:'/',
-      element: <LoginPage/>, index: true
-    },
+   
     {
       element: <SimpleLayout />,
       children: [

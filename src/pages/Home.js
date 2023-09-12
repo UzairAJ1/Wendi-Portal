@@ -30,7 +30,7 @@ const Home = () => {
   // post
   const [adminApi] =  useGlobalSettingsMutation()
 // get
-const [adminGetApi] =  useGlobalSettingsGetQuery()
+// const [adminGetApi] =  useGlobalSettingsGetQuery()
   // State for Like Timer
   const [remainingTime, setRemainingTime] = useState(60);
   const [reports, setReports] = useState([
@@ -145,7 +145,7 @@ const [adminGetApi] =  useGlobalSettingsGetQuery()
           Zodiac Machine Feature
         </Typography>
         <Typography variant="h6" gutterBottom sx={{marginBottom:"20px"}}>
-          Current Limit: {data.zodiacMachineLimit}
+          {/* Current Limit: {data.zodiacMachineLimit} */}
         </Typography>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={6}>

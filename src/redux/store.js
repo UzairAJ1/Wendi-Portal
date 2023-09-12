@@ -1,16 +1,30 @@
+// persit
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+// end
 // src/store.js
 import { configureStore } from '@reduxjs/toolkit';
 import { authApi } from './toolkitQuery/ApiCalls';
 import authReducer from './slices/auth';
+
 // import homeApi from './homeApi/homeApi';
 import { homeApi } from './homeApi/homeApi';
 import { dashboardApi } from './dashboard/dashboardApi';
 import { userManagement } from './userManagement/userManagementApi';
 import { reporting } from './reporting/reportingApi';
 
+
+const persistConfig = {
+  key: 'auth',
+  storage,
+  whitelist:['userData']
+}
+
+const persistedAuthReducer = persistReducer(persistConfig, authReducer)
+
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
+    auth: persistedAuthReducer,
     [authApi.reducerPath]: authApi.reducer,
     [homeApi.reducerPath]: homeApi.reducer,
     [dashboardApi.reducerPath]: dashboardApi.reducer,
@@ -27,3 +41,6 @@ export const store = configureStore({
       reporting.middleware
     )
 });
+
+
+export const persistor = persistStore(store)

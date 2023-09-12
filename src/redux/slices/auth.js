@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 // import { AppState } from "../store";
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 export const auth = createSlice({
   name: "auth",
@@ -13,7 +15,8 @@ export const auth = createSlice({
   },
 });
 
-export const { setUser } = auth.actions;
+
+export const { setUser, login, logout } = auth.actions;
 
 export const getAuth = (state) => state.auth;
 

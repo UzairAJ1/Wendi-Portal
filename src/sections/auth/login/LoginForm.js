@@ -4,10 +4,11 @@ import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@m
 import { LoadingButton } from '@mui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 // import { fetchApi } from '../../../redux/slice/ApiCalls';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { setUser } from '../../../redux/slices/auth';
 import { useGetDummyDataQuery, useLoginMutation } from '../../../redux/toolkitQuery/ApiCalls';
 import Iconify from '../../../components/iconify';
-
 
 export default function LoginForm() {
   const dispatch =  useDispatch();
@@ -21,6 +22,17 @@ export default function LoginForm() {
  const {userData} = useSelector(state=>state.auth)
 console.log("USER DATA =======",userData)
   // const { data, error, isLoading, isFetching, isSuccess } = useGetDummyDataQuery();
+  const [isValid, setIsValid] = useState(true);
+
+  const handleEmailChange = (e) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+
+    // Regular expression for email validation
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    setIsValid(emailPattern.test(newEmail));
+  };
+
 
   const HandleClick = async (e) => {
     // e.preventDefault();
@@ -29,11 +41,25 @@ console.log("USER DATA =======",userData)
       password,
     };
 
+    if(email=="" || password == ""){
+      toast.error('Please enter the credentials', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+      setLoading(false)
+    }
+  
+    else {
+      setLoading(true);
     const res = await loginApi(data)
-    console.log("RESPONSE =====",res) 
-
-    if(res?.error){
-      alert("no access");
+    console.log("RESPONSE =====",res)
+     if(res?.error){
+      toast.error('No access', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+      setLoading(false)
+      // alert("no access");
     }
 
     else if (res?.data?.status == 200){
@@ -42,12 +68,16 @@ console.log("USER DATA =======",userData)
         userType:res?.data?.data?.userType,
         email: res?.data?.data?.email,
       }))
-      navigate('/dashboard/home');
+      setLoading(false)
+      // navigate('/dashboard/home');
     } 
   console.log("data to redux", data)
   
   // navigate('/dashboard/home');
+
+
 };
+  }
 
 
   const handleForgotPasswordClick = () => {
@@ -58,8 +88,12 @@ console.log("USER DATA =======",userData)
       <Stack spacing={3}>
         <TextField name="email" label="Email" 
         onChange = {(e)=>{
-          setEmail(e.target.value)
+          handleEmailChange(e);
+          // setEmail(e.target.value)
         }}
+
+        error={!isValid}
+        helperText={!isValid ? 'Invalid email address' : ''}
         />
 
         <TextField
@@ -100,9 +134,12 @@ console.log("USER DATA =======",userData)
       <LoadingButton fullWidth size="large" type="submit" variant="contained" 
      onClick={() => {
       HandleClick();
+     
       // navigate('/dashboard/home')
     }}
-        loading={loading} sx={{background:"#4A276B"}}>
+        loading={loading} sx={{background:"#4A276B"}}
+        disabled={loading}
+        >
         Login
       </LoadingButton>
     </>
