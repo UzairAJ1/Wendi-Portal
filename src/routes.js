@@ -38,7 +38,7 @@ export default function Router() {
   const { isAuthenticated } = useSelector(getAuth);
   const {userData} = useSelector(state=> state.auth)
   const routes = useRoutes([
-    !userData?._id?
+    !userData?
 
     { path:'/',
     element: <LoginPage/>, index: true

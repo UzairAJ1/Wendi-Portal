@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { setUser } from '../../../redux/slices/auth';
+import { setRemember } from '../../../redux/slices/rememberMeSlice';
 import { useGetDummyDataQuery, useLoginMutation } from '../../../redux/toolkitQuery/ApiCalls';
 import Iconify from '../../../components/iconify';
 
@@ -16,10 +17,12 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+  // const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
  const [loginApi] =  useLoginMutation()
  const {userData} = useSelector(state=>state.auth)
+ const {remember} = useSelector(state=>state.remember)
+
 console.log("USER DATA =======",userData)
   // const { data, error, isLoading, isFetching, isSuccess } = useGetDummyDataQuery();
   const [isValid, setIsValid] = useState(true);
@@ -41,7 +44,7 @@ console.log("USER DATA =======",userData)
       password,
     };
 
-    if(email=="" || password == ""){
+    if(email === "" || password === ""){
       toast.error('Please enter the credentials', {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -62,7 +65,7 @@ console.log("USER DATA =======",userData)
       // alert("no access");
     }
 
-    else if (res?.data?.status == 200){
+    else if (res?.data?.status === 200){
       dispatch(setUser({
         _id: res?.data?.data?._id,
         userType:res?.data?.data?.userType,
@@ -78,8 +81,6 @@ console.log("USER DATA =======",userData)
 
 };
   }
-
-
   const handleForgotPasswordClick = () => {
     navigate('/forgotpassword');
   };
@@ -121,13 +122,20 @@ console.log("USER DATA =======",userData)
           <div>
         <Checkbox name="remember" label="Remember me"  
         onChange = {(e)=>{
-          setRememberMe(e.target.checked)
+          // setRememberMe(e.target.checked)
         }}
         />
-       <Link style={{textDecoration:"none"}} onClick={handleForgotPasswordClick}>Remember me</Link> 
+       <Link style={{textDecoration:"none"}}
+        onClick={() => {
+          dispatch(setRemember(true));
+          console.log("remember===========", remember);
+        }}>
+          Remember me</Link> 
        </div>
         <Link variant="subtitle2" to="" underline="hover" style={{cursor:"pointer"}}>
-         <Link onClick={handleForgotPasswordClick}>Forgot password?</Link> 
+         <Link onClick={()=>{handleForgotPasswordClick()
+        
+        }}>Forgot password?</Link> 
         </Link>
       </Stack>
 

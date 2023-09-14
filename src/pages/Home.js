@@ -10,16 +10,22 @@ import {
   Box,
   IconButton,
 } from '@mui/material';
-
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Tab from '@mui/material/Tab';
+import { setUser } from '../redux/slices/auth';
 
 import {  useGlobalSettingsMutation, useGlobalSettingsGetQuery } from '../redux/homeApi/homeApi';
+
+
 // import DeleteIcon from '@mui/icons-material/Delete';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
     const [zodiacMachineLimit, setZodiacMachineLimit] = useState(5);
   // State for Like Interaction
 
@@ -136,10 +142,26 @@ const Home = () => {
     }
   }, [isLoading, error, data]);
 
-
+const logout = () => {
+  dispatch(setUser(null));
+  navigate("/");
+}
 
   return (
     <Container>
+                <Grid item xs={8}
+                sx={{width:"100%", display:"flex", justifyContent:"flex-end"}}
+                >
+            <Button
+              variant="contained"
+              color="primary"
+
+              onClick={() => {logout() }}
+              sx={{background:"#4A276B", marginBottom:"20px"}}
+            >
+              Logout
+            </Button>
+          </Grid>
               <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
         <Typography variant="h5" gutterBottom>
           Zodiac Machine Feature

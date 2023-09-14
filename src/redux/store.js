@@ -12,6 +12,7 @@ import { homeApi } from './homeApi/homeApi';
 import { dashboardApi } from './dashboard/dashboardApi';
 import { userManagement } from './userManagement/userManagementApi';
 import { reporting } from './reporting/reportingApi';
+import rememberMeSlice from './slices/rememberMeSlice';
 
 
 const persistConfig = {
@@ -25,11 +26,13 @@ const persistedAuthReducer = persistReducer(persistConfig, authReducer)
 export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
+    remember: rememberMeSlice,
     [authApi.reducerPath]: authApi.reducer,
     [homeApi.reducerPath]: homeApi.reducer,
     [dashboardApi.reducerPath]: dashboardApi.reducer,
     [userManagement.reducerPath]: userManagement.reducer,
     [reporting.reducerPath]: reporting.reducer,
+
   },
 
   middleware: (getDefaultMiddleware) => 

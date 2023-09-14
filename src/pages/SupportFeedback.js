@@ -51,6 +51,7 @@ const useStyles = {
 };
 
 function SupportAndFeedbackScreen() {
+
   const navigate = useNavigate();
   const theme = useTheme();
   const [tickets, setTickets] = useState([]);
