@@ -23,19 +23,19 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-       <ToastContainer />
-    <SuccessProvider>
-      <HelmetProvider>
-        <BrowserRouter>
-          <ThemeProvider>
-            <ScrollToTop />
-            <StyledChart />
-            <Router />
-          </ThemeProvider>
-        </BrowserRouter>
-      </HelmetProvider>
-    </SuccessProvider>
-    </PersistGate>
+        <ToastContainer />
+        <SuccessProvider>
+          <HelmetProvider>
+            <BrowserRouter>
+              <ThemeProvider>
+                <ScrollToTop />
+                <StyledChart />
+                <Router />
+              </ThemeProvider>
+            </BrowserRouter>
+          </HelmetProvider>
+        </SuccessProvider>
+      </PersistGate>
     </Provider>
   );
 }

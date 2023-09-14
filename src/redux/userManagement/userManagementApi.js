@@ -17,23 +17,21 @@ export const userManagement = createApi({
   }),
 
   endpoints: (builder) => ({
-    // Define your API endpoints here
-
     userManagement: builder.query({
       query: () => ({
         url: 'user/userDetails',
         method: 'get',
-        // body: payload
       }),
     }),
-    // home: builder.mutation({
-    //   query: (payload) => ({
-    //       url: 'user/home',
-    //       method: 'POST',
-    //       body: payload
-    //   }),
-    //   }),
+
+    getUsers: builder.query({
+      query: () => 'user/getUsers',
+    }),
+
+    getUserById: builder.query({
+      query: (id) => `user/getUser/${id}`,
+    }),
   }),
 });
 
-export const { useUserManagementQuery } = userManagement;
+export const { useUserManagementQuery, useGetUsersQuery, useGetUserByIdQuery } = userManagement;

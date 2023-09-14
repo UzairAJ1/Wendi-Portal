@@ -68,6 +68,14 @@ export const dashboardApi = createApi({
         // body: payload
       }),
     }),
+
+    getUserStatistics: builder.query({
+      query: () => 'user/usersStats',
+    }),
+
+    getLikesStatistics: builder.query({
+      query: () => 'like/likesStats',
+    }),
   }),
 });
 
@@ -79,4 +87,6 @@ export const {
   useDailyActiveUsersQuery,
   useMonthlyActiveUsersQuery,
   useGenderDistributionQuery,
+  useGetUserStatisticsQuery,
+  useGetLikesStatisticsQuery,
 } = dashboardApi;
