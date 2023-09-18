@@ -26,6 +26,9 @@ export default function DashboardAppPage() {
   const { data: userData, isFetching } = useGetUserStatisticsQuery();
   const { data: likesData, isFetching: fetchingData } = useGetLikesStatisticsQuery();
 
+  console.log('====', userData);
+  console.log('====', likesData);
+
   return (
     <>
       <Helmet>
