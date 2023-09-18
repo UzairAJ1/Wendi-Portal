@@ -6,17 +6,22 @@ import storage from 'redux-persist/lib/storage';
 export const auth = createSlice({
   name: "auth",
   initialState: {
-    userData:null
+    userData:null,
+    primaryData : null
   },
+
   reducers: {
     setUser: (state, action) => {
       state.userData = action.payload;
     },
+    setPrimaryUser: (state,action) =>{
+      state.primaryData = action.payload;
+    }
   },
 });
 
 
-export const { setUser, login, logout } = auth.actions;
+export const { setUser, login, logout,setPrimaryUser } = auth.actions;
 
 export const getAuth = (state) => state.auth;
 

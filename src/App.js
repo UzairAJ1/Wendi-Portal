@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { PersistGate } from 'redux-persist/integration/react';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -20,22 +21,24 @@ import { SuccessProvider } from './SuccessContext';
 // ----------------------------------------------------------------------
 
 export default function App() {
+
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-       <ToastContainer />
-    <SuccessProvider>
-      <HelmetProvider>
-        <BrowserRouter>
-          <ThemeProvider>
-            <ScrollToTop />
-            <StyledChart />
-            <Router />
-          </ThemeProvider>
-        </BrowserRouter>
-      </HelmetProvider>
-    </SuccessProvider>
-    </PersistGate>
+        <ToastContainer />
+        <SuccessProvider>
+          <HelmetProvider>
+            <BrowserRouter>
+              <ThemeProvider>
+                <ScrollToTop />
+                <StyledChart />
+                <Router />
+              </ThemeProvider>
+            </BrowserRouter>
+          </HelmetProvider>
+        </SuccessProvider>
+      </PersistGate>
     </Provider>
   );
 }
