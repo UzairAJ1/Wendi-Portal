@@ -1,6 +1,6 @@
 // persit
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 // end
 // src/store.js
 import { configureStore } from '@reduxjs/toolkit';
@@ -14,41 +14,36 @@ import { userManagement } from './userManagement/userManagementApi';
 import { reporting } from './reporting/reportingApi';
 import rememberMeSlice from './slices/rememberMeSlice';
 
+
 const persistConfig = {
   key: 'auth',
   storage,
-  whitelist: ['userData'],
-};
+  whitelist:['userData']
+}
 
-const persistRememberConfig = {
-  key: 'remember',
-  storage,
-  whitelist: ['remember'],
-};
-
-const persistedAuthReducer = persistReducer(persistConfig, authReducer);
-
-const persistedRememberReducer = persistReducer(persistRememberConfig, rememberMeSlice);
+const persistedAuthReducer = persistReducer(persistConfig, authReducer)
 
 export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
-    remember: persistedRememberReducer,
+    remember: rememberMeSlice,
     [authApi.reducerPath]: authApi.reducer,
     [homeApi.reducerPath]: homeApi.reducer,
     [dashboardApi.reducerPath]: dashboardApi.reducer,
     [userManagement.reducerPath]: userManagement.reducer,
     [reporting.reducerPath]: reporting.reducer,
+
   },
 
-  middleware: (getDefaultMiddleware) =>
+  middleware: (getDefaultMiddleware) => 
     getDefaultMiddleware().concat(
       authApi.middleware,
       homeApi.middleware,
       dashboardApi.middleware,
       userManagement.middleware,
       reporting.middleware
-    ),
+    )
 });
 
-export const persistor = persistStore(store);
+
+export const persistor = persistStore(store)

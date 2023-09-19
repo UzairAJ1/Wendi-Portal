@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // import { AppState } from "../store";
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import Cookies from 'js-cookie';
 
 export const auth = createSlice({
   name: "auth",
