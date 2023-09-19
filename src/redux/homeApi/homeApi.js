@@ -30,7 +30,6 @@ export const homeApi = createApi({
       query: () => ({
         url: 'global/globalSettings',
         method: 'get',
-        // body: payload
       }),
     }),
   }),

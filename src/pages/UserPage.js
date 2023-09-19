@@ -36,6 +36,7 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
 import { useSuccess } from '../SuccessContext';
+import { useGetUsersQuery } from '../redux/userManagement/userManagementApi';
 
 // ----------------------------------------------------------------------
 
@@ -102,6 +103,9 @@ export default function UserPage() {
   const [previewUrl, setPreviewUrl] = useState(null); // For previewing selected image
   const fileInputRef = useRef(null);
   const [uploadTrue, setUploadTrue] = useState(false);
+  const { data: users, isFetching } = useGetUsersQuery();
+
+  console.log(users);
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
