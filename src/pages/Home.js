@@ -20,7 +20,7 @@ const Home = () => {
   // Get global settings data
   const { data, error, isLoading } = useGlobalSettingsGetQuery();
 
-  const { likeInteractionLimit, likeTimerLimit, zodiacLimit } = data || {};
+  const { likeInteractionLimit, likeTimerLimit, zodiacLimit } = data?.data || {};
   const [zodiacMachineLimit, setZodiacMachineLimit] = useState(zodiacLimit || 5);
 
   // State for Like Interaction
