@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Card, CardContent, Typography, Button, Container, TextField, Grid, Paper, Box } from '@mui/material';
 import { styled } from '@mui/system';
-import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
+import { useNavigate, useParams } from 'react-router-dom';
 import man from '../assets/man.avif';
+import { useGetUserByIdQuery, useSetUserByIdMutation } from '../redux/userManagement/userManagementApi';
+import { prepareSetUserDetailsData } from './utils';
 
 const StyledCard = styled(Card)({
   width: '100%', // Set the width to 100% to match the parent Container
@@ -17,18 +21,125 @@ const StyledButton = styled(Button)({
 });
 
 const UserDetail = ({ user }) => {
+  const [setUserDetails] =  useSetUserByIdMutation()
+  const { _id } = useParams();
+  console.log("idehhh", _id)
+// redux user data
+const { data: specificUser, isFetching } = useGetUserByIdQuery({_id});
+
+console.log(specificUser);
+
   const [image, setImage] = useState(null);
   const [imageError, setImageError] = useState(false);
 
+
+
   const dispatch = useDispatch();
-  const [editedUser, setEditedUser] = useState({ ...user });
+  // const [editedUser, setEditedUser] = useState({ ...user });
   const [edit, setEdit] = useState(false);
   const navigate = useNavigate();
 
-  const handleSave = () => {
-    // Dispatch your Redux action here for updating user details
-    // dispatch(updateUserDetails(editedUser));
+  const [editedUser, setEditedUser] = useState({
+    fullName: specificUser?.data?.fullName || '',
+    gender: specificUser?.data?.gender || '',
+    sexualOrientation: specificUser?.data?.sexualOrientation || '',
+    email: specificUser?.data?.email || '',
+    aboutYou: specificUser?.data?.aboutYou || '',
+    password: specificUser?.data?.password || '',
+  });
+  
+  const [userArray, setUserArray] = useState([]);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setEditedUser((prevUser) => {
+      // Check if the new value is different from the current value
+      if (prevUser[name] !== value) {
+        return {
+          ...prevUser,
+          [name]: value,
+        };
+      }
+      return prevUser; // No change needed
+    });
+    // console.log("editedUser=====",editedUser)
   };
+  
+
+  useEffect(() => {
+    const y = 0;
+    if(y != 0){
+      toast.error('Please enter the credentials', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+    }
+    console.log("editedUser=====", editedUser);
+  }, [editedUser]);
+  
+
+  // const handleSave = async () => {
+  //   setUserArray((prevArray) => [...prevArray, editedUser]);
+  //   try {
+  //     const response = await setUserDetails({ _id, ...editedUser });
+  //     console.log('User details updated successfully', response);
+  //     setEdit(false);
+  //     setEditedUser({
+  //       username: '',
+  //       gender: '',
+  //       sexualOrientation: '',
+  //       email: '',
+  //       aboutYou: '',
+  //       password: '',
+  //     });
+  //     console.log("editedUser=====", editedUser);
+  //   } catch (error) {
+  //     console.error('Error updating user details', error);
+
+  //   }
+  //   console.log("edited userttt", editedUser)
+  //   const res =  setUserDetails(editedUser)
+  // };
+
+  const handleSave = async () => {
+    if(  fullName === '' || gender === '' || sexualOrientation === '' || email === '' || aboutYou === '' || password === ''){
+      toast.error('Please enter the credentials', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+    }
+    else{
+    try {
+      const preparedData = prepareSetUserDetailsData(editedUser, image);
+      const response = await setUserDetails({ preparedData, _id });
+      console.log("ideeeeeee", _id)
+      // const response = await setUserDetails({ payload: editedUser }, _id);
+
+      if (setUserDetails.isSuccess) {
+              console.log('User details updated successfully', response);
+      setEdit(false);
+      setEditedUser({
+        fullName: '',
+        gender: '',
+        sexualOrientation: '',
+        email: '',
+        aboutYou: '',
+        password: '',
+      });
+        // Successful response handling
+        const data = response.data;
+        showMessage({
+          type: 'success',
+          message: 'עודכן בהצלחה',
+        });
+        // Handle further actions if needed
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  }
+  };
+
 
   const handleImageChange = (event) => {
     const selectedImage = event.target.files[0];
@@ -36,6 +147,12 @@ const UserDetail = ({ user }) => {
     setImageError(!selectedImage); // Set imageError to true if no image is selected
   };
 
+  useEffect(() => {
+    // Log the updated image state in the useEffect
+    console.log("imageee", image);
+  }, [image]); // Include 'image' in the dependency array
+
+console.log("editttttt", edit)
   return (
     <Container component="main" maxWidth="lg" sx={{ width: '100%' }}>
       <StyledCard sx={{ width: '95%' }}>
@@ -46,7 +163,7 @@ const UserDetail = ({ user }) => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Paper elevation={3} sx={{ padding: 2, width: '200px', height: '200px' }}>
-                <img src={man} alt="user_image" style={{ width: '180px', height: '170px', objectFit: 'cover' }} />
+                <img src={"http://192.168.18.131:3333/Images/" + specificUser?.data?.profileImages[0]?.uri?.split("/")?.pop()} alt="user_image" style={{ width: '180px', height: '170px', objectFit: 'cover' }} />
                 {/* <Typography variant="subtitle1">
                   Profile Picture: {editedUser.pic}
                 </Typography> */}
@@ -55,31 +172,31 @@ const UserDetail = ({ user }) => {
             <Grid item xs={6}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
                 <Typography variant="subtitle1">Username:</Typography>
-                <Typography variant="body1">{editedUser.username} John</Typography>
+                <Typography variant="body1">{specificUser?.data?.fullName}</Typography>
               </Paper>
             </Grid>
             <Grid item xs={6}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
                 <Typography variant="subtitle1">Gender:</Typography>
-                <Typography variant="body1">{editedUser.gender} Male</Typography>
+                <Typography variant="body1">{specificUser?.data?.gender}</Typography>
               </Paper>
             </Grid>
             <Grid item xs={6}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
                 <Typography variant="subtitle1">Sexual Orientation:</Typography>
-                <Typography variant="body1">{editedUser.sex_orientation} Straight</Typography>
+                <Typography variant="body1">{specificUser?.data?.sexualOrientation}</Typography>
               </Paper>
             </Grid>
             <Grid item xs={6}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
                 <Typography variant="subtitle1">Email:</Typography>
-                <Typography variant="body1">{editedUser.email} johndoe@gmail.com</Typography>
+                <Typography variant="body1">{specificUser?.data?.email} </Typography>
               </Paper>
             </Grid>
             <Grid item xs={12}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
                 <Typography variant="subtitle1">Bio:</Typography>
-                <Typography variant="body1">Software Engineer {editedUser.bio}</Typography>
+                <Typography variant="body1">{specificUser?.data?.aboutYou}</Typography>
               </Paper>
             </Grid>
             <Grid item xs={12}>
@@ -103,7 +220,7 @@ const UserDetail = ({ user }) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              handleSave();
+              // handleSave();
               setEdit(true);
             }}
             sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
@@ -115,7 +232,7 @@ const UserDetail = ({ user }) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              handleSave();
+              // handleSave();
             }}
             sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
           >
@@ -125,7 +242,7 @@ const UserDetail = ({ user }) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              handleSave();
+              // handleSave();
             }}
             sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
           >
@@ -136,7 +253,8 @@ const UserDetail = ({ user }) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              navigate('/userpayment');
+              navigate(`/userpayment/${_id}`);
+              // navigate('/userpayment');
             }}
             sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
           >
@@ -161,18 +279,53 @@ const UserDetail = ({ user }) => {
                   style={{ display: 'none' }}
                 />
               </Button>
-              <TextField label="Username" value={editedUser.username} disabled={!edit} fullWidth margin="normal" />
-              <TextField label="Gender" value={editedUser.gender} disabled={!edit} fullWidth margin="normal" />
+              <TextField label="Username" 
+              name = "fullName"
+              value={editedUser.fullName || specificUser?.data?.fullName || ''}
+              disabled={!edit} 
+              fullWidth 
+              margin="normal" 
+              onChange = {handleInputChange}
+              />
+              
+              <TextField label="Gender" 
+              name = "gender"
+              value={editedUser.gender || specificUser?.data?.gender || ''}
+              // value={specificUser?.data?.gender} 
+              disabled={!edit} 
+              fullWidth 
+              margin="normal"
+              onChange = {handleInputChange}
+               />
+
               <TextField
                 label="Sexual Orientation"
-                value={editedUser.sexual_orientation}
-                disabled={!edit}
+                name = "sexualOrientation"
+                value={editedUser.sexualOrientation || specificUser?.data?.sexualOrientation || ''}
+                // value={specificUser?.data?.sexualOrientation}
+                disabled={!edit} 
                 fullWidth
                 margin="normal"
+                onChange = {handleInputChange}
               />
-              <TextField label="Email" value={editedUser.email} disabled={!edit} fullWidth margin="normal" />
-              <TextField label="Bio" value={editedUser.bio} disabled={!edit} fullWidth margin="normal" />
-              <TextField label="New password" value={editedUser.password} disabled={!edit} fullWidth margin="normal" />
+              <TextField label="Email" 
+              name = "email"
+              value={editedUser.email || specificUser?.data?.email || ''}
+              // disabled={!edit}
+               fullWidth margin="normal"  
+                onChange = {handleInputChange}/>
+              <TextField label="Bio"
+              name = "aboutYou"
+               value={editedUser.aboutYou || specificUser?.data?.aboutYou || ''} 
+              disabled={!edit} 
+              fullWidth margin="normal"   
+              onChange = {handleInputChange}/>
+              <TextField label="New password" 
+              name = "password"
+              value = {editedUser.password || specificUser?.data?.password || ''}
+              disabled={!edit}
+               fullWidth margin="normal"  
+                onChange = {handleInputChange}/>
               <StyledButton
                 variant="contained"
                 color="primary"
@@ -188,7 +341,7 @@ const UserDetail = ({ user }) => {
                 variant="contained"
                 color="primary"
                 onClick={() => {
-                  handleSave();
+                  // handleSave();
                   setEdit(false);
                 }}
                 sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}

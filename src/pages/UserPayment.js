@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, Typography, Divider, Paper, Grid, List, ListItem, ListItemText, Button, Container } from '@mui/material';
 import { styled } from '@mui/system';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const PaymentDetails = () => {
+  const { _id } = useParams();
   const paymentHistory = [
     { date: '2023-08-01', amount: '$50' },
     { date: '2023-07-01', amount: '$50' },
@@ -66,7 +67,7 @@ const PaymentDetails = () => {
           color="primary"
           // onClick={() => onUpdatePaymentMethods(['Credit Card', 'PayPal', 'Bitcoin'])}
           onClick={()=>{
-              navigate("/userdetails")
+            navigate(`/userdetails/${_id}`);
               // navigate(-1); 
           }}
           sx={{ margin: "15px 0px 20px 0px", background: '#4A276B' }}

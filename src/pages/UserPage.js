@@ -4,7 +4,7 @@ import { sentenceCase } from 'change-case';
 
 import React, { useRef, useState, useEffect } from 'react';
 
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // @mui
@@ -82,17 +82,15 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
   const navigate = useNavigate();
+  // const { id } = useParams();
   const [open, setOpen] = useState(null);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const [isSuccessMessageShown, setSuccessMessageShown] = useState(false);
-
   const [showUserDetails, setShowUserDetails] = useState(false);
 
   // tostify
@@ -106,6 +104,9 @@ export default function UserPage() {
   const { data: users, isFetching } = useGetUsersQuery();
 
   console.log(users);
+  console.log("userssss name",users?.data?.fullName);
+  console.log("userssss name", users?.data[0]?.fullName);
+  // const profilePhoto = users?.data?.profileImages[0];
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -245,21 +246,23 @@ export default function UserPage() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, email, avatarUrl, isVerified } = row;
-                    const selectedUser = selected.indexOf(name) !== -1;
+                  {/* {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) */}
+                  
+                  {users?.data?.map((row) => {
+                    // const { id, name, role, status, email, avatarUrl, isVerified } = row;
+                    // const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
                       <TableRow
                         hover
-                        key={id}
+                        // key={id}
                         tabIndex={-1}
                         role="none"
-                        selected={selectedUser}
+                        // selected={selectedUser}
                         sx={{ cursor: 'pointer' }}
                         onClick={() => {
                           setShowUserDetails(true);
-                          navigate('/userdetails');
+                          navigate(`/userdetails/${row._id}`);
                         }}
                       >
                         {/* {showUserDetails  &&  */}
@@ -279,8 +282,8 @@ export default function UserPage() {
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar
                               sx={{ cursor: 'pointer' }}
-                              alt={name}
-                              src={avatarUrl}
+                              // alt={name}
+                              src={"http://192.168.18.131:3333/Images/" + row?.profileImages[0]?.uri?.split("/")?.pop()}
                               // onClick={() => fileInputRef.current.click()}
                             />
 
@@ -294,19 +297,19 @@ export default function UserPage() {
                             />
 
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {row?.fullName}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{email}</TableCell>
+                        <TableCell align="left">{row?.email}</TableCell>
 
                         {/* <TableCell align="left">{role}</TableCell> */}
 
                         {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell> */}
 
                         <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(row?.status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         {/* <TableCell align="right">

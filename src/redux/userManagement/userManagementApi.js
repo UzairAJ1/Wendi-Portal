@@ -1,5 +1,9 @@
 // src/apiSlice.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+// import { useParams } from 'react-router-dom';
+  
+// const { _id } = useParams();
+
 
 export const userManagement = createApi({
   reducerPath: 'userManagement',
@@ -29,9 +33,24 @@ export const userManagement = createApi({
     }),
 
     getUserById: builder.query({
-      query: (id) => `user/getUser/${id}`,
+      query: ({_id}) => `user/getUser/${_id}`,
     }),
+ 
+      setUserById: builder.mutation({
+      query: (payload) => ({
+          url: `user/updateUser/${payload._id}`,
+          method: 'POST',
+          body: payload
+      }),
+    }),
+    // setUserById: builder.mutation({
+    //   query: ({ payload, _id }) => ({
+    //     url: `user/updateUser/${_id}`,
+    //     method: 'POST',
+    //     body: payload
+    //   }),
+    // }),
   }),
-});
+});  
 
-export const { useUserManagementQuery, useGetUsersQuery, useGetUserByIdQuery } = userManagement;
+export const { useUserManagementQuery, useGetUsersQuery, useGetUserByIdQuery, useSetUserByIdMutation} = userManagement;

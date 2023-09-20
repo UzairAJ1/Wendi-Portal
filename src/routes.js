@@ -104,7 +104,7 @@ export default function Router() {
       element: <NewUser />,
     },
     {
-      path: '/userpayment',
+      path: '/userpayment/:_id',
       element: <UserPayment />,
     },
     {
@@ -113,7 +113,7 @@ export default function Router() {
     },
     { path: 'reports', element: <Reports /> },
     {
-      path: '/userdetails',
+      path: '/userdetails/:_id',
       element: <UserDetail />,
     },
     {
