@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Button, Grid, TextField, Paper, Box, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -14,6 +14,11 @@ import { useGlobalSettingsMutation, useGlobalSettingsGetQuery } from '../redux/h
 // import DeleteIcon from '@mui/icons-material/Delete';
 
 const Home = () => {
+  const { userData, primaryData } = useSelector((state) => state.auth);
+  const { remember } = useSelector((state) => state.remember);
+
+  const finalUserData =  remember ? userData: primaryData
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
