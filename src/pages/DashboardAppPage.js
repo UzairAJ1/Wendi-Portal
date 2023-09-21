@@ -23,11 +23,11 @@ import { useGetUserStatisticsQuery, useGetLikesStatisticsQuery } from '../redux/
 
 export default function DashboardAppPage() {
   const theme = useTheme();
-  const { data: userData, isFetching } = useGetUserStatisticsQuery();
-  const { data: likesData, isFetching: fetchingData } = useGetLikesStatisticsQuery();
+  const { data: usersData, isFetching } = useGetUserStatisticsQuery();
+  const { data: likesData, isFetching: fetchingLikesStats } = useGetLikesStatisticsQuery();
 
-  console.log('====', userData);
-  console.log('====', likesData);
+  const { totalUsers = 100, maleUsers = 60, femaleUsers = 40, activeUsers = 50, newUsers = 10 } = usersData?.data || {};
+  const { totalLikes, maleLikes, femaleLikes, likesPerDay, likesPerMonth } = likesData?.data || {};
 
   return (
     <>
@@ -48,7 +48,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3} sx={{ m: 0, pd: 0 }}>
               <AppWidgetSummary
                 title="Total number of registered users"
-                total={100}
+                total={totalUsers}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -57,7 +57,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Active users currently using the app"
-                total={831}
+                total={activeUsers}
                 color="info"
                 icon={'ant-design:heart-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -67,7 +67,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="new user sign-ups within a specified time period"
-                total={315}
+                total={newUsers}
                 color="warning"
                 icon={'ant-design:windows-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -128,8 +128,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="User Statistics:"
               chartData={[
-                { label: 'Male', value: 4344 },
-                { label: 'Female', value: 5435 },
+                { label: 'Male', value: maleUsers },
+                { label: 'Female', value: femaleUsers },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}
@@ -149,7 +149,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Number of likes given by users on a daily basis"
-                total={240}
+                total={likesPerDay?.count || 240}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -246,7 +246,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Number of likes given by users on a monthly basis"
-                total={710}
+                total={likesPerMonth?.count || 710}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -421,8 +421,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Gender Distribution"
               chartData={[
-                { label: 'Male', value: 4344 },
-                { label: 'Female', value: 5435 },
+                { label: 'Male', value: maleUsers },
+                { label: 'Female', value: femaleUsers },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}
@@ -519,8 +519,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Gender Distribution"
               chartData={[
-                { label: 'Male', value: 4344 },
-                { label: 'Female', value: 5435 },
+                { label: 'Male', value: maleUsers },
+                { label: 'Female', value: femaleUsers },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}
@@ -540,7 +540,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Total number of registered users"
-                total={700}
+                total={totalUsers}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -549,7 +549,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Active users currently using the app"
-                total={831}
+                total={activeUsers}
                 color="info"
                 icon={'ant-design:apple-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -559,7 +559,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="new user sign-ups within a specified time period"
-                total={315}
+                total={newUsers}
                 color="warning"
                 icon={'ant-design:windows-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -616,8 +616,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Gender Distribution"
               chartData={[
-                { label: 'Male', value: 4344 },
-                { label: 'Female', value: 5435 },
+                { label: 'Male', value: maleUsers },
+                { label: 'Female', value: femaleUsers },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}

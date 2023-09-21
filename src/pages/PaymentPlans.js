@@ -40,7 +40,12 @@ const PaymentPlans = () => {
   const [paymentPlan, setPaymentPlan] = useState({
     name: '',
     description: '',
+    amount: '',
     likesLimit: null,
+    giftsLimit: null,
+    spinsLimit: null,
+    seeLikes: false,
+    transactionId: '',
     likesResetDuration: null,
   });
 
@@ -53,11 +58,26 @@ const PaymentPlans = () => {
   };
 
   const handleInputChnages = (e) => {
-    setPaymentPlan({ ...paymentPlan, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setPaymentPlan({ ...paymentPlan, [name]: value });
   };
 
   const handleSubmit = () => {
-    if (paymentPlan.name && paymentPlan.description && paymentPlan.likesLimit && paymentPlan.likesResetDuration) {
+    const requiredFields = [
+      'name',
+      'description',
+      'likesLimit',
+      'likesResetDuration',
+      'giftsLimit',
+      'spinsLimit',
+      'seeLikes',
+      'transactionId',
+      'amount',
+    ];
+
+    const hasAllRequiredFields = requiredFields.every((field) => paymentPlan[field]);
+
+    if (hasAllRequiredFields) {
       setPaymentPlansData([...paymentPlansData, paymentPlan]);
       setPaymentPlan({});
       setOpen(false);
@@ -95,10 +115,10 @@ const PaymentPlans = () => {
           </Grid>
         ))}
       </Grid>
-      <Dialog open={open} onClose={handleClose} fullWidth="true" maxWidth="sm">
+      <Dialog open={open} onClose={handleClose} fullWidth="true" maxWidth="md">
         <DialogTitle variant="h4">Payment Plan</DialogTitle>
         <DialogContent>
-          <Stack spacing={3} sx={{ marginTop: '8px' }}>
+          <Stack direction="row" spacing={2} sx={{ margin: '20px 0' }}>
             <TextField
               label="Name"
               name="name"
@@ -116,10 +136,55 @@ const PaymentPlans = () => {
               fullWidth
             />
             <TextField
+              label="Amount"
+              type="number"
+              name="amount"
+              value={paymentPlan.amount}
+              onChange={handleInputChnages}
+              fullWidth
+            />
+          </Stack>
+          <Stack direction="row" spacing={2} sx={{ margin: '20px 0' }}>
+            <TextField
               label="Likes Limit"
               type="number"
               name="likesLimit"
               value={paymentPlan.likesLimit}
+              onChange={handleInputChnages}
+              fullWidth
+            />
+            <TextField
+              label="Spins Limit"
+              type="number"
+              name="spinsLimit"
+              value={paymentPlan.spinsLimit}
+              onChange={handleInputChnages}
+              fullWidth
+            />
+            <TextField
+              label="Gifts Limit"
+              type="number"
+              name="giftsLimit"
+              value={paymentPlan.giftsLimit}
+              onChange={handleInputChnages}
+              fullWidth
+            />
+          </Stack>
+
+          <Stack direction="row" spacing={2} sx={{ margin: '20px 0' }}>
+            <TextField
+              label="See Likes"
+              type="number"
+              name="seeLikes"
+              value={paymentPlan.seeLikes}
+              onChange={handleInputChnages}
+              fullWidth
+            />
+            <TextField
+              label="Transaction ID"
+              type="string"
+              name="transactionId"
+              value={paymentPlan.transactionId}
               onChange={handleInputChnages}
               fullWidth
             />
