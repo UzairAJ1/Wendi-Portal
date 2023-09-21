@@ -280,10 +280,11 @@ export default function UserPage() {
 
                         <TableCell component="th" scope="row" padding="0px 0px 0px 40px">
                           <Stack direction="row" alignItems="center" spacing={2}>
+                          {/* <img src={"http://192.168.18.131:3333/Images/" + specificUser?.data?.profileImages?.find(item=> item?.orderId == 1)?.uri?.split("/")?.pop()} alt="user_image" style={{ width: '180px', height: '170px', objectFit: 'cover' }} /> */}
                             <Avatar
                               sx={{ cursor: 'pointer' }}
                               // alt={name}
-                              src={"http://192.168.18.131:3333/Images/" + row?.profileImages[0]?.uri?.split("/")?.pop()}
+                              src={"http://192.168.18.131:3333/Images/" + row?.profileImages?.find(item=> item?.orderId == 1)?.uri?.split("/")?.pop()}
                               // onClick={() => fileInputRef.current.click()}
                             />
 
@@ -309,7 +310,7 @@ export default function UserPage() {
                         {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell> */}
 
                         <TableCell align="left">
-                          <Label color={(row?.status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(row?.status === 'banned' && 'error') || 'success'}>{row?.status}</Label>
                         </TableCell>
 
                         {/* <TableCell align="right">

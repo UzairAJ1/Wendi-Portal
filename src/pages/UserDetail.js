@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Card, CardContent, Typography, Button, Container, TextField, Grid, Paper, Box } from '@mui/material';
+import { Card, CardContent, Typography, Button, FormControl, InputLabel, Select, MenuItem, Container, TextField, Grid, Paper, Box } from '@mui/material';
 import { styled } from '@mui/system';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
@@ -23,30 +23,37 @@ const StyledButton = styled(Button)({
 const UserDetail = ({ user }) => {
   const [setUserDetails] =  useSetUserByIdMutation()
   const { _id } = useParams();
-  console.log("idehhh", _id)
-// redux user data
-const { data: specificUser, isFetching } = useGetUserByIdQuery({_id});
-
-console.log(specificUser);
-
+  const { data: specificUser, isFetching,refetch } = useGetUserByIdQuery({_id});
   const [image, setImage] = useState(null);
+  // const [imageURI, setImageURI] = useState('');
   const [imageError, setImageError] = useState(false);
-
-
-
   const dispatch = useDispatch();
   // const [editedUser, setEditedUser] = useState({ ...user });
   const [edit, setEdit] = useState(false);
   const navigate = useNavigate();
-
   const [editedUser, setEditedUser] = useState({
-    fullName: specificUser?.data?.fullName || '',
-    gender: specificUser?.data?.gender || '',
-    sexualOrientation: specificUser?.data?.sexualOrientation || '',
-    email: specificUser?.data?.email || '',
-    aboutYou: specificUser?.data?.aboutYou || '',
-    password: specificUser?.data?.password || '',
+    fullName: '',
+    gender:  '',
+    sexualOrientation:  '',
+    // email: specificUser?.data?.email || '',
+    aboutYou: '',
+    // password: specificUser?.data?.password || '',
   });
+  const [selectedImage, setSelectedImage] = useState(null);
+  console.log("Source===", selectedImage)
+
+  useEffect(()=>{
+    setEditedUser({
+      fullName: specificUser?.data?.fullName,
+      gender: specificUser?.data?.gender ,
+      sexualOrientation: specificUser?.data?.sexualOrientation,
+      // email: specificUser?.data?.email,
+      aboutYou: specificUser?.data?.aboutYou,
+      // password: specificUser?.data?.password,
+    })
+  },[specificUser])
+
+
   
   const [userArray, setUserArray] = useState([]);
 
@@ -65,19 +72,6 @@ console.log(specificUser);
     // console.log("editedUser=====",editedUser)
   };
   
-
-  useEffect(() => {
-    const y = 0;
-    if(y != 0){
-      toast.error('Please enter the credentials', {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
-      });
-    }
-    console.log("editedUser=====", editedUser);
-  }, [editedUser]);
-  
-
   // const handleSave = async () => {
   //   setUserArray((prevArray) => [...prevArray, editedUser]);
   //   try {
@@ -102,7 +96,7 @@ console.log(specificUser);
   // };
 
   const handleSave = async () => {
-    if(  fullName === '' || gender === '' || sexualOrientation === '' || email === '' || aboutYou === '' || password === ''){
+    if(  editedUser.fullName === '' || editedUser.gender === '' || editedUser.sexualOrientation === '' || editedUser.aboutYou === '' ){
       toast.error('Please enter the credentials', {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -110,21 +104,28 @@ console.log(specificUser);
     }
     else{
     try {
-      const preparedData = prepareSetUserDetailsData(editedUser, image);
+      const preparedData = prepareSetUserDetailsData(editedUser, selectedImage);
       const response = await setUserDetails({ preparedData, _id });
+    if(response?.data?.status ===200) 
+    {refetch()
+    // setImageURI(response.data.uri);
+     }
       console.log("ideeeeeee", _id)
+      console.log("user details going to the api", response)
+      
       // const response = await setUserDetails({ payload: editedUser }, _id);
-
-      if (setUserDetails.isSuccess) {
-              console.log('User details updated successfully', response);
       setEdit(false);
+      if (setUserDetails.isSuccess) {
+        toast.success('User details updated successfully')
+              console.log('User details updated successfully', response);
+     
       setEditedUser({
         fullName: '',
         gender: '',
         sexualOrientation: '',
-        email: '',
+        // email: '',
         aboutYou: '',
-        password: '',
+        // password: '',
       });
         // Successful response handling
         const data = response.data;
@@ -141,16 +142,28 @@ console.log(specificUser);
   };
 
 
-  const handleImageChange = (event) => {
-    const selectedImage = event.target.files[0];
-    setImage(selectedImage);
-    setImageError(!selectedImage); // Set imageError to true if no image is selected
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+  
+
+    if (file) {
+      // You can also add validation here for the file type and size if needed
+      let myURI =  URL.createObjectURL(e.target.files[0])
+      console.log("OKOKO =======",file)
+      setSelectedImage(file)
+      // const reader = new FileReader();
+
+      // reader.onloadend = () => {
+      //   setSelectedImage(reader.result);
+      // };
+
+      // reader.readAsDataURL(file);
+    }
   };
 
   useEffect(() => {
-    // Log the updated image state in the useEffect
     console.log("imageee", image);
-  }, [image]); // Include 'image' in the dependency array
+  }, [image]); 
 
 console.log("editttttt", edit)
   return (
@@ -163,7 +176,8 @@ console.log("editttttt", edit)
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Paper elevation={3} sx={{ padding: 2, width: '200px', height: '200px' }}>
-                <img src={"http://192.168.18.131:3333/Images/" + specificUser?.data?.profileImages[0]?.uri?.split("/")?.pop()} alt="user_image" style={{ width: '180px', height: '170px', objectFit: 'cover' }} />
+                <img src={"http://192.168.18.131:3333/Images/" + specificUser?.data?.profileImages?.find(item=> item?.orderId == 1)?.uri?.split("/")?.pop()} alt="user_image" style={{ width: '180px', height: '170px', objectFit: 'cover' }} />
+                {/* <img src={selectedImage} alt="Selected" style={{ maxWidth: '100%' }} /> */}
                 {/* <Typography variant="subtitle1">
                   Profile Picture: {editedUser.pic}
                 </Typography> */}
@@ -187,24 +201,24 @@ console.log("editttttt", edit)
                 <Typography variant="body1">{specificUser?.data?.sexualOrientation}</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6}>
+            {/* <Grid item xs={6}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
                 <Typography variant="subtitle1">Email:</Typography>
                 <Typography variant="body1">{specificUser?.data?.email} </Typography>
               </Paper>
-            </Grid>
-            <Grid item xs={12}>
+            </Grid> */}
+            <Grid item xs={6}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
                 <Typography variant="subtitle1">Bio:</Typography>
                 <Typography variant="body1">{specificUser?.data?.aboutYou}</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
                 <Typography variant="subtitle1">Password:</Typography>
                 <Typography variant="body1">dontAsk {editedUser.password}</Typography>
               </Paper>
-            </Grid>
+            </Grid> */}
           </Grid>
           <StyledButton
             variant="contained"
@@ -281,57 +295,60 @@ console.log("editttttt", edit)
               </Button>
               <TextField label="Username" 
               name = "fullName"
-              value={editedUser.fullName || specificUser?.data?.fullName || ''}
+              value={editedUser.fullName}
               disabled={!edit} 
               fullWidth 
               margin="normal" 
               onChange = {handleInputChange}
               />
               
-              <TextField label="Gender" 
-              name = "gender"
-              value={editedUser.gender || specificUser?.data?.gender || ''}
-              // value={specificUser?.data?.gender} 
-              disabled={!edit} 
-              fullWidth 
-              margin="normal"
-              onChange = {handleInputChange}
-               />
+              <InputLabel>Gender</InputLabel>
+  <Select
+    label="Gender"
+    name="gender"
+    value={editedUser.gender}
+    // value={specificUser?.data?.gender}
+    disabled={!edit}
+    onChange={handleInputChange}
+  >
+    <MenuItem value="Male">Male</MenuItem>
+    <MenuItem value="Female">Female</MenuItem>
+  </Select>
 
               <TextField
                 label="Sexual Orientation"
                 name = "sexualOrientation"
-                value={editedUser.sexualOrientation || specificUser?.data?.sexualOrientation || ''}
+                value={editedUser.sexualOrientation}
                 // value={specificUser?.data?.sexualOrientation}
                 disabled={!edit} 
                 fullWidth
                 margin="normal"
                 onChange = {handleInputChange}
               />
-              <TextField label="Email" 
+              {/* <TextField label="Email" 
               name = "email"
-              value={editedUser.email || specificUser?.data?.email || ''}
+              value={editedUser.email}
               // disabled={!edit}
                fullWidth margin="normal"  
-                onChange = {handleInputChange}/>
+                onChange = {handleInputChange}/> */}
               <TextField label="Bio"
               name = "aboutYou"
-               value={editedUser.aboutYou || specificUser?.data?.aboutYou || ''} 
+               value={editedUser.aboutYou} 
               disabled={!edit} 
               fullWidth margin="normal"   
               onChange = {handleInputChange}/>
-              <TextField label="New password" 
+              {/* <TextField label="New password" 
               name = "password"
-              value = {editedUser.password || specificUser?.data?.password || ''}
+              value = {editedUser.password}
               disabled={!edit}
                fullWidth margin="normal"  
-                onChange = {handleInputChange}/>
+                onChange = {handleInputChange}/> */}
               <StyledButton
                 variant="contained"
                 color="primary"
                 onClick={() => {
                   handleSave();
-                  setEdit(false);
+                  // setEdit(false);
                 }}
                 sx={{ margin: '10px 10px 0px 0px', background: '#4A276B' }}
               >

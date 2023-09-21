@@ -4,8 +4,8 @@ export function prepareSetUserDetailsData(payload, image) {
     const formData = new FormData();
   
     // Add payload properties to formData
-    if (payload.username) {
-      formData.append('fullName', payload.username);
+    if (payload.fullName) {
+      formData.append('fullName', payload.fullName);
     }
   
     if (payload.gender) {
@@ -15,21 +15,24 @@ export function prepareSetUserDetailsData(payload, image) {
     if (payload.sexualOrientation) {
       formData.append('sexualOrientation', payload.sexualOrientation);
     }
-  
-    if (payload.email) {
-      formData.append('email', payload.email);
-    }
+
   
     if (payload.aboutYou) {
       formData.append('aboutYou', payload.aboutYou);
     }
-  
-    if (payload.password) {
-      formData.append('password', payload.password);
+
+    if(image){
+      formData.append('orderIds', JSON.stringify([1]));
+      
     }
-    if (image) {
-        formData.append('image', image);
-      }
+
+if (image) {
+  const Images = [image]
+  Images.forEach(image => {
+    console.log("SENT IMAGE ======",image)
+      formData.append('profileImages', image);
+  });
+}
     // Add more payload properties as needed...
   
     return formData;

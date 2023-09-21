@@ -40,7 +40,7 @@ export const userManagement = createApi({
       query: (payload) => ({
           url: `user/updateUser/${payload._id}`,
           method: 'POST',
-          body: payload
+          body: payload?.preparedData
       }),
     }),
     // setUserById: builder.mutation({
