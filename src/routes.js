@@ -42,12 +42,12 @@ export default function Router() {
       if (performance.navigation.type === 1) {
         console.log('ok');
       } else {
-        if (!remember) {
-          console.log('IM HERE ON REMEMBER =======', remember);
-          dispatch(setUser(null));
-        }
+        // if (!remember) {
+        console.log('IM HERE ON REMEMBER =======', remember);
+        dispatch(setUser(null));
+        // }
       }
-      return;
+      // return;
     };
 
     // Add the event listener when the component mounts
@@ -63,25 +63,25 @@ export default function Router() {
   const { userData } = useSelector((state) => state.auth);
   const { remember } = useSelector((state) => state.remember);
   const routes = useRoutes([
-    !userData
-      ? { path: '/', element: <LoginPage />, index: true }
-      : {
-          path: '/dashboard',
-          
-          element: <DashboardLayout />,
-          children: [
-            // { element: <Navigate to="/dashboard/app" />, index: true },
-            { path: 'home', element: <Home />, index: true },
-            { path: 'app', element: <DashboardAppPage /> },
-            { path: 'user', element: <UserPage /> },
-            { path: 'products', element: <ProductsPage /> },
-            { path: 'blog', element: <BlogPage /> },
-            { path: 'payments', element: <PaymentsFour /> },
-            { path: 'supportfeedback', element: <SupportFeedback /> },
-            { path: 'reportandanalytics', element: <ReportAnalytics /> },
-            { path: 'supportfour', element: <Supportfour /> },
-          ],
-        },
+    // !userData
+    { path: '/', element: <LoginPage />, index: true },
+    {
+      path: '/dashboard',
+
+      element: <DashboardLayout />,
+      children: [
+        // { element: <Navigate to="/dashboard/app" />, index: true },
+        { path: 'home', element: <Home />, index: true },
+        { path: 'app', element: <DashboardAppPage /> },
+        { path: 'user', element: <UserPage /> },
+        { path: 'products', element: <ProductsPage /> },
+        { path: 'blog', element: <BlogPage /> },
+        { path: 'payments', element: <PaymentsFour /> },
+        { path: 'supportfeedback', element: <SupportFeedback /> },
+        { path: 'reportandanalytics', element: <ReportAnalytics /> },
+        { path: 'supportfour', element: <Supportfour /> },
+      ],
+    },
 
     {
       element: <SimpleLayout />,
