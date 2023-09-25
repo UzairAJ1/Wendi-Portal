@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { TailSpin } from "react-loader-spinner";
 import { Card, CardContent, Typography, Button, FormControl, InputLabel, Select, MenuItem, Container, TextField, Grid, Paper, Box } from '@mui/material';
 import { styled } from '@mui/system';
 import { toast } from 'react-toastify';
@@ -30,6 +31,7 @@ const UserDetail = ({ user }) => {
   const dispatch = useDispatch();
   // const [editedUser, setEditedUser] = useState({ ...user });
   const [edit, setEdit] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [editedUser, setEditedUser] = useState({
     fullName: '',
@@ -43,6 +45,19 @@ const UserDetail = ({ user }) => {
   console.log("Source===", selectedImage)
 
   useEffect(()=>{
+    if (editedUser.fullName || editedUser.gender || editedUser.sexualOrientation || editedUser.aboutYou)
+    {  
+    <ColorRing
+      visible={true}
+      height="80"
+      width="80"
+      ariaLabel="blocks-loading"
+      wrapperStyle={{}}
+      wrapperClass="blocks-wrapper"
+      colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+      />
+}
+  else
     setEditedUser({
       fullName: specificUser?.data?.fullName,
       gender: specificUser?.data?.gender ,
@@ -103,11 +118,13 @@ const UserDetail = ({ user }) => {
       });
     }
     else{
+      setLoading(true);
     try {
       const preparedData = prepareSetUserDetailsData(editedUser, selectedImage);
       const response = await setUserDetails({ preparedData, _id });
     if(response?.data?.status ===200) 
     {refetch()
+      setLoading(false);
     // setImageURI(response.data.uri);
      }
       console.log("ideeeeeee", _id)
@@ -167,6 +184,9 @@ const UserDetail = ({ user }) => {
 
 console.log("editttttt", edit)
   return (
+    loading ? (
+      <TailSpin color="red" radius={"8px"} />
+    ) : (
     <Container component="main" maxWidth="lg" sx={{ width: '100%' }}>
       <StyledCard sx={{ width: '95%' }}>
         <CardContent>
@@ -369,8 +389,9 @@ console.log("editttttt", edit)
           </StyledCard>
         </Container>
       )}
-    </Container>
-  );
-};
-
+      </Container>
+        )
+        );
+              }
+              
 export default UserDetail;

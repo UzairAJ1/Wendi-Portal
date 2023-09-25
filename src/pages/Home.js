@@ -19,12 +19,12 @@ const Home = () => {
 
   // Get global settings data
   const { data, error, isLoading } = useGlobalSettingsGetQuery();
-
+console.log("dataaa home===", data)
   const { likeInteractionLimit, likeTimerLimit, zodiacLimit } = data?.data || {};
   const [zodiacMachineLimit, setZodiacMachineLimit] = useState(zodiacLimit || 5);
 
   // State for Like Interaction
-  const [freeGifts, setFreeGifts] = useState(likeInteractionLimit?.freeGifts || 10);
+  const [freeGifts, setFreeGifts] = useState(likeInteractionLimit?.freeGifts || 11);
   const [paidGifts, setPaidGifts] = useState(likeInteractionLimit?.paidGifts || 20);
   const [giftRenewalTime, setGiftRenewalTime] = useState(likeInteractionLimit?.giftRenewalTime || 24);
 
