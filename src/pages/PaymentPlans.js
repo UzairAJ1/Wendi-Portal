@@ -1,18 +1,19 @@
 // PaymentPlansPage.js
 import React, { useState } from 'react';
 import { Card, CardContent, Typography, Grid, Button } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
-
+import { useGetPaymentPlansQuery, useAddPaymentPlanMutation } from '../redux/paymentPlansApi/paymentPlansApi';
 import Iconify from '../components/iconify';
 
-const paymentPlans = [
+const paymentPlansArray = [
   {
     name: 'Plan A',
     description: 'Basic plan with limited features',
@@ -35,18 +36,20 @@ const paymentPlans = [
 
 const PaymentPlans = () => {
   const navigate = useNavigate();
+  const { data: paymentPlans, isFetching } = useGetPaymentPlansQuery();
+  const [addPaymentPlan] = useAddPaymentPlanMutation();
   const [open, setOpen] = useState(false);
-  const [paymentPlansData, setPaymentPlansData] = useState(paymentPlans);
+  const [paymentPlansData, setPaymentPlansData] = useState(paymentPlansArray);
   const [paymentPlan, setPaymentPlan] = useState({
     name: '',
     description: '',
     amount: '',
-    likesLimit: null,
-    giftsLimit: null,
-    spinsLimit: null,
+    likesLimit: '',
+    giftsLimit: '',
+    spinsLimit: '',
     seeLikes: false,
     transactionId: '',
-    likesResetDuration: null,
+    likesResetDuration: '',
   });
 
   const handleClickOpen = () => {
@@ -58,30 +61,18 @@ const PaymentPlans = () => {
   };
 
   const handleInputChnages = (e) => {
-    const { name, value } = e.target;
-    setPaymentPlan({ ...paymentPlan, [name]: value });
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+
+    setPaymentPlan({ ...paymentPlan, [name]: newValue });
   };
 
   const handleSubmit = () => {
-    const requiredFields = [
-      'name',
-      'description',
-      'likesLimit',
-      'likesResetDuration',
-      'giftsLimit',
-      'spinsLimit',
-      'seeLikes',
-      'transactionId',
-      'amount',
-    ];
-
-    const hasAllRequiredFields = requiredFields.every((field) => paymentPlan[field]);
-
-    if (hasAllRequiredFields) {
-      setPaymentPlansData([...paymentPlansData, paymentPlan]);
-      setPaymentPlan({});
-      setOpen(false);
-    }
+    // addPaymentPlan(paymentPlan); //to be used when api is working
+    console.log(paymentPlan);
+    setPaymentPlansData([...paymentPlansData, paymentPlan]);
+    setPaymentPlan({});
+    setOpen(false);
   };
 
   return (
@@ -115,7 +106,7 @@ const PaymentPlans = () => {
           </Grid>
         ))}
       </Grid>
-      <Dialog open={open} onClose={handleClose} fullWidth="true" maxWidth="md">
+      <Dialog open={open} onClose={handleClose} maxWidth="md">
         <DialogTitle variant="h4">Payment Plan</DialogTitle>
         <DialogContent>
           <Stack direction="row" spacing={2} sx={{ margin: '20px 0' }}>
@@ -172,13 +163,9 @@ const PaymentPlans = () => {
           </Stack>
 
           <Stack direction="row" spacing={2} sx={{ margin: '20px 0' }}>
-            <TextField
+            <FormControlLabel
+              control={<Checkbox name="seeLikes" checked={paymentPlan.seeLikes} onChange={handleInputChnages} />}
               label="See Likes"
-              type="number"
-              name="seeLikes"
-              value={paymentPlan.seeLikes}
-              onChange={handleInputChnages}
-              fullWidth
             />
             <TextField
               label="Transaction ID"
@@ -190,7 +177,7 @@ const PaymentPlans = () => {
             />
             <TextField
               label="Likes Reset Duration (Hours)"
-              type="text"
+              type="number"
               name="likesResetDuration"
               value={paymentPlan.likesResetDuration}
               onChange={handleInputChnages}

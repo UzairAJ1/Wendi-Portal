@@ -17,7 +17,13 @@ export const homeApi = createApi({
   }),
 
   endpoints: (builder) => ({
-    // Define your API endpoints here
+    globalSettingsGet: builder.query({
+      query: () => ({
+        url: 'global/globalSettings',
+        method: 'get',
+      }),
+      providesTags: ['Settings'],
+    }),
 
     globalSettings: builder.mutation({
       query: (payload) => ({
@@ -25,12 +31,7 @@ export const homeApi = createApi({
         method: 'POST',
         body: payload,
       }),
-    }),
-    globalSettingsGet: builder.query({
-      query: () => ({
-        url: 'global/globalSettings',
-        method: 'get',
-      }),
+      invalidatesTags: ['Settings'],
     }),
   }),
 });

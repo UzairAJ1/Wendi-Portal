@@ -1,15 +1,15 @@
 // PremiumFeaturesPage.js
 import React, { useState } from 'react';
 import { Card, CardContent, Typography, Grid, Button } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
 import Iconify from '../components/iconify';
+import { useGetFeaturesQuery, useAddFeatureMutation } from '../redux/featuresApi/featuresApi';
 
 const premiumFeatures = [
   {
@@ -28,12 +28,16 @@ const premiumFeatures = [
 
 const PremiumFeatures = () => {
   const navigate = useNavigate();
+  const { data: featuresData, isFetching } = useGetFeaturesQuery();
+  const [addFeature] = useAddFeatureMutation();
   const [open, setOpen] = useState(false);
   const [features, setFeatures] = useState(premiumFeatures);
   const [feature, setFeature] = useState({
     name: '',
     description: '',
   });
+
+  console.log(featuresData);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,6 +51,15 @@ const PremiumFeatures = () => {
     const { name, value } = e.target;
     setFeature({ ...feature, [name]: value });
   };
+
+  // to be used when api is working
+  // const handleSubmit = async () => {
+  //   if (feature.name && feature.description) {
+  //     await addFeature(feature);
+  //     setFeature({});
+  //     setOpen(false);
+  //   }
+  // };
 
   const handleSubmit = () => {
     if (feature.name && feature.description) {

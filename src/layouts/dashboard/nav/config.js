@@ -9,12 +9,18 @@ const navConfig = [
   // {
   //   title: 'login',
   //   path: '/login',
-  //   icon: icon('ic_lock'), 
+  //   icon: icon('ic_lock'),
   // },
   {
     title: 'Home',
     path: '/dashboard/home',
-   icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/dashboard.svg" alt="Support and Feedback" />,
+    icon: (
+      <img
+        style={{ width: '20px', height: '20px' }}
+        src="/assets/icons/navbar/imported_icons/dashboard.svg"
+        alt="Support and Feedback"
+      />
+    ),
   },
   //   {
   //   title: 'Zodiac Machine',
@@ -26,7 +32,7 @@ const navConfig = [
   //   path: '/dashboard/likes',
   //   icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/likes.svg" alt="Support and Feedback" />,
   // },
-  { 
+  {
     title: 'dashboard',
     path: '/dashboard/app',
     icon: icon('ic_analytics'),
@@ -34,12 +40,24 @@ const navConfig = [
   {
     title: 'user management',
     path: '/dashboard/user',
-    icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/manage.svg" alt="Support and Feedback" />,
+    icon: (
+      <img
+        style={{ width: '20px', height: '20px' }}
+        src="/assets/icons/navbar/imported_icons/manage.svg"
+        alt="Support and Feedback"
+      />
+    ),
   },
   {
-    title: 'Reporting and Analytic',
+    title: 'Reporting and Analytics',
     path: '/dashboard/reportandanalytics',
-    icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/analytics.svg" alt="Support and Feedback" />,
+    icon: (
+      <img
+        style={{ width: '20px', height: '20px' }}
+        src="/assets/icons/navbar/imported_icons/analytics.svg"
+        alt="Support and Feedback"
+      />
+    ),
   },
   // {
   //   title: 'product',
@@ -55,15 +73,25 @@ const navConfig = [
   {
     title: 'Support And Feedback',
     path: '/dashboard/supportfour',
-    icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/fdback.svg" alt="Support and Feedback" />,
+    icon: (
+      <img
+        style={{ width: '20px', height: '20px' }}
+        src="/assets/icons/navbar/imported_icons/fdback.svg"
+        alt="Support and Feedback"
+      />
+    ),
   },
   {
     title: 'Payments',
     path: '/dashboard/payments',
-    icon: <img style={{width:"20px", height:"20px"}}  src="/assets/icons/navbar/imported_icons/payment.svg" alt="Support and Feedback" />,
+    icon: (
+      <img
+        style={{ width: '20px', height: '20px' }}
+        src="/assets/icons/navbar/imported_icons/payment.svg"
+        alt="Support and Feedback"
+      />
+    ),
   },
-
-  
 ];
 
 export default navConfig;
