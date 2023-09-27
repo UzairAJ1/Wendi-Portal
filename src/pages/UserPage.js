@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
 
 import React, { useRef, useState, useEffect } from 'react';
 
@@ -14,16 +13,11 @@ import {
   Stack,
   Paper,
   Avatar,
-  Button,
-  Popover,
-  Checkbox,
   TableRow,
-  MenuItem,
   TableBody,
   TableCell,
   Container,
   Typography,
-  IconButton,
   TableContainer,
   TablePagination,
 } from '@mui/material';
@@ -104,8 +98,8 @@ export default function UserPage() {
   const { data: users, isFetching } = useGetUsersQuery();
 
   console.log(users);
-  console.log("userssss name",users?.data?.fullName);
-  console.log("userssss name", users?.data[0]?.fullName);
+  console.log('userssss name', users?.data?.fullName);
+  console.log('userssss name', users?.data[0]?.fullName);
   // const profilePhoto = users?.data?.profileImages[0];
 
   const handleOpenMenu = (event) => {
@@ -247,13 +241,14 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {/* {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) */}
-                  
+
                   {users?.data?.map((row) => {
                     // const { id, name, role, status, email, avatarUrl, isVerified } = row;
                     // const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
                       <TableRow
+                        key={row._id}
                         hover
                         // key={id}
                         tabIndex={-1}
@@ -278,13 +273,16 @@ export default function UserPage() {
                           <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
                         </TableCell> */}
 
-                        <TableCell component="th" scope="row" padding="0px 0px 0px 40px">
+                        <TableCell component="th" scope="row" sx={{ padding: '0px 0px 0px 40px' }}>
                           <Stack direction="row" alignItems="center" spacing={2}>
-                          {/* <img src={"http://192.168.18.131:3333/Images/" + specificUser?.data?.profileImages?.find(item=> item?.orderId == 1)?.uri?.split("/")?.pop()} alt="user_image" style={{ width: '180px', height: '170px', objectFit: 'cover' }} /> */}
+                            {/* <img src={"http://192.168.18.131:3333/Images/" + specificUser?.data?.profileImages?.find(item=> item?.orderId == 1)?.uri?.split("/")?.pop()} alt="user_image" style={{ width: '180px', height: '170px', objectFit: 'cover' }} /> */}
                             <Avatar
                               sx={{ cursor: 'pointer' }}
                               // alt={name}
-                              src={"http://192.168.18.131:3333/Images/" + row?.profileImages?.find(item=> item?.orderId == 1)?.uri?.split("/")?.pop()}
+                              src={`http://192.168.18.131:3333/Images/${row?.profileImages
+                                ?.find((item) => item?.orderId === 1)
+                                ?.uri?.split('/')
+                                ?.pop()}`}
                               // onClick={() => fileInputRef.current.click()}
                             />
 

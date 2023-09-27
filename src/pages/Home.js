@@ -1,14 +1,10 @@
-// Import necessary dependencies
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Button, Grid, TextField, Paper, Box, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import { setUser } from '../redux/slices/auth';
-
 import { useGlobalSettingsMutation, useGlobalSettingsGetQuery } from '../redux/homeApi/homeApi';
-
-// import DeleteIcon from '@mui/icons-material/Delete';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -60,6 +56,7 @@ const Home = () => {
   const handleFreeGiftsChange = (e) => {
     setFreeGifts(e.target.value);
   };
+
   const handleZodiacMachineLimitChange = (e) => {
     setZodiacMachineLimit(e.target.value);
   };
@@ -97,6 +94,14 @@ const Home = () => {
       console.log('Data received:', data);
     }
   }, [isLoading, error, data]);
+
+  useEffect(() => {
+    setZodiacMachineLimit(zodiacLimit);
+    setFreeGifts(likeInteractionLimit?.freeGifts);
+    setPaidGifts(likeInteractionLimit?.paidGifts);
+    setGiftRenewalTime(likeInteractionLimit?.giftRenewalTime);
+    setRemainingTime(likeTimerLimit);
+  }, [data]);
 
   const logout = () => {
     dispatch(setUser(null));

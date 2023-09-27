@@ -1,10 +1,9 @@
-import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 
 import React, { useRef, useState, useEffect } from 'react';
 
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // @mui
@@ -16,14 +15,12 @@ import {
   Avatar,
   Button,
   Popover,
-  Checkbox,
   TableRow,
   MenuItem,
   TableBody,
   TableCell,
   Container,
   Typography,
-  IconButton,
   TableContainer,
   TablePagination,
 } from '@mui/material';
@@ -209,14 +206,6 @@ export default function UserPage() {
           <Typography variant="h4" gutterBottom>
             Subscribers
           </Typography>
-
-          {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} sx={{ background: '#4A276B' }}
-          onClick={()=>{
-            navigate('/newuser');
-          }}
-          >
-            New User
-          </Button> */}
         </Stack>
 
         <Card>
@@ -270,7 +259,7 @@ export default function UserPage() {
                           <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
                         </TableCell> */}
 
-                        <TableCell component="th" scope="row" padding="0px 0px 0px 40px">
+                        <TableCell component="th" scope="row" sx={{ padding: '0px 0px 0px 40px' }}>
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar
                               sx={{ cursor: 'pointer' }}
@@ -399,16 +388,6 @@ export default function UserPage() {
           Delete
         </MenuItem>
       </Popover>
-      {/* <Button
-        variant="contained"
-        sx={{ background: '#4A276B', height: '50px', marginLeft: '760px', marginTop: '30px' }}
-        onClick={() => {
-          navigate('/dashboard/payments');
-          // navigate(-1);
-        }}
-      >
-        Back to Payment menu
-      </Button> */}
       <ToastContainer />
     </>
   );

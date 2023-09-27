@@ -1,7 +1,6 @@
 // PaymentPlansPage.js
 import React, { useState } from 'react';
 import { Card, CardContent, Typography, Grid, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,36 +9,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
+
 import { useGetPaymentPlansQuery, useAddPaymentPlanMutation } from '../redux/paymentPlansApi/paymentPlansApi';
 import Iconify from '../components/iconify';
 
-const paymentPlansArray = [
-  {
-    name: 'Plan A',
-    description: 'Basic plan with limited features',
-    likesLimit: 40,
-    likesResetDuration: 24,
-  },
-  {
-    name: 'Plan B',
-    description: 'Standard plan with additional features',
-    likesLimit: 100,
-    likesResetDuration: 48,
-  },
-  {
-    name: 'Plan C',
-    description: 'Premium plan with all features',
-    likesLimit: 300,
-    likesResetDuration: 76,
-  },
-];
-
 const PaymentPlans = () => {
-  const navigate = useNavigate();
-  const { data: paymentPlans, isFetching } = useGetPaymentPlansQuery();
-  const [addPaymentPlan] = useAddPaymentPlanMutation();
+  const { data: paymentPlans, isFetching, isError } = useGetPaymentPlansQuery();
+  const [addPaymentPlan, addPaymentPlanResults] = useAddPaymentPlanMutation();
   const [open, setOpen] = useState(false);
-  const [paymentPlansData, setPaymentPlansData] = useState(paymentPlansArray);
   const [paymentPlan, setPaymentPlan] = useState({
     name: '',
     description: '',
@@ -49,8 +26,10 @@ const PaymentPlans = () => {
     spinsLimit: '',
     seeLikes: false,
     transactionId: '',
-    likesResetDuration: '',
+    resetDuration: '',
   });
+
+  console.log(paymentPlans);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -68,11 +47,33 @@ const PaymentPlans = () => {
   };
 
   const handleSubmit = () => {
-    // addPaymentPlan(paymentPlan); //to be used when api is working
-    console.log(paymentPlan);
-    setPaymentPlansData([...paymentPlansData, paymentPlan]);
-    setPaymentPlan({});
+    if (
+      !paymentPlan.name ||
+      !paymentPlan.description ||
+      !paymentPlan.amount ||
+      !paymentPlan.likesLimit ||
+      !paymentPlan.giftsLimit ||
+      !paymentPlan.spinsLimit ||
+      !paymentPlan.transactionId ||
+      !paymentPlan.resetDuration
+    ) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+    addPaymentPlan(paymentPlan);
+    setPaymentPlan({
+      name: '',
+      description: '',
+      amount: '',
+      likesLimit: '',
+      giftsLimit: '',
+      spinsLimit: '',
+      seeLikes: false,
+      transactionId: '',
+      resetDuration: '',
+    });
     setOpen(false);
+    console.log(paymentPlan);
   };
 
   return (
@@ -89,7 +90,7 @@ const PaymentPlans = () => {
         </Button>
       </div>
       <Grid container spacing={2}>
-        {paymentPlansData.map((plan, index) => (
+        {paymentPlans?.data?.map((plan, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Card variant="outlined">
               <CardContent>
@@ -99,8 +100,18 @@ const PaymentPlans = () => {
                 <Typography variant="body2" color="text.secondary">
                   {plan.description}
                 </Typography>
-                <Typography variant="h5">Likes Limit {plan.likesLimit}</Typography>
-                <Typography variant="h5">Reset Duration {plan.likesResetDuration}</Typography>
+                <Typography variant="subtitle1">
+                  Likes Limit: {plan.likesLimit === -1 ? 'Unlimited' : plan.likesLimit}
+                </Typography>
+                <Typography variant="subtitle1">
+                  Gifts Limit: {plan.giftsLimit === -1 ? 'Unlimited' : plan.giftsLimit}
+                </Typography>
+                <Typography variant="subtitle1">
+                  Spins Limit: {plan.spinsLimit === -1 ? 'Unlimited' : plan.spinsLimit}
+                </Typography>
+                <Typography variant="subtitle1">Reset Duration: {plan.resetDuration} hours</Typography>
+                <Typography variant="subtitle1">See Likes: {plan.seeLikes ? 'true' : 'false'}</Typography>
+                <Typography variant="subtitle1">Amount: {plan.amount}</Typography>
               </CardContent>
             </Card>
           </Grid>
@@ -166,6 +177,13 @@ const PaymentPlans = () => {
             <FormControlLabel
               control={<Checkbox name="seeLikes" checked={paymentPlan.seeLikes} onChange={handleInputChnages} />}
               label="See Likes"
+              sx={{
+                width: '100%',
+                border: '1px solid #80808036',
+                borderRadius: '5px',
+                marginLeft: '0',
+                marginRight: '0',
+              }}
             />
             <TextField
               label="Transaction ID"
@@ -176,10 +194,10 @@ const PaymentPlans = () => {
               fullWidth
             />
             <TextField
-              label="Likes Reset Duration (Hours)"
+              label="Reset Duration (Hours)"
               type="number"
-              name="likesResetDuration"
-              value={paymentPlan.likesResetDuration}
+              name="resetDuration"
+              value={paymentPlan.resetDuration}
               onChange={handleInputChnages}
               fullWidth
             />

@@ -3,7 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const paymentPlansApi = createApi({
   reducerPath: 'paymentPlans',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://192.168.18.131:3333/',
+    // baseUrl: 'http://192.168.18.131:3333/',
+    baseUrl: 'http://127.0.0.1:3333/',
   }),
   endpoints: (builder) => ({
     getPaymentPlans: builder.query({
@@ -11,7 +12,7 @@ const paymentPlansApi = createApi({
         url: 'paymentPlans',
         method: 'GET',
       }),
-      providesTags: [],
+      providesTags: ['PaymentPlan'],
     }),
 
     addPaymentPlan: builder.mutation({
@@ -20,7 +21,7 @@ const paymentPlansApi = createApi({
         method: 'POST',
         body: paymentPlan,
       }),
-      invalidatesTags: [],
+      invalidatesTags: ['PaymentPlan'],
     }),
 
     updatePaymentPlan: builder.mutation({
@@ -29,7 +30,7 @@ const paymentPlansApi = createApi({
         method: 'PUT',
         body: payload,
       }),
-      invalidatesTags: [],
+      invalidatesTags: ['PaymentPlan'],
     }),
 
     deletePaymentPlan: builder.mutation({
@@ -37,7 +38,7 @@ const paymentPlansApi = createApi({
         url: `paymentPlans/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: [],
+      invalidatesTags: ['PaymentPlan'],
     }),
   }),
 });

@@ -1,27 +1,15 @@
-import { Helmet } from 'react-helmet-async';
-import { faker } from '@faker-js/faker';
-// @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-// components
-import Iconify from '../components/iconify';
-// sections
-import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
-} from '../sections/@dashboard/app';
+import { AppWebsiteVisits, AppWidgetSummary, AppCurrentSubject, AppConversionRates } from '../sections/@dashboard/app';
+import { useGetUserStatisticsQuery } from '../redux/dashboard/dashboardApi';
 
 function ReportAnalytics() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { data: usersData, isFetching, isError } = useGetUserStatisticsQuery();
+
+  const { totalUsers = 300, activeUsers = 100, newUsers = 50 } = usersData?.data || {};
 
   return (
     <Container maxWidth="lg">
@@ -51,7 +39,7 @@ function ReportAnalytics() {
           <Grid item xs={12} sm={6} md={3} sx={{ m: 0, pd: 0 }}>
             <AppWidgetSummary
               title="Total number of registered users"
-              total={90}
+              total={totalUsers}
               icon={'ant-design:android-filled'}
               sx={{ minHeight: '260px', padding: '40px 10px' }}
             />
@@ -60,7 +48,7 @@ function ReportAnalytics() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="Active users currently using the app"
-              total={131}
+              total={activeUsers}
               color="info"
               icon={'ant-design:heart-filled'}
               sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -70,7 +58,7 @@ function ReportAnalytics() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="new user sign-ups within a specified time period"
-              total={172}
+              total={newUsers}
               color="warning"
               icon={'ant-design:windows-filled'}
               sx={{ minHeight: '260px', padding: '40px 10px' }}

@@ -1,14 +1,14 @@
 // src/apiSlice.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 // import { useParams } from 'react-router-dom';
-  
-// const { _id } = useParams();
 
+// const { _id } = useParams();
 
 export const userManagement = createApi({
   reducerPath: 'userManagement',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://192.168.18.131:3333/',
+    // baseUrl: 'http://192.168.18.131:3333/',
+    baseUrl: 'http://127.0.0.1:3333/',
     prepareHeaders: (headers, { getState }) => {
       // @ts-ignore
       // const token = getCoo('token');
@@ -33,14 +33,14 @@ export const userManagement = createApi({
     }),
 
     getUserById: builder.query({
-      query: ({_id}) => `user/getUser/${_id}`,
+      query: ({ _id }) => `user/getUser/${_id}`,
     }),
- 
-      setUserById: builder.mutation({
+
+    setUserById: builder.mutation({
       query: (payload) => ({
-          url: `user/updateUser/${payload._id}`,
-          method: 'POST',
-          body: payload?.preparedData
+        url: `user/updateUser/${payload._id}`,
+        method: 'POST',
+        body: payload?.preparedData,
       }),
     }),
     // setUserById: builder.mutation({
@@ -51,6 +51,6 @@ export const userManagement = createApi({
     //   }),
     // }),
   }),
-});  
+});
 
-export const { useUserManagementQuery, useGetUsersQuery, useGetUserByIdQuery, useSetUserByIdMutation} = userManagement;
+export const { useUserManagementQuery, useGetUsersQuery, useGetUserByIdQuery, useSetUserByIdMutation } = userManagement;

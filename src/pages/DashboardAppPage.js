@@ -1,30 +1,17 @@
 import { Helmet } from 'react-helmet-async';
-import { faker } from '@faker-js/faker';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
-// components
-import Iconify from '../components/iconify';
 // sections
-import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
-} from '../sections/@dashboard/app';
+import { AppCurrentVisits, AppWebsiteVisits, AppWidgetSummary, AppConversionRates } from '../sections/@dashboard/app';
 import { useGetUserStatisticsQuery, useGetLikesStatisticsQuery } from '../redux/dashboard/dashboardApi';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   const theme = useTheme();
-  const { data: usersData, isFetching } = useGetUserStatisticsQuery();
-  const { data: likesData, isFetching: fetchingLikesStats } = useGetLikesStatisticsQuery();
+  const { data: usersData, isFetching, isError } = useGetUserStatisticsQuery();
+  const { data: likesData, isFetching: fetchingLikesStats, error } = useGetLikesStatisticsQuery();
 
   const { totalUsers = 100, maleUsers = 60, femaleUsers = 40, activeUsers = 50, newUsers = 10 } = usersData?.data || {};
   const { totalLikes, maleLikes, femaleLikes, likesPerDay, likesPerMonth } = likesData?.data || {};

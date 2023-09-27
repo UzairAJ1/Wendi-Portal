@@ -1,30 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
-
-import {
-  Card,
-  Table,
-  Stack,
-  Paper,
-  Avatar,
-  Button,
-  Popover,
-  Checkbox,
-  TableRow,
-  MenuItem,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  IconButton,
-  TableContainer,
-  TablePagination,
-  Box,
-} from '@mui/material';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Tab from '@mui/material/Tab';
+
 import PaymentForm from './PaymentGateway';
 import PremiumFeatures from './PremiumFeatures';
 import PaymentPlans from './PaymentPlans';
