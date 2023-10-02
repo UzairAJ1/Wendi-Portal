@@ -15,6 +15,7 @@ import {
   Grid,
   Paper,
   Box,
+  Avatar,
 } from '@mui/material';
 import { styled } from '@mui/system';
 import { toast } from 'react-toastify';
@@ -198,7 +199,13 @@ const UserDetail = ({ user }) => {
     console.log('imageee', image);
   }, [image]);
 
-  console.log('editttttt', edit);
+
+
+    let myImg = `http://192.168.18.131:3333/Images/${specificUser?.data?.profileImages?.find((item) => item?.orderId === 1)
+    ?.uri?.split('/')
+      ?.pop()}`
+  console.log('editttttt', myImg);
+
   return loading ? (
     <TailSpin color="red" radius={'8px'} />
   ) : (
@@ -211,15 +218,10 @@ const UserDetail = ({ user }) => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Paper elevation={3} sx={{ padding: 2, width: '200px', height: '200px' }}>
-                <img
-                  src={`http://192.168.18.131:3333/Images/
-                    ${specificUser?.data?.profileImages
-                      ?.find((item) => item?.orderId === 1)
-                      ?.uri?.split('/')
-                      ?.pop()}`}
-                  alt="user_image"
-                  style={{ width: '180px', height: '170px', objectFit: 'cover' }}
-                />
+             <img
+src={myImg}
+style={{height:"100%",width:"100%",objectFit:"cover"}}
+             />
                 {/* <img src={selectedImage} alt="Selected" style={{ maxWidth: '100%' }} /> */}
                 {/* <Typography variant="subtitle1">
                   Profile Picture: {editedUser.pic}

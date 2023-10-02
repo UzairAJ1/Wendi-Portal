@@ -7,8 +7,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const userManagement = createApi({
   reducerPath: 'userManagement',
   baseQuery: fetchBaseQuery({
-    // baseUrl: 'http://192.168.18.131:3333/',
-    baseUrl: 'http://127.0.0.1:3333/',
+    baseUrl: 'http://192.168.18.131:3333/',
+    // baseUrl: 'http://127.0.0.1:3333/',
     prepareHeaders: (headers, { getState }) => {
       // @ts-ignore
       // const token = getCoo('token');
