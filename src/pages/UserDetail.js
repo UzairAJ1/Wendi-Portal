@@ -201,7 +201,7 @@ const UserDetail = ({ user }) => {
 
 
 
-    let myImg = `http://192.168.18.131:3333/Images/${specificUser?.data?.profileImages?.find((item) => item?.orderId === 1)
+    const myImg = `http://192.168.18.131:3333/Images/${specificUser?.data?.profileImages?.find((item) => item?.orderId === 1)
     ?.uri?.split('/')
       ?.pop()}`
   console.log('editttttt', myImg);
@@ -219,6 +219,7 @@ const UserDetail = ({ user }) => {
             <Grid item xs={12}>
               <Paper elevation={3} sx={{ padding: 2, width: '200px', height: '200px' }}>
              <img
+             alt=""
 src={myImg}
 style={{height:"100%",width:"100%",objectFit:"cover"}}
              />

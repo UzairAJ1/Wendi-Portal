@@ -101,7 +101,7 @@ const Home = () => {
     setFreeGifts(likeInteractionLimit?.freeGifts ? likeInteractionLimit?.freeGifts:freeGifts);
     setPaidGifts(likeInteractionLimit?.paidGifts ? likeInteractionLimit?.paidGifts :  paidGifts);
     setGiftRenewalTime(likeInteractionLimit?.giftRenewalTime ? likeInteractionLimit?.giftRenewalTime : giftRenewalTime);
-    setRemainingTime(likeTimerLimit ? likeTimerLimit : remainingTime);
+    setRemainingTime(likeTimerLimit );
   }, [data]);
 
   // useEffect(() => {
