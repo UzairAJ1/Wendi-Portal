@@ -159,11 +159,15 @@ const UserDetail = ({ user }) => {
             // password: '',
           });
           // Successful response handling
-          const data = response.data;
-          showMessage({
-            type: 'success',
-            message: 'עודכן בהצלחה',
-          });
+
+          // Fahad commented
+          // const data = response.data;
+          // showMessage({
+          //   type: 'success',
+          //   message: 'עודכן בהצלחה',
+          // });
+          //
+
           // Handle further actions if needed
         }
       } catch (error) {
