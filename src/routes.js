@@ -63,14 +63,11 @@ export default function Router() {
   const { userData } = useSelector((state) => state.auth);
   const { remember } = useSelector((state) => state.remember);
   const routes = useRoutes([
-    // !userData
-    { path: '/', element: <LoginPage />, index: true },
-    {
+    // Use userData to determine if the user is authenticated
+    !userData ? { path: '/', element: <LoginPage />, index: true } : {
       path: '/dashboard',
-
       element: <DashboardLayout />,
       children: [
-        // { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'home', element: <Home />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'user', element: <UserPage /> },
@@ -82,7 +79,6 @@ export default function Router() {
         { path: 'supportfour', element: <Supportfour /> },
       ],
     },
-
     {
       element: <SimpleLayout />,
       children: [
@@ -144,3 +140,7 @@ export default function Router() {
 
   return routes;
 }
+ 
+
+
+

@@ -13,7 +13,8 @@ const Home = () => {
   // Get global settings data
   const { data, error, isLoading, isFetching } = useGlobalSettingsGetQuery();
   const { likeInteractionLimit, likeTimerLimit, zodiacLimit } = data?.data || {};
-  const [zodiacMachineLimit, setZodiacMachineLimit] = useState(zodiacLimit || 5);
+  const zod = 5;
+  const [zodiacMachineLimit, setZodiacMachineLimit] = useState(zodiacLimit || zod);
 
   console.log(data);
 
@@ -96,12 +97,23 @@ const Home = () => {
   }, [isLoading, error, data]);
 
   useEffect(() => {
-    setZodiacMachineLimit(zodiacLimit);
-    setFreeGifts(likeInteractionLimit?.freeGifts);
-    setPaidGifts(likeInteractionLimit?.paidGifts);
-    setGiftRenewalTime(likeInteractionLimit?.giftRenewalTime);
-    setRemainingTime(likeTimerLimit);
+    setZodiacMachineLimit(zodiacMachineLimit);
+    setFreeGifts(likeInteractionLimit?.freeGifts ? likeInteractionLimit?.freeGifts:freeGifts);
+    setPaidGifts(likeInteractionLimit?.paidGifts ? likeInteractionLimit?.paidGifts :  paidGifts);
+    setGiftRenewalTime(likeInteractionLimit?.giftRenewalTime ? likeInteractionLimit?.giftRenewalTime : giftRenewalTime);
+    setRemainingTime(remainingTime? remainingTime : likeTimerLimit);
   }, [data]);
+
+  // useEffect(() => {
+  //   setZodiacMachineLimit(zodiacMachineLimit);
+  //   setFreeGifts(freeGifts);
+  //   setPaidGifts(paidGifts);
+  //   setGiftRenewalTime(giftRenewalTime);
+  //   setRemainingTime(likeTimerLimit);
+  // }, [data]);
+
+
+  
 
   const logout = () => {
     dispatch(setUser(null));
@@ -137,6 +149,7 @@ const Home = () => {
               value={zodiacMachineLimit}
               onChange={handleZodiacMachineLimitChange}
               fullWidth
+              
             />
           </Grid>
           <Grid item xs={6}>
@@ -174,6 +187,7 @@ const Home = () => {
               value={giftRenewalTime}
               onChange={handleGiftRenewalTimeChange}
               fullWidth
+           
             />
           </Grid>
           <Grid item xs={3}>

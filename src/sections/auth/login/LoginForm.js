@@ -155,7 +155,7 @@ console.log("USER DATA =======",userData)
         onChange = {(e)=>{
           setRememberMe(e.target.checked)
         }}
-        defaultChecked={true}
+        defaultChecked
         />
        <Link style={{textDecoration:"none"}}
         onClick={() => {
