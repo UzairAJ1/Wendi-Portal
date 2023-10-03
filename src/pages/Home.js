@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import Tab from '@mui/material/Tab';
 import { Container, Typography, Button, Grid, TextField, Paper, Box, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -9,7 +13,10 @@ import { useGlobalSettingsMutation, useGlobalSettingsGetQuery } from '../redux/h
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [value, setValue] = useState('1');
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   // Get global settings data
   const { data, error, isLoading, isFetching } = useGlobalSettingsGetQuery();
   const { likeInteractionLimit, likeTimerLimit, zodiacLimit } = data?.data || {};
@@ -121,8 +128,9 @@ const Home = () => {
   };
 
   return (
-    <Container>
-      <Grid item xs={8} sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+    <Box sx={{ width: '100%', typography: 'body1' }}>
+    <TabContext value={value}>
+    <Grid item xs={8} sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
         <Button
           variant="contained"
           color="primary"
@@ -134,6 +142,16 @@ const Home = () => {
           Logout
         </Button>
       </Grid>
+    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label="Zodiac Machine Feature" value="1" />
+              <Tab label="Like Interaction" value="2" />
+              <Tab label="Like Timer" value="3" />
+            </TabList>
+          </Box>
+    <Container>
+
+      <TabPanel value="1">
       <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
         <Typography variant="h5" gutterBottom>
           Zodiac Machine Feature
@@ -166,6 +184,8 @@ const Home = () => {
           </Grid>
         </Grid>
       </Paper>
+      </TabPanel>
+      <TabPanel value="2">
       <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
         <Typography variant="h5" gutterBottom>
           Like Interaction
@@ -204,8 +224,10 @@ const Home = () => {
           </Grid>
         </Grid>
       </Paper>
+      </TabPanel>
 
       {/* Like Timer */}
+      <TabPanel value="3">
       <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
         <Typography variant="h5" gutterBottom>
           Like Timer
@@ -237,7 +259,10 @@ const Home = () => {
           </Grid>
         </Grid>
       </Paper>
+      </TabPanel>
     </Container>
+    </TabContext>
+      </Box>
   );
 };
 

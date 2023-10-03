@@ -526,8 +526,8 @@ export default function DashboardAppPage() {
           <Grid container spacing={3} justifyContent="space-around">
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
-                title="Total number of registered users"
-                total={totalUsers}
+                title="Total number of male registered users"
+                total={maleUsers}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -535,8 +535,8 @@ export default function DashboardAppPage() {
 
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
-                title="Active users currently using the app"
-                total={activeUsers}
+                title="Total number of female registered users"
+                total={femaleUsers}
                 color="info"
                 icon={'ant-design:apple-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -545,8 +545,9 @@ export default function DashboardAppPage() {
 
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
-                title="new user sign-ups within a specified time period"
-                total={newUsers}
+                // title="new user sign-ups within a specified time period"
+                title="Difference among male and female users"
+                total={maleUsers - femaleUsers}
                 color="warning"
                 icon={'ant-design:windows-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
