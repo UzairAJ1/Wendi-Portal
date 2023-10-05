@@ -220,8 +220,8 @@ const UserDetail = ({ user }) => {
               <Paper elevation={3} sx={{ padding: 2, width: '200px', height: '200px' }}>
              <img
              alt=""
-src={myImg}
-style={{height:"100%",width:"100%",objectFit:"cover"}}
+        src={myImg}
+        style={{height:"100%",width:"100%",objectFit:"cover"}}
              />
                 {/* <img src={selectedImage} alt="Selected" style={{ maxWidth: '100%' }} /> */}
                 {/* <Typography variant="subtitle1">
