@@ -7,8 +7,8 @@ import { Grid, Container, Typography } from '@mui/material';
 // components
 import Iconify from '../components/iconify';
 // sections
-import {useGetUserStatisticsQuery,useGetLikesStatisticsQuery} from '../redux/dashboard/dashboardApi';
-import{
+import { useGetUserStatisticsQuery, useGetLikesStatisticsQuery,useDailyActiveUsersQuery, } from '../redux/dashboard/dashboardApi';
+import {
   AppTasks,
   AppNewsUpdate,
   AppOrderTimeline,
@@ -26,22 +26,31 @@ export default function DashboardAppPage() {
   const theme = useTheme();
   const { data: usersData, isFetching, isError } = useGetUserStatisticsQuery();
   const { data: likesData, isFetching: fetchingLikesStats, error } = useGetLikesStatisticsQuery();
-
+  const {data:dailyActiveUsers, isFetching:fetchingLikeUsers,isError1}=useDailyActiveUsersQuery();
+  console.log(dailyActiveUsers);
   const totalUsers = usersData?.data?.totalUsers || 0;
   const maleUsers = usersData?.data?.maleUsers || 0;
   const femaleUsers = usersData?.data?.femaleUsers || 0;
   const activeUsers = usersData?.data?.activeUsers || 0;
   const newUsers = usersData?.data?.newUsers || 0;
-  const { totalLikes, maleLikes, femaleLikes, likesPerDay, likesPerMonth,likesPerDayMale,likesPerDayFemale,likesPerMonthMale,likesPerMonthFemale  } = likesData?.data || {};
+  const {
+    totalLikes,
+    maleLikes,
+    femaleLikes,
+    likesPerDay,
+    likesPerMonth,
+    likesPerDayMale,
+    likesPerDayFemale,
+    likesPerMonthMale,
+    likesPerMonthFemale,
+  } = likesData?.data || {};
   const [totalCount, setTotalCount] = useState(0);
   const [averageDailyLikes, setAverageDailyLikes] = useState(0);
   const [averageMonthlyLikes, setAverageMonthlyLikes] = useState(0);
   const [averageDailyLikesMale, setAverageDailyLikesMale] = useState(0);
-  const [averageDailyLikesFemale,setAverageDailyLikesFemale]=useState(0);
-  const [averageMonthlyLikesMale,setAverageMonthlyLikesMale]=useState(0);
-  const [averageMonthlyLikesFemale,setAverageMonthlyLikesFemale]=useState(0);
-
-console.log(totalUsers)
+  const [averageDailyLikesFemale, setAverageDailyLikesFemale] = useState(0);
+  const [averageMonthlyLikesMale, setAverageMonthlyLikesMale] = useState(0);
+  const [averageMonthlyLikesFemale, setAverageMonthlyLikesFemale] = useState(0);
   useEffect(() => {
     if (likesPerMonthFemale) {
       let total = 0;
@@ -125,25 +134,41 @@ console.log(totalUsers)
           Hi, Welcome back
         </Typography>
 
-
         <Grid container spacing={4}>
-        <Typography variant="h6" sx={{ margin: '30px 0px 20px 40px' }}>
-        1. User Statistics:
-        </Typography>
-        <Grid container spacing={3} justifyContent="space-around" >
-          <Grid item xs={12} sm={6} md={3} sx={{ m: 0, pd:0,   }}>
-            <AppWidgetSummary title="Total number of registered users" total={100} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
-          </Grid>
+          <Typography variant="h6" sx={{ margin: '30px 0px 20px 40px' }}>
+            1. User Statistics:
+          </Typography>
+          <Grid container spacing={3} justifyContent="space-around">
+            <Grid item xs={12} sm={6} md={3} sx={{ m: 0, pd: 0 }}>
+              <AppWidgetSummary
+                title="Total number of registered users"
+                total={totalUsers}
+                icon={'ant-design:android-filled'}
+                sx={{ minHeight: '260px', padding: '40px 10px' }}
+              />
+            </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Active users currently using the app" total={831} color="info" icon={'ant-design:heart-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
-          </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <AppWidgetSummary
+                title="Active users currently using the app"
+                total={activeUsers}
+                color="info"
+                icon={'ant-design:heart-filled'}
+                sx={{ minHeight: '260px', padding: '40px 10px' }}
+              />
+            </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="new user sign-ups within a specified time period" total={315} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
-          </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <AppWidgetSummary
+                title="new user sign-ups within a specified time period"
+                total={newUsers}
+                color="warning"
+                icon={'ant-design:windows-filled'}
+                sx={{ minHeight: '260px', padding: '40px 10px' }}
+              />
+            </Grid>
 
-          {/* <Grid item xs={12} sm={6} md={3}>
+            {/* <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
           </Grid> */}
           </Grid>
@@ -183,7 +208,7 @@ console.log(totalUsers)
                 //   fill: 'solid',
                 //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
                 // },
-                    {
+                {
                   name: 'User Retention',
                   type: 'column',
                   fill: 'solid',
@@ -204,11 +229,9 @@ console.log(totalUsers)
               ]}
               chartColors={[
                 theme.palette.primary.main,
-                   theme.palette.error.main,
+                theme.palette.error.main,
                 theme.palette.warning.main,
                 theme.palette.info.main,
-                
-             
               ]}
             />
           </Grid>
@@ -282,7 +305,7 @@ console.log(totalUsers)
                 //   fill: 'solid',
                 //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
                 // },
-                    {
+                {
                   name: 'User Retention',
                   type: 'column',
                   fill: 'solid',
@@ -303,15 +326,12 @@ console.log(totalUsers)
               ]}
               chartColors={[
                 theme.palette.primary.main,
-                   theme.palette.error.main,
+                theme.palette.error.main,
                 theme.palette.warning.main,
                 theme.palette.info.main,
-                
-             
               ]}
             />
           </Grid>
-
 
           <Typography variant="h6" sx={{ margin: '30px 0px 20px 40px' }}>
             3. Monthly Likes:
@@ -383,7 +403,7 @@ console.log(totalUsers)
                 //   fill: 'solid',
                 //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
                 // },
-                    {
+                {
                   name: 'User Retention',
                   type: 'column',
                   fill: 'solid',
@@ -404,11 +424,9 @@ console.log(totalUsers)
               ]}
               chartColors={[
                 theme.palette.primary.main,
-                   theme.palette.error.main,
+                theme.palette.error.main,
                 theme.palette.warning.main,
                 theme.palette.info.main,
-                
-             
               ]}
             />
           </Grid>
@@ -426,15 +444,26 @@ console.log(totalUsers)
               />
             </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="User retention" total={131} color="info" icon={'ant-design:apple-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
-          </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <AppWidgetSummary
+                title="User retention"
+                total={131}
+                color="info"
+                icon={'ant-design:apple-filled'}
+                sx={{ minHeight: '260px', padding: '40px 10px' }}
+              />
+            </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="User engagement" total={115} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
+            <Grid item xs={12} sm={6} md={3}>
+              <AppWidgetSummary
+                title="User engagement"
+                total={115}
+                color="warning"
+                icon={'ant-design:windows-filled'}
+                sx={{ minHeight: '260px', padding: '40px 10px' }}
+              />
+            </Grid>
           </Grid>
-          </Grid>
-
 
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
@@ -472,7 +501,7 @@ console.log(totalUsers)
                 //   fill: 'solid',
                 //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
                 // },
-                    {
+                {
                   name: 'User Retention',
                   type: 'column',
                   fill: 'solid',
@@ -493,31 +522,45 @@ console.log(totalUsers)
               ]}
               chartColors={[
                 theme.palette.primary.main,
-                   theme.palette.error.main,
+                theme.palette.error.main,
                 theme.palette.warning.main,
                 theme.palette.info.main,
-                
-             
               ]}
             />
           </Grid>
 
-
           <Typography variant="h6" sx={{ margin: '30px 0px 20px 40px' }}>
-          5. Monthly Active Users:
-        </Typography>
-        <Grid container spacing={3} justifyContent="space-around">
-        <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Total number of active users on monthly basis"  total={576} icon={'ant-design:android-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
-          </Grid>
+            5. Monthly Active Users:
+          </Typography>
+          <Grid container spacing={3} justifyContent="space-around">
+            <Grid item xs={12} sm={6} md={3}>
+              <AppWidgetSummary
+                title="Total number of active users on monthly basis"
+                total={576}
+                icon={'ant-design:android-filled'}
+                sx={{ minHeight: '260px', padding: '40px 10px' }}
+              />
+            </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="User retention" total={977} color="info" icon={'ant-design:apple-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
-          </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <AppWidgetSummary
+                title="User retention"
+                total={977}
+                color="info"
+                icon={'ant-design:apple-filled'}
+                sx={{ minHeight: '260px', padding: '40px 10px' }}
+              />
+            </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="User engagement"  total={543} color="warning" icon={'ant-design:windows-filled'} sx={{ minHeight: "260px", padding:"40px 10px" }}/>
-          </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <AppWidgetSummary
+                title="User engagement"
+                total={543}
+                color="warning"
+                icon={'ant-design:windows-filled'}
+                sx={{ minHeight: '260px', padding: '40px 10px' }}
+              />
+            </Grid>
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
@@ -556,7 +599,7 @@ console.log(totalUsers)
                 //   fill: 'solid',
                 //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
                 // },
-                    {
+                {
                   name: 'User Retention',
                   type: 'column',
                   fill: 'solid',
@@ -577,16 +620,12 @@ console.log(totalUsers)
               ]}
               chartColors={[
                 theme.palette.primary.main,
-                   theme.palette.error.main,
+                theme.palette.error.main,
                 theme.palette.warning.main,
                 theme.palette.info.main,
-                
-             
               ]}
             />
           </Grid>
-
-
 
           <Typography variant="h6" sx={{ margin: '30px 0px 20px 40px' }}>
             6. Gender Distribution:
@@ -657,7 +696,7 @@ console.log(totalUsers)
                   fill: 'solid',
                   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
                 },
-                    {
+                {
                   name: 'Female',
                   type: 'column',
                   fill: 'solid',
@@ -678,15 +717,12 @@ console.log(totalUsers)
               ]}
               chartColors={[
                 theme.palette.primary.main,
-                   theme.palette.error.main,
+                theme.palette.error.main,
                 theme.palette.warning.main,
                 theme.palette.info.main,
-                
-             
               ]}
             />
           </Grid>
-
 
           {/* <Typography variant="h6" sx={{ margin: '30px 0px 20px 40px' }}>
           7. Registration Statistics:
@@ -816,4 +852,3 @@ console.log(totalUsers)
     </>
   );
 }
-
