@@ -1,7 +1,8 @@
+import Cookies from 'js-cookie';
 import { useEffect } from 'react';
-import { Navigate, useRoutes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuth, setUser } from './redux/slices/auth';
+import { setUser } from './redux/slices/auth';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
@@ -28,119 +29,58 @@ import PremiumFeatures from './pages/PremiumFeatures';
 import Supportfour from './pages/SupportFour';
 import FeedbackManagement from './pages/FeedbackManagement';
 import ZodiacMachine from './pages/ZodiacMachine';
-
 import Likes from './pages/Likes';
 import Home from './pages/Home';
 
-// ----------------------------------------------------------------------
-
 export default function Router() {
   const dispatch = useDispatch();
+  const email = Cookies.get('email');
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      console.log('YEYEYWY');
-      if (performance.navigation.type === 1) {
-        console.log('ok');
-      } else {
-        // if (!remember) {
-        console.log('IM HERE ON REMEMBER =======', remember);
-        dispatch(setUser(null));
-        // }
-      }
-      // return;
-    };
+    setUser(email);
+  }, [email]);
 
-    // Add the event listener when the component mounts
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
-
-  const { isAuthenticated } = useSelector(getAuth);
   const { userData } = useSelector((state) => state.auth);
-  const { remember } = useSelector((state) => state.remember);
-  const routes = useRoutes([
-    // Use userData to determine if the user is authenticated
-    !userData ? { path: '/', element: <LoginPage />, index: true } : {
-      path: '/dashboard',
-      element: <DashboardLayout />,
-      children: [
-        { path: 'home', element: <Home />, index: true },
-        { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
-        { path: 'payments', element: <PaymentsFour /> },
-        { path: 'supportfeedback', element: <SupportFeedback /> },
-        { path: 'reportandanalytics', element: <ReportAnalytics /> },
-        { path: 'supportfour', element: <Supportfour /> },
-      ],
-    },
-    {
-      element: <SimpleLayout />,
-      children: [
-        { element: <Navigate to="/dashboard/home" />, index: true },
-        { path: '404', element: <Page404 /> },
-        { path: '*', element: <Navigate to="/404" /> },
-      ],
-    },
-    {
-      path: '*',
-      element: <Navigate to="/404" replace />,
-    },
-    {
-      path: '/forgotpassword',
-      element: <ForgotPassword />,
-    },
-    {
-      path: '/newuser',
-      element: <NewUser />,
-    },
-    {
-      path: '/userpayment/:_id',
-      element: <UserPayment />,
-    },
-    {
-      path: '/usersubscriptiondetails',
-      element: <UserSubscriptionDetails />,
-    },
-    { path: 'reports', element: <Reports /> },
-    {
-      path: '/userdetails/:_id',
-      element: <UserDetail />,
-    },
-    {
-      path: '/subscribers',
-      element: <PaymentDetailsPage />,
-    },
-    {
-      path: '/paymentgateway',
-      element: <PaymentGateway />,
-    },
-    {
-      path: '/paymentplans',
-      element: <PaymentPlans />,
-    },
-    {
-      path: '/premiumfeatures',
-      element: <PremiumFeatures />,
-    },
-    {
-      path: '/supportandfeedback',
-      element: <SupportFeedback />,
-    },
-    {
-      path: '/feedbackmanagement',
-      element: <FeedbackManagement />,
-    },
-  ]);
 
-  return routes;
+  return (
+    <Routes>
+      <Route path="/">
+        {!userData ? (
+          <Route path="/" element={<LoginPage />} />
+        ) : (
+          <>
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route path="home" element={<Home />} index />
+              <Route path="app" element={<DashboardAppPage />} />
+              <Route path="user" element={<UserPage />} />
+              <Route path="products" element={<ProductsPage />} />
+              <Route path="blog" element={<BlogPage />} />
+              <Route path="payments" element={<PaymentsFour />} />
+              <Route path="supportfeedback" element={<SupportFeedback />} />
+              <Route path="reportandanalytics" element={<ReportAnalytics />} />
+              <Route path="supportfour" element={<Supportfour />} />
+            </Route>
+            <Route element={<SimpleLayout />}>
+              <Route path="/" element={<Navigate to="/dashboard/home" />} />
+              <Route path="404" element={<Page404 />} />
+              <Route path="*" element={<Navigate to="/404" />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+              <Route path="/newuser" element={<NewUser />} />
+              <Route path="/userpayment/:_id" element={<UserPayment />} />
+              <Route path="/usersubscriptiondetails" element={<UserSubscriptionDetails />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/userdetails/:_id" element={<UserDetail />} />
+              <Route path="/subscribers" element={<PaymentDetailsPage />} />
+              <Route path="/paymentgateway" element={<PaymentGateway />} />
+              <Route path="/paymentplans" element={<PaymentPlans />} />
+              <Route path="/premiumfeatures" element={<PremiumFeatures />} />
+              <Route path="/supportandfeedback" element={<SupportFeedback />} />
+              <Route path="/feedbackmanagement" element={<FeedbackManagement />} />
+            </Route>
+          </>
+        )}
+        <Route path="404" element={<Page404 />} />
+        <Route path="*" element={<Navigate to="/404" />} />
+      </Route>
+    </Routes>
+  );
 }
- 
-
-
-
