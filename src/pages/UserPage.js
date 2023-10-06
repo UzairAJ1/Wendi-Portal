@@ -106,8 +106,6 @@ console.log(users)
     // applySortFilter();
     console.log("filterName====", filterName)
   };
-
-  
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (users?.data?.length || 0)) : 0;
   const filteredUsers = applySortFilter(users?.data || [], getComparator(order, orderBy), filterName);
   console.log("filteredUsers ahinnn", filteredUsers)

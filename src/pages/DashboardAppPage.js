@@ -1,10 +1,24 @@
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { faker } from '@faker-js/faker';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
+// components
+import Iconify from '../components/iconify';
 // sections
-import { AppCurrentVisits, AppWebsiteVisits, AppWidgetSummary, AppConversionRates } from '../sections/@dashboard/app';
-import { useGetUserStatisticsQuery, useGetLikesStatisticsQuery } from '../redux/dashboard/dashboardApi';
+import { useGetUserStatisticsQuery, useGetLikesStatisticsQuery,useDailyActiveUsersQuery, } from '../redux/dashboard/dashboardApi';
+import {
+  AppTasks,
+  AppNewsUpdate,
+  AppOrderTimeline,
+  AppCurrentVisits,
+  AppWebsiteVisits,
+  AppTrafficBySite,
+  AppWidgetSummary,
+  AppCurrentSubject,
+  AppConversionRates,
+} from '../sections/@dashboard/app';
 
 // ----------------------------------------------------------------------
 
@@ -12,9 +26,102 @@ export default function DashboardAppPage() {
   const theme = useTheme();
   const { data: usersData, isFetching, isError } = useGetUserStatisticsQuery();
   const { data: likesData, isFetching: fetchingLikesStats, error } = useGetLikesStatisticsQuery();
+  const {data:dailyActiveUsers, isFetching:fetchingLikeUsers,isError1}=useDailyActiveUsersQuery();
+  console.log(dailyActiveUsers);
+  const totalUsers = usersData?.data?.totalUsers || 0;
+  const maleUsers = usersData?.data?.maleUsers || 0;
+  const femaleUsers = usersData?.data?.femaleUsers || 0;
+  const activeUsers = usersData?.data?.activeUsers || 0;
+  const newUsers = usersData?.data?.newUsers || 0;
+  const {
+    totalLikes,
+    maleLikes,
+    femaleLikes,
+    likesPerDay,
+    likesPerMonth,
+    likesPerDayMale,
+    likesPerDayFemale,
+    likesPerMonthMale,
+    likesPerMonthFemale,
+  } = likesData?.data || {};
+  const [totalCount, setTotalCount] = useState(0);
+  const [averageDailyLikes, setAverageDailyLikes] = useState(0);
+  const [averageMonthlyLikes, setAverageMonthlyLikes] = useState(0);
+  const [averageDailyLikesMale, setAverageDailyLikesMale] = useState(0);
+  const [averageDailyLikesFemale, setAverageDailyLikesFemale] = useState(0);
+  const [averageMonthlyLikesMale, setAverageMonthlyLikesMale] = useState(0);
+  const [averageMonthlyLikesFemale, setAverageMonthlyLikesFemale] = useState(0);
+  useEffect(() => {
+    if (likesPerMonthFemale) {
+      let total = 0;
+      Object.keys(likesPerMonthFemale).forEach((key) => {
+        total += likesPerMonthFemale[key].count || 0;
+      });
+      const average = total / Object.keys(likesPerMonthFemale).length;
+      setTotalCount(total);
+      setAverageMonthlyLikesFemale(average);
+    }
+  }, [likesPerMonthFemale]);
 
-  const { totalUsers = 100, maleUsers = 60, femaleUsers = 40, activeUsers = 50, newUsers = 10 } = usersData?.data || {};
-  const { totalLikes, maleLikes, femaleLikes, likesPerDay, likesPerMonth } = likesData?.data || {};
+  useEffect(() => {
+    if (likesPerMonthMale) {
+      let total = 0;
+      Object.keys(likesPerMonthMale).forEach((key) => {
+        total += likesPerMonthMale[key].count || 0;
+      });
+      const average = total / Object.keys(likesPerMonthMale).length;
+      setTotalCount(total);
+      setAverageMonthlyLikesMale(average);
+    }
+  }, [likesPerMonthMale]);
+
+  useEffect(() => {
+    if (likesPerDayMale) {
+      let total = 0;
+      Object.keys(likesPerDayMale).forEach((key) => {
+        total += likesPerDayMale[key].count || 0;
+      });
+      const average = total / Object.keys(likesPerDayMale).length;
+      setTotalCount(total);
+      setAverageDailyLikesMale(average);
+    }
+  }, [likesPerDayMale]);
+
+  useEffect(() => {
+    if (likesPerDayFemale) {
+      let total = 0;
+      Object.keys(likesPerDayFemale).forEach((key) => {
+        total += likesPerDayFemale[key].count || 0;
+      });
+      const average = total / Object.keys(likesPerDayFemale).length;
+      setTotalCount(total);
+      setAverageDailyLikesFemale(average);
+    }
+  }, [likesPerDayFemale]);
+
+  useEffect(() => {
+    if (likesPerDay) {
+      let total = 0;
+      Object.keys(likesPerDay).forEach((key) => {
+        total += likesPerDay[key].count || 0;
+      });
+      const average = total / Object.keys(likesPerDay).length;
+      setTotalCount(total);
+      setAverageDailyLikes(average);
+    }
+  }, [likesPerDay]);
+
+  useEffect(() => {
+    if (likesPerMonth) {
+      let total = 0;
+      Object.keys(likesPerMonth).forEach((key) => {
+        total += likesPerMonth[key].count || 0;
+      });
+      const average = total / Object.keys(likesPerMonth).length;
+      setTotalCount(total);
+      setAverageMonthlyLikes(average);
+    }
+  }, [likesPerMonth]);
 
   return (
     <>
@@ -115,8 +222,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="User Statistics:"
               chartData={[
-                { label: 'Male', value: maleUsers },
-                { label: 'Female', value: femaleUsers },
+                { label: 'Male', value: 4344 },
+                { label: 'Female', value: 5435 },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}
@@ -136,7 +243,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Number of likes given by users on a daily basis"
-                total={likesPerDay?.count || 240}
+                total={Math.round(averageDailyLikes)}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -145,7 +252,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Number of likes given by male users"
-                total={131}
+                total={Math.round(averageDailyLikesMale)}
                 color="info"
                 icon={'ant-design:apple-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -155,7 +262,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Number of likes given by female users"
-                total={119}
+                total={Math.round(averageDailyLikesFemale)}
                 color="warning"
                 icon={'ant-design:windows-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -233,7 +340,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Number of likes given by users on a monthly basis"
-                total={likesPerMonth?.count || 710}
+                total={Math.round(averageMonthlyLikes)}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -242,7 +349,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Number of likes given by male users"
-                total={131}
+                total={Math.round(averageMonthlyLikesMale)}
                 color="info"
                 icon={'ant-design:apple-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -252,7 +359,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Number of likes given by female users"
-                total={119}
+                total={Math.round(averageMonthlyLikesFemale)}
                 color="warning"
                 icon={'ant-design:windows-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -331,7 +438,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Total number of active users on daily basis"
-                total={710}
+                total={activeUsers}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -408,8 +515,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Gender Distribution"
               chartData={[
-                { label: 'Male', value: maleUsers },
-                { label: 'Female', value: femaleUsers },
+                { label: 'Male', value: 1 },
+                { label: 'Female', value: 1 },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}
@@ -506,8 +613,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Gender Distribution"
               chartData={[
-                { label: 'Male', value: maleUsers },
-                { label: 'Female', value: femaleUsers },
+                { label: 'Male', value: 1 },
+                { label: 'Female', value: 1 },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}
@@ -526,8 +633,8 @@ export default function DashboardAppPage() {
           <Grid container spacing={3} justifyContent="space-around">
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
-                title="Total number of male registered users"
-                total={maleUsers}
+                title="Total number of registered users"
+                total={1}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -535,8 +642,8 @@ export default function DashboardAppPage() {
 
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
-                title="Total number of female registered users"
-                total={femaleUsers}
+                title="Active users currently using the app"
+                total={1}
                 color="info"
                 icon={'ant-design:apple-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -545,9 +652,8 @@ export default function DashboardAppPage() {
 
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
-                // title="new user sign-ups within a specified time period"
-                title="Difference among male and female users"
-                total={maleUsers - femaleUsers}
+                title="new user sign-ups within a specified time period"
+                total={1}
                 color="warning"
                 icon={'ant-design:windows-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -604,8 +710,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Gender Distribution"
               chartData={[
-                { label: 'Male', value: maleUsers },
-                { label: 'Female', value: femaleUsers },
+                { label: 'Male', value: 1 },
+                { label: 'Female', value: 1 },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}

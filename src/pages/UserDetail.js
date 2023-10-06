@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { TailSpin } from 'react-loader-spinner';
+import { TailSpin } from 'react-loader-spinner'
 import {
   Card,
   CardContent,
@@ -70,8 +70,8 @@ const UserDetail = ({ user }) => {
     //     wrapperClass="blocks-wrapper"
     //     colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
     //   />;
-    // } else
-      setEditedUser({
+    // } elseU
+      setEditedser({
         fullName: specificUser?.data?.fullName,
         gender: specificUser?.data?.gender,
         sexualOrientation: specificUser?.data?.sexualOrientation,

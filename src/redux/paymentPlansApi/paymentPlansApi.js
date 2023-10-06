@@ -28,7 +28,7 @@ const paymentPlansApi = createApi({
       query: (payload) => ({
         url: `paymentPlans/${payload.id}`,
         method: 'PUT',
-        body: payload,
+        body: payload.dataToUpdate,
       }),
       invalidatesTags: ['PaymentPlan'],
     }),
