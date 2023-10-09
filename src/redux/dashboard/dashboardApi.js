@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const dashboardApi = createApi({
   reducerPath: 'dashboardApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://192.168.18.131:3333/',
+    baseUrl: 'http://localhost:3333/',
     // baseUrl: 'http://127.0.0.1:3333/',
     prepareHeaders: (headers, { getState }) => {
       // @ts-ignore
@@ -64,7 +64,7 @@ export const dashboardApi = createApi({
     }),
     genderDistribution: builder.query({
       query: () => ({
-        url: 'user/home',
+        url: 'user/genderDistribution',
         method: 'get',
         // body: payload
       }),
@@ -90,4 +90,5 @@ export const {
   useGenderDistributionQuery,
   useGetUserStatisticsQuery,
   useGetLikesStatisticsQuery,
+  
 } = dashboardApi;

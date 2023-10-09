@@ -33,14 +33,8 @@ import Likes from './pages/Likes';
 import Home from './pages/Home';
 
 export default function Router() {
-  const dispatch = useDispatch();
-  const email = Cookies.get('email');
-  useEffect(() => {
-    setUser(email);
-  }, [email]);
-
   const { userData } = useSelector((state) => state.auth);
-
+  console.log('Users:', userData);
   return (
     <Routes>
       <Route path="/">

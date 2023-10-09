@@ -7,7 +7,12 @@ import { Grid, Container, Typography } from '@mui/material';
 // components
 import Iconify from '../components/iconify';
 // sections
-import { useGetUserStatisticsQuery, useGetLikesStatisticsQuery,useDailyActiveUsersQuery, } from '../redux/dashboard/dashboardApi';
+import {
+  useGetUserStatisticsQuery,
+  useGetLikesStatisticsQuery,
+  useDailyActiveUsersQuery,
+  useGenderDistributionQuery,
+} from '../redux/dashboard/dashboardApi';
 import {
   AppTasks,
   AppNewsUpdate,
@@ -26,13 +31,16 @@ export default function DashboardAppPage() {
   const theme = useTheme();
   const { data: usersData, isFetching, isError } = useGetUserStatisticsQuery();
   const { data: likesData, isFetching: fetchingLikesStats, error } = useGetLikesStatisticsQuery();
-  const {data:dailyActiveUsers, isFetching:fetchingLikeUsers,isError1}=useDailyActiveUsersQuery();
-  console.log(dailyActiveUsers);
+  const { data: dailyActiveUsers, isFetching: fetchingLikeUsers, isError1 } = useDailyActiveUsersQuery();
+  const { data: totalGenderDistribution } = useGenderDistributionQuery();
   const totalUsers = usersData?.data?.totalUsers || 0;
   const maleUsers = usersData?.data?.maleUsers || 0;
   const femaleUsers = usersData?.data?.femaleUsers || 0;
   const activeUsers = usersData?.data?.activeUsers || 0;
   const newUsers = usersData?.data?.newUsers || 0;
+
+  const totalFemales = totalGenderDistribution?.totalFemales || 0;
+  const totalMales = totalGenderDistribution?.totalMales || 0;
   const {
     totalLikes,
     maleLikes,
@@ -51,6 +59,7 @@ export default function DashboardAppPage() {
   const [averageDailyLikesFemale, setAverageDailyLikesFemale] = useState(0);
   const [averageMonthlyLikesMale, setAverageMonthlyLikesMale] = useState(0);
   const [averageMonthlyLikesFemale, setAverageMonthlyLikesFemale] = useState(0);
+
   useEffect(() => {
     if (likesPerMonthFemale) {
       let total = 0;
@@ -613,8 +622,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Gender Distribution"
               chartData={[
-                { label: 'Male', value: 1 },
-                { label: 'Female', value: 1 },
+                { label: 'Male', value: totalMales },
+                { label: 'Female', value: totalFemales },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}
@@ -682,7 +691,7 @@ export default function DashboardAppPage() {
                   name: 'Male',
                   type: 'column',
                   fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                  data: [totalMales],
                 },
                 {
                   name: 'Female',
