@@ -19,28 +19,25 @@ const Home = () => {
   };
   // Get global settings data
   const { data, error, isLoading, isFetching } = useGlobalSettingsGetQuery();
-  const { likeInteractionLimit, likeTimerLimit, zodiacLimit } = data?.data || {};
-  const zod = 5;
-  const [zodiacMachineLimit, setZodiacMachineLimit] = useState(zodiacLimit || zod);
 
-  console.log(data);
-
+  const [zodiacLimit, setzodiacLimit] = useState(1);
   // State for Like Interaction
-  const [freeGifts, setFreeGifts] = useState(likeInteractionLimit?.freeGifts || 11);
-  const [paidGifts, setPaidGifts] = useState(likeInteractionLimit?.paidGifts || 20);
-  const [giftRenewalTime, setGiftRenewalTime] = useState(likeInteractionLimit?.giftRenewalTime || 24);
-
+  const [freeGifts, setFreeGifts] = useState(1);
+  const [paidGifts, setPaidGifts] = useState(1);
+  const [giftRenewalTime, setGiftRenewalTime] = useState(1);
+console.log(freeGifts,paidGifts,giftRenewalTime)
   // post
   const [adminApi] = useGlobalSettingsMutation();
   // State for Like Timer
-  const [remainingTime, setRemainingTime] = useState(likeTimerLimit || 60);
+  const [remainingTime, setRemainingTime] = useState(1);
   const [reportText, setReportText] = useState('');
 
   const GlobalSettingsCall = async ({ type }) => {
     const dataToSend = {};
-
+  
     if (type === 'zodiac') {
-      dataToSend.zodiacLimit = zodiacMachineLimit;
+      // Send zodiacLimit in the request body
+      dataToSend.zodiacLimit = zodiacLimit;
     } else if (type === 'likeInteractionLimit') {
       dataToSend.likeInteractionLimit = {
         freeGifts,
@@ -50,7 +47,7 @@ const Home = () => {
     } else if (type === 'likeTimerLimit') {
       dataToSend.likeTimerLimit = remainingTime;
     }
-
+  
     try {
       const res = await adminApi(dataToSend);
       console.log(res);
@@ -65,8 +62,8 @@ const Home = () => {
     setFreeGifts(e.target.value);
   };
 
-  const handleZodiacMachineLimitChange = (e) => {
-    setZodiacMachineLimit(e.target.value);
+  const handlezodiacLimitChange = (e) => {
+    setzodiacLimit(e.target.value);
   };
 
   const handlePaidGiftsChange = (e) => {
@@ -99,28 +96,27 @@ const Home = () => {
     } else if (error) {
       // Handle the error (e.g., show an error message)
     } else if (data) {
-      console.log('Data received:', data);
+      console.log('Data received:', data.data);
     }
   }, [isLoading, error, data]);
 
   useEffect(() => {
-    setZodiacMachineLimit(zodiacMachineLimit);
-    setFreeGifts(likeInteractionLimit?.freeGifts ? likeInteractionLimit?.freeGifts:freeGifts);
-    setPaidGifts(likeInteractionLimit?.paidGifts ? likeInteractionLimit?.paidGifts :  paidGifts);
-    setGiftRenewalTime(likeInteractionLimit?.giftRenewalTime ? likeInteractionLimit?.giftRenewalTime : giftRenewalTime);
-    setRemainingTime(likeTimerLimit );
+    if (data) {
+      setFreeGifts(data.data.likeInteractionLimit.freeGifts || 1);
+      setPaidGifts(data.data.likeInteractionLimit.paidGifts || 1);
+      setGiftRenewalTime(data.data.likeInteractionLimit.giftRenewalTime || 1);
+      setzodiacLimit(data.data.zodiacLimit || 1);
+      setRemainingTime(data.data.likeTimerLimit || 1);
+    }
   }, [data]);
 
   // useEffect(() => {
-  //   setZodiacMachineLimit(zodiacMachineLimit);
+  //   setzodiacLimit(zodiacLimit);
   //   setFreeGifts(freeGifts);
   //   setPaidGifts(paidGifts);
   //   setGiftRenewalTime(giftRenewalTime);
   //   setRemainingTime(likeTimerLimit);
   // }, [data]);
-
-
-  
 
   const logout = () => {
     dispatch(setUser(null));
@@ -129,140 +125,149 @@ const Home = () => {
 
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
-    <TabContext value={value}>
-    <Grid item xs={8} sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            logout();
-          }}
-          sx={{ background: '#4A276B', marginBottom: '20px' }}
-        >
-          Logout
-        </Button>
-      </Grid>
-    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Zodiac Machine Feature" value="1" />
-              <Tab label="Like Interaction" value="2" />
-              <Tab label="Like Timer" value="3" />
-            </TabList>
-          </Box>
-    <Container>
+      <TabContext value={value}>
+        <Grid item xs={8} sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              logout();
+            }}
+            sx={{ background: '#4A276B', marginBottom: '20px' }}
+          >
+            Logout
+          </Button>
+        </Grid>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="Zodiac Machine Feature" value="1" />
+            <Tab label="Like Interaction" value="2" />
+            <Tab label="Like Timer" value="3" />
+          </TabList>
+        </Box>
+        <Container>
+          <TabPanel value="1">
+            <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
+              <Typography variant="h5" gutterBottom>
+                Zodiac Machine Feature
+              </Typography>
+              <Typography variant="h6" gutterBottom sx={{ marginBottom: '20px' }}>
+                {/* Current Limit: {data.zodiacLimit} */}
+              </Typography>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={6}>
+                  <TextField
+                    label="Set Limit"
+                    type="number"
+                    value={zodiacLimit}
+                    onChange={handlezodiacLimitChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      GlobalSettingsCall({ type: 'zodiac' });
+                    }}
+                    sx={{ background: '#4A276B' }}
+                  >
+                    Set Limit
+                  </Button>
+                </Grid>
+              </Grid>
+            </Paper>
+          </TabPanel>
+          <TabPanel value="2">
+            <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
+              <Typography variant="h5" gutterBottom>
+                Like Interaction
+              </Typography>
+              <Typography variant="h6" gutterBottom sx={{ marginBottom: '20px' }}>
+                Current Like Interaction Limit:
+              </Typography>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={3}>
+                  <TextField
+                    label="Free Gifts"
+                    type="number"
+                    value={freeGifts}
+                    onChange={handleFreeGiftsChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    label="Paid Gifts"
+                    type="number"
+                    value={paidGifts}
+                    onChange={handlePaidGiftsChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    label="Gift Renewal Time (hours)"
+                    type="number"
+                    value={giftRenewalTime}
+                    onChange={handleGiftRenewalTimeChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      GlobalSettingsCall({ type: 'likeInteractionLimit' });
+                    }}
+                    sx={{ background: '#4A276B' }}
+                  >
+                    Set Interaction Limit
+                  </Button>
+                </Grid>
+              </Grid>
+            </Paper>
+          </TabPanel>
 
-      <TabPanel value="1">
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Zodiac Machine Feature
-        </Typography>
-        <Typography variant="h6" gutterBottom sx={{ marginBottom: '20px' }}>
-          {/* Current Limit: {data.zodiacMachineLimit} */}
-        </Typography>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={6}>
-            <TextField
-              label="Set Limit"
-              type="number"
-              value={zodiacMachineLimit}
-              onChange={handleZodiacMachineLimitChange}
-              fullWidth
-              
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                GlobalSettingsCall({ type: 'zodiac' });
-              }}
-              sx={{ background: '#4A276B' }}
-            >
-              Set Limit
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
-      </TabPanel>
-      <TabPanel value="2">
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Like Interaction
-        </Typography>
-        <Typography variant="h6" gutterBottom sx={{ marginBottom: '20px' }}>
-          Current Like Interaction Limit:
-        </Typography>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={3}>
-            <TextField label="Free Gifts" type="number" value={freeGifts} onChange={handleFreeGiftsChange} fullWidth />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField label="Paid Gifts" type="number" value={paidGifts} onChange={handlePaidGiftsChange} fullWidth />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="Gift Renewal Time (hours)"
-              type="number"
-              value={giftRenewalTime}
-              onChange={handleGiftRenewalTimeChange}
-              fullWidth
-           
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                GlobalSettingsCall({ type: 'likeInteractionLimit' });
-              }}
-              sx={{ background: '#4A276B' }}
-            >
-              Set Interaction Limit
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
-      </TabPanel>
-
-      {/* Like Timer */}
-      <TabPanel value="3">
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Like Timer
-        </Typography>
-        <Typography variant="h6" gutterBottom sx={{ marginBottom: '20px' }}>
-          Current Like Timer:
-        </Typography>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={8}>
-            <TextField
-              label="Remaining Time (minutes)"
-              type="number"
-              value={remainingTime}
-              onChange={handleRemainingTimeChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                GlobalSettingsCall({ type: 'likeTimerLimit' });
-              }}
-              sx={{ background: '#4A276B' }}
-            >
-              Set Timer
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
-      </TabPanel>
-    </Container>
-    </TabContext>
-      </Box>
+          {/* Like Timer */}
+          <TabPanel value="3">
+            <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
+              <Typography variant="h5" gutterBottom>
+                Like Timer
+              </Typography>
+              <Typography variant="h6" gutterBottom sx={{ marginBottom: '20px' }}>
+                Current Like Timer:
+              </Typography>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={8}>
+                  <TextField
+                    label="Remaining Time (minutes)"
+                    type="number"
+                    value={remainingTime}
+                    onChange={handleRemainingTimeChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      GlobalSettingsCall({ type: 'likeTimerLimit' });
+                    }}
+                    sx={{ background: '#4A276B' }}
+                  >
+                    Set Timer
+                  </Button>
+                </Grid>
+              </Grid>
+            </Paper>
+          </TabPanel>
+        </Container>
+      </TabContext>
+    </Box>
   );
 };
 

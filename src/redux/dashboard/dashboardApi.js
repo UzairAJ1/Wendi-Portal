@@ -90,5 +90,4 @@ export const {
   useGenderDistributionQuery,
   useGetUserStatisticsQuery,
   useGetLikesStatisticsQuery,
-  
 } = dashboardApi;

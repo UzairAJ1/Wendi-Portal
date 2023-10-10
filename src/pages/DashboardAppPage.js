@@ -52,6 +52,10 @@ export default function DashboardAppPage() {
     likesPerMonthMale,
     likesPerMonthFemale,
   } = likesData?.data || {};
+  console.log( likesPerDay,
+    likesPerMonth,
+    likesPerDayMale,
+    );
   const [totalCount, setTotalCount] = useState(0);
   const [averageDailyLikes, setAverageDailyLikes] = useState(0);
   const [averageMonthlyLikes, setAverageMonthlyLikes] = useState(0);

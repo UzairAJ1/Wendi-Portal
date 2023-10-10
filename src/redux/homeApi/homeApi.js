@@ -40,4 +40,4 @@ export const homeApi = createApi({
   }),
 });
 
-export const { useGlobalSettingsMutation, useGlobalSettingsGetQuery } = homeApi;
+export const {useGlobalSettingsGetQuery, useGlobalSettingsMutation } = homeApi;
