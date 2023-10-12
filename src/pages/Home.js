@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab';
 import { Container, Typography, Button, Grid, TextField, Paper, Box, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-
+import { ToastContainer, toast } from 'react-toastify';
 import { setUser } from '../redux/slices/auth';
 import { useGlobalSettingsMutation, useGlobalSettingsGetQuery } from '../redux/homeApi/homeApi';
 
@@ -38,16 +38,21 @@ const Home = () => {
     if (type === 'zodiac') {
       // Send zodiacLimit in the request body
       dataToSend.zodiacLimit = zodiacLimit;
+      toast.success('Zodiac details updated successfully');
     } else if (type === 'giftInteractionLimit') {
       dataToSend.giftInteractionLimit = {
         freeGifts,
         giftRenewalTime,
         paidGifts,
       };
+      toast.success('Gift details updated successfully');
     } else if (type === 'likeTimerLimit') {
       dataToSend.likeTimerLimit = remainingTime;
+      toast.success('Remaining time updated successfully');
     } else if (type === 'likeLimit') {
       dataToSend.likeLimit = totalLikes;
+
+      toast.success('Like details updated successfully');
     }
 
     try {
@@ -111,7 +116,7 @@ const Home = () => {
       setGiftRenewalTime(data.data?.giftInteractionLimit.giftRenewalTime || 1);
       setzodiacLimit(data.data?.zodiacLimit || 1);
       setRemainingTime(data.data?.likeTimerLimit || 1);
-      setTotallikes(data.data?.likeLimit || 1)
+      setTotallikes(data.data?.likeLimit || 1);
     }
   }, [data]);
 
