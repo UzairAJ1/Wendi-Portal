@@ -25,29 +25,31 @@ const Home = () => {
   const [freeGifts, setFreeGifts] = useState(1);
   const [paidGifts, setPaidGifts] = useState(1);
   const [giftRenewalTime, setGiftRenewalTime] = useState(1);
-console.log(freeGifts,paidGifts,giftRenewalTime)
   // post
   const [adminApi] = useGlobalSettingsMutation();
   // State for Like Timer
   const [remainingTime, setRemainingTime] = useState(1);
+  const [totalLikes, setTotallikes] = useState(1);
   const [reportText, setReportText] = useState('');
 
   const GlobalSettingsCall = async ({ type }) => {
     const dataToSend = {};
-  
+
     if (type === 'zodiac') {
       // Send zodiacLimit in the request body
       dataToSend.zodiacLimit = zodiacLimit;
-    } else if (type === 'likeInteractionLimit') {
-      dataToSend.likeInteractionLimit = {
+    } else if (type === 'giftInteractionLimit') {
+      dataToSend.giftInteractionLimit = {
         freeGifts,
         giftRenewalTime,
         paidGifts,
       };
     } else if (type === 'likeTimerLimit') {
       dataToSend.likeTimerLimit = remainingTime;
+    } else if (type === 'likeLimit') {
+      dataToSend.likeLimit = totalLikes;
     }
-  
+
     try {
       const res = await adminApi(dataToSend);
       console.log(res);
@@ -77,7 +79,9 @@ console.log(freeGifts,paidGifts,giftRenewalTime)
   const handleRemainingTimeChange = (e) => {
     setRemainingTime(e.target.value);
   };
-
+  const handleTotalLikesChange = (e) => {
+    setTotallikes(e.target.value);
+  };
   const handleSetLikeInteraction = () => {
     // You can implement logic here to send the new values to the server
     // For now, we'll just display an alert
@@ -102,11 +106,12 @@ console.log(freeGifts,paidGifts,giftRenewalTime)
 
   useEffect(() => {
     if (data) {
-      setFreeGifts(data.data.likeInteractionLimit.freeGifts || 1);
-      setPaidGifts(data.data.likeInteractionLimit.paidGifts || 1);
-      setGiftRenewalTime(data.data.likeInteractionLimit.giftRenewalTime || 1);
-      setzodiacLimit(data.data.zodiacLimit || 1);
-      setRemainingTime(data.data.likeTimerLimit || 1);
+      setFreeGifts(data.data?.giftInteractionLimit.freeGifts || 1);
+      setPaidGifts(data.data?.giftInteractionLimit.paidGifts || 1);
+      setGiftRenewalTime(data.data?.giftInteractionLimit.giftRenewalTime || 1);
+      setzodiacLimit(data.data?.zodiacLimit || 1);
+      setRemainingTime(data.data?.likeTimerLimit || 1);
+      setTotallikes(data.data?.likeLimit || 1)
     }
   }, [data]);
 
@@ -141,8 +146,8 @@ console.log(freeGifts,paidGifts,giftRenewalTime)
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="Zodiac Machine Feature" value="1" />
-            <Tab label="Like Interaction" value="2" />
-            <Tab label="Like Timer" value="3" />
+            <Tab label="Gift Interaction" value="2" />
+            <Tab label="Like Interaction" value="3" />
           </TabList>
         </Box>
         <Container>
@@ -182,10 +187,10 @@ console.log(freeGifts,paidGifts,giftRenewalTime)
           <TabPanel value="2">
             <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
               <Typography variant="h5" gutterBottom>
-                Like Interaction
+                Gift Interaction
               </Typography>
               <Typography variant="h6" gutterBottom sx={{ marginBottom: '20px' }}>
-                Current Like Interaction Limit:
+                Current Gift Interaction Limit:
               </Typography>
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={3}>
@@ -220,7 +225,7 @@ console.log(freeGifts,paidGifts,giftRenewalTime)
                     variant="contained"
                     color="primary"
                     onClick={() => {
-                      GlobalSettingsCall({ type: 'likeInteractionLimit' });
+                      GlobalSettingsCall({ type: 'giftInteractionLimit' });
                     }}
                     sx={{ background: '#4A276B' }}
                   >
@@ -260,6 +265,38 @@ console.log(freeGifts,paidGifts,giftRenewalTime)
                     sx={{ background: '#4A276B' }}
                   >
                     Set Timer
+                  </Button>
+                </Grid>
+              </Grid>
+            </Paper>
+
+            <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
+              <Typography variant="h5" gutterBottom>
+                Total Likes
+              </Typography>
+              <Typography variant="h6" gutterBottom sx={{ marginBottom: '20px' }}>
+                Current Total likes:
+              </Typography>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={8}>
+                  <TextField
+                    label="Likes"
+                    type="number"
+                    value={totalLikes}
+                    onChange={handleTotalLikesChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      GlobalSettingsCall({ type: 'likeLimit' });
+                    }}
+                    sx={{ background: '#4A276B' }}
+                  >
+                    Set Likes
                   </Button>
                 </Grid>
               </Grid>
