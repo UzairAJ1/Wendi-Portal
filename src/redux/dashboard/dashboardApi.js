@@ -71,11 +71,31 @@ export const dashboardApi = createApi({
     }),
 
     getUserStatistics: builder.query({
-      query: () => 'user/usersStats',
+      query: () => ({
+        url: 'user/usersStats',
+        method: 'get',
+      }),
     }),
 
     getLikesStatistics: builder.query({
-      query: () => 'like/likesStats',
+      query: () => ({
+        url: 'like/likesStats',
+        method: 'get',
+      }),
+    }),
+
+    getUserByTime: builder.query({
+      query: () => ({
+        url: 'user/filterUserByTime',
+        method: 'get',
+      }), // This should be a correct API endpoint URL
+    }),
+
+    getLikesByTime: builder.query({
+      query: () => ({
+        url: 'like/filterLikesByTime',
+        method: 'get',
+      }),
     }),
   }),
 });
@@ -90,4 +110,6 @@ export const {
   useGenderDistributionQuery,
   useGetUserStatisticsQuery,
   useGetLikesStatisticsQuery,
+  useGetUserByTimeQuery,
+  useGetLikesByTimeQuery,
 } = dashboardApi;

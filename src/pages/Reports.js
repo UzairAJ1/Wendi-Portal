@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PDFDocument, rgb } from 'pdf-lib';
 import {
@@ -18,68 +18,7 @@ import {
   TablePagination,
   Box,
 } from '@mui/material';
-
-const tableData = {
-  users: {
-    monthly: [
-      { id: 1, name: 'User 1', email: 'user1@example.com' },
-      { id: 2, name: 'User 2', email: 'user2@example.com' },
-      { id: 11, name: 'User 1', email: 'user1@example.com' },
-      { id: 12, name: 'User 2', email: 'user2@example.com' },
-      { id: 42, name: 'User 2', email: 'user2@example.com' },
-      { id: 41, name: 'User 1', email: 'user1@example.com' },
-      { id: 52, name: 'User 2', email: 'user2@example.com' },
-    ],
-    weekly: [
-      { id: 3, name: 'User 3', email: 'user3@example.com' },
-      { id: 4, name: 'User 4', email: 'user4@example.com' },
-    ],
-    yearly: [
-      { id: 5, name: 'User 5', email: 'user5@example.com' },
-      { id: 6, name: 'User 6', email: 'user6@example.com' },
-    ],
-    total: [
-      { id: 7, name: 'User 7', email: 'user7@example.com' },
-      { id: 8, name: 'User 8', email: 'user8@example.com' },
-    ],
-  },
-  likes: {
-    monthly: [
-      { id: 1, name: 'User 1', email: 'user1@example.com' },
-      { id: 2, name: 'User 2', email: 'user2@example.com' },
-    ],
-    weekly: [
-      { id: 3, name: 'User 3', email: 'user3@example.com' },
-      { id: 4, name: 'User 4', email: 'user4@example.com' },
-    ],
-    yearly: [
-      { id: 5, name: 'User 5', email: 'user5@example.com' },
-      { id: 6, name: 'User 6', email: 'user6@example.com' },
-    ],
-    total: [
-      { id: 7, name: 'User 7', email: 'user7@example.com' },
-      { id: 8, name: 'User 8', email: 'user8@example.com' },
-    ],
-  },
-  gender: {
-    monthly: [
-      { id: 1, name: 'User 1', email: 'user1@example.com' },
-      { id: 2, name: 'User 2', email: 'user2@example.com' },
-    ],
-    weekly: [
-      { id: 3, name: 'User 3', email: 'user3@example.com' },
-      { id: 4, name: 'User 4', email: 'user4@example.com' },
-    ],
-    yearly: [
-      { id: 5, name: 'User 5', email: 'user5@example.com' },
-      { id: 6, name: 'User 6', email: 'user6@example.com' },
-    ],
-    total: [
-      { id: 7, name: 'User 7', email: 'user7@example.com' },
-      { id: 8, name: 'User 8', email: 'user8@example.com' },
-    ],
-  },
-};
+import { useGetUserByTimeQuery, useGetLikesByTimeQuery } from '../redux/dashboard/dashboardApi';
 
 const tabs = {
   users: ['monthly', 'weekly', 'yearly', 'total'],
@@ -88,12 +27,54 @@ const tabs = {
 };
 
 const Reports = () => {
+  const { data: usersData, isFetching: fetchingUserStats, error1 } = useGetUserByTimeQuery();
+  const { data: likesData, isFetching: fetchingLikesStats, error2 } = useGetLikesByTimeQuery();
+
+  const [monthlyUsers, setMonthlyUser] = useState([]);
+  const [weeklyUsers, setWeeklyUsers] = useState([]);
+  const [yearlyUsers, setyearlyUsers] = useState([]);
+  const [totalUsers, setTotalUsers] = useState([]);
+
+  const [monthlyLikes, setMonthlyLikes] = useState([]);
+  const [weeklyLikes, setWeeklyLikes] = useState([]);
+  const [yearlyLikes, setYearlyLikes] = useState([]);
+  const [totalLikes, setTotalLikes] = useState([]);
+
+  const [monthlyGenders, setMonthlyGenders] = useState([]);
+  const [weeklyGenders, setWeeklyGenders] = useState([]);
+  const [yearlyGenders, setYearlyGenders] = useState([]);
+  const [totalGenders, setTotalGenders] = useState([]);
+
+  useEffect(() => {
+    setMonthlyUser(usersData?.usersMonthly || []);
+    setWeeklyUsers(usersData?.usersWeekly || []);
+    setyearlyUsers(usersData?.usersYearly || []);
+    setTotalUsers(usersData?.usersTotal || []);
+  }, [usersData]);
+
+  useEffect(() => {
+    setMonthlyLikes(likesData?.likesMonthly || []);
+    setWeeklyLikes(likesData?.likesWeekly || []);
+    setYearlyLikes(likesData?.likesYearly || []);
+    setTotalLikes(likesData?.likesTotal || []);
+  }, [likesData]);
+
+  useEffect(() => {
+    setMonthlyGenders(usersData?.gendersMonthly || []);
+    setWeeklyGenders(usersData?.gendersWeekly || []);
+    setYearlyGenders(usersData?.gendersYearly || []);
+    setTotalGenders(usersData?.gendersTotal || []);
+  }, [usersData]);
+
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState('users');
   const [activeTab, setActiveTab] = useState('monthly');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const tableRef = useRef(null);
+  // useEffect(() => {
+  //   console.log('selectedOption : ', selectedOption);
+  // }, [selectedOption]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -101,11 +82,12 @@ const Reports = () => {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setPage(0); // Reset to the first page when changing rowsPerPage
   };
 
   const handleTabChange = (event, newTab) => {
     setActiveTab(newTab);
+    setPage(0); // Reset to the first page when changing tabs
   };
 
   const startIndex = page * rowsPerPage;
@@ -118,7 +100,16 @@ const Reports = () => {
 
     const content = tableData[selectedOption][activeTab]
       .slice(startIndex, endIndex)
-      .map((user) => `${user.id} | ${user.name} | ${user.email}`)
+      .map((user) => {
+        const sanitizedText = new TextEncoder().encode(user.fullName).reduce((str, charCode) => {
+          if (charCode >= 32 && charCode <= 126) {
+            // Filter out non-printable ASCII characters
+            return str + String.fromCharCode(charCode);
+          }
+          return str;
+        }, '');
+        return `${user._id} | ${sanitizedText} | ${user.mobileNumber}`;
+      })
       .join('\n');
 
     page.drawText(`${selectedOption}-${activeTab}-report`, {
@@ -146,6 +137,28 @@ const Reports = () => {
     window.URL.revokeObjectURL(url);
   };
 
+  const tableData = {
+    users: {
+      monthly: monthlyUsers,
+      weekly: weeklyUsers,
+      yearly: yearlyUsers,
+      total: totalUsers,
+    },
+    likes: {
+      monthly: monthlyLikes,
+      weekly: weeklyLikes,
+      yearly: yearlyLikes,
+      total: totalLikes,
+    },
+    gender: {
+      monthly: [monthlyGenders],
+      weekly: [weeklyGenders],
+      yearly: [yearlyGenders],
+      total: [totalGenders],
+    },
+  };
+  console.log('MonthlyUsers :', monthlyUsers);
+  console.log('MonthlyGenders :', monthlyGenders);
   return (
     <Container sx={{ marginTop: '40px' }}>
       <Select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)} sx={{ marginBottom: '20px' }}>
@@ -159,24 +172,66 @@ const Reports = () => {
         ))}
       </Tabs>
       <TableContainer component={Paper}>
-        <Table ref={tableRef}>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tableData[selectedOption][activeTab].slice(startIndex, endIndex).map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.id}</TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
+        {selectedOption === 'users' && (
+          <Table ref={tableRef}>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>MobileNumber</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {tableData[selectedOption][activeTab].slice(startIndex, endIndex).map((user) => (
+                <TableRow key={user._id}>
+                  <TableCell>{user._id}</TableCell>
+                  <TableCell>{user.fullName}</TableCell>
+                  <TableCell>{user.mobileNumber}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+
+        {selectedOption === 'likes' && (
+          <Table ref={tableRef}>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Liker ID</TableCell>
+                <TableCell>Liked ID</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableData[selectedOption][activeTab].slice(startIndex, endIndex).map((likes) => (
+                <TableRow key={likes?._id}>
+                  <TableCell>{likes?._id}</TableCell>
+                  <TableCell>{likes?.likerUserId?.fullName}</TableCell>
+                  <TableCell>{likes?.likedUserId?.fullName}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+
+        {selectedOption === 'gender' && (
+          <Table ref={tableRef}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Males</TableCell>
+                <TableCell>Females</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableData[selectedOption][activeTab].slice(startIndex, endIndex).map((user) => (
+                <TableRow key={user._id}>
+                  <TableCell>{user.male}</TableCell>
+                  <TableCell>{user.female}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
@@ -204,4 +259,5 @@ const Reports = () => {
     </Container>
   );
 };
+
 export default Reports;

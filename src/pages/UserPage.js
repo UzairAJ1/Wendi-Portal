@@ -2,7 +2,20 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Card, Table, Stack, Paper, Avatar, TableRow, TableBody, TableCell, Container, Typography, TableContainer, TablePagination } from '@mui/material';
+import {
+  Card,
+  Table,
+  Stack,
+  Paper,
+  Avatar,
+  TableRow,
+  TableBody,
+  TableCell,
+  Container,
+  Typography,
+  TableContainer,
+  TablePagination,
+} from '@mui/material';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
@@ -41,7 +54,9 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return array.filter((_user) => _user && _user.fullName && _user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return array.filter(
+      (_user) => _user && _user.fullName && _user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -58,7 +73,7 @@ export default function UserPage() {
   const [showUserDetails, setShowUserDetails] = useState(false);
   const { showSuccess, setShowSuccess } = useSuccess();
   const { data: users, isFetching } = useGetUsersQuery();
-console.log(users)
+  console.log('All the users: ', users);
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
   };
@@ -104,17 +119,17 @@ console.log(users)
     setPage(0);
     setFilterName(event.target.value);
     // applySortFilter();
-    console.log("filterName====", filterName)
+    console.log('filterName====', filterName);
   };
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (users?.data?.length || 0)) : 0;
   const filteredUsers = applySortFilter(users?.data || [], getComparator(order, orderBy), filterName);
-  console.log("filteredUsers ahinnn", filteredUsers)
+  console.log('filteredUsers ahinnn', filteredUsers);
   const isNotFound = !filteredUsers.length && !!filterName;
   useEffect(() => {
     if (showSuccess) {
       toast.success('Form submitted successfully!', {
         autoClose: 3000,
-      }); 
+      });
     }
   }, [isSuccessMessageShown]);
   return (
@@ -164,7 +179,10 @@ console.log(users)
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar
                               sx={{ cursor: 'pointer' }}
-                              src={`http://192.168.18.131:3333/Images/${row?.profileImages?.find((item) => item?.orderId === 1)?.uri?.split('/')?.pop()}`}
+                              src={`http://192.168.18.131:3333/Images/${row?.profileImages
+                                ?.find((item) => item?.orderId === 1)
+                                ?.uri?.split('/')
+                                ?.pop()}`}
                             />
                             <Typography variant="subtitle2" noWrap>
                               {row?.fullName}
