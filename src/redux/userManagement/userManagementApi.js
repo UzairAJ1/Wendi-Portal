@@ -43,6 +43,14 @@ export const userManagement = createApi({
         body: payload?.preparedData,
       }),
     }),
+
+    deleteUserById: builder.mutation({
+      query: (userId) => ({
+        url: `user/deleteUser/${userId}`,
+        method: 'DELETE',
+      }),
+    }),
+
     // setUserById: builder.mutation({
     //   query: ({ payload, _id }) => ({
     //     url: `user/updateUser/${_id}`,
@@ -53,4 +61,10 @@ export const userManagement = createApi({
   }),
 });
 
-export const { useUserManagementQuery, useGetUsersQuery, useGetUserByIdQuery, useSetUserByIdMutation } = userManagement;
+export const {
+  useUserManagementQuery,
+  useGetUsersQuery,
+  useGetUserByIdQuery,
+  useSetUserByIdMutation,
+  useDeleteUserByIdMutation,
+} = userManagement;

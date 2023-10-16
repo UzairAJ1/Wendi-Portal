@@ -165,6 +165,10 @@ const Reports = () => {
         <MenuItem value="users">Users</MenuItem>
         <MenuItem value="likes">Likes</MenuItem>
         <MenuItem value="gender">Gender</MenuItem>
+        <MenuItem value="gender">User engagement</MenuItem>
+        <MenuItem value="gender">Conversion rates</MenuItem>
+        <MenuItem value="gender">Revenue</MenuItem>
+        <MenuItem value="gender">Gifts</MenuItem>
       </Select>
       <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
         {tabs[selectedOption].map((tab) => (

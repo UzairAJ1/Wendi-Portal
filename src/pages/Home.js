@@ -21,6 +21,7 @@ const Home = () => {
   const { data, error, isLoading, isFetching } = useGlobalSettingsGetQuery();
 
   const [zodiacLimit, setzodiacLimit] = useState(1);
+  const [zodiacTimeLimit, setZodiacTimeLimit] = useState(1);
   // State for Like Interaction
   const [freeGifts, setFreeGifts] = useState(1);
   const [paidGifts, setPaidGifts] = useState(1);
@@ -38,6 +39,7 @@ const Home = () => {
     if (type === 'zodiac') {
       // Send zodiacLimit in the request body
       dataToSend.zodiacLimit = zodiacLimit;
+      dataToSend.zodiacTimeLimit = zodiacTimeLimit;
       toast.success('Zodiac details updated successfully');
     } else if (type === 'giftInteractionLimit') {
       dataToSend.giftInteractionLimit = {
@@ -71,6 +73,10 @@ const Home = () => {
 
   const handlezodiacLimitChange = (e) => {
     setzodiacLimit(e.target.value);
+  };
+
+  const handlezodiacTimeLimitChange = (e) => {
+    setZodiacTimeLimit(e.target.value);
   };
 
   const handlePaidGiftsChange = (e) => {
@@ -174,6 +180,17 @@ const Home = () => {
                     fullWidth
                   />
                 </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    label="Set Duration(Hours)"
+                    type="number"
+                    value={zodiacTimeLimit}
+                    onChange={handlezodiacTimeLimitChange}
+                    fullWidth
+                  />
+                </Grid>
+
                 <Grid item xs={6}>
                   <Button
                     variant="contained"

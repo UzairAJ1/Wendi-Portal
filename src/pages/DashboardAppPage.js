@@ -232,8 +232,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="User Statistics:"
               chartData={[
-                { label: 'Male', value: 4344 },
-                { label: 'Female', value: 5435 },
+                { label: 'Male', value: totalMales },
+                { label: 'Female', value: totalFemales },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}
@@ -329,8 +329,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Daily Likes:"
               chartData={[
-                { label: 'Male', value: 4344 },
-                { label: 'Female', value: 5435 },
+                { label: 'Male', value: totalMales },
+                { label: 'Female', value: totalFemales },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}

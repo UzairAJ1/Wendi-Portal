@@ -25,7 +25,7 @@ import { useGetUsersQuery } from '../redux/userManagement/userManagementApi';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'email', label: 'Phone Number', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
 ];
 // ----------------------------------------------------------------------
@@ -72,8 +72,15 @@ export default function UserPage() {
   const [isSuccessMessageShown, setSuccessMessageShown] = useState(false);
   const [showUserDetails, setShowUserDetails] = useState(false);
   const { showSuccess, setShowSuccess } = useSuccess();
-  const { data: users, isFetching } = useGetUsersQuery();
-  console.log('All the users: ', users);
+  const {
+    data: users,
+    isFetching,
+    refetch,
+  } = useGetUsersQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
+  const [filteredUsers, setFilteredUsers] = useState(users?.data || []);
+
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
   };
@@ -119,12 +126,19 @@ export default function UserPage() {
     setPage(0);
     setFilterName(event.target.value);
     // applySortFilter();
-    console.log('filterName====', filterName);
   };
+  // useEffect(() => {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (users?.data?.length || 0)) : 0;
-  const filteredUsers = applySortFilter(users?.data || [], getComparator(order, orderBy), filterName);
-  console.log('filteredUsers ahinnn', filteredUsers);
+  useEffect(() => {
+    const filtered = applySortFilter(users?.data || [], getComparator(order, orderBy), filterName);
+    setFilteredUsers(filtered);
+    console.log('new users: ', filteredUsers);
+  }, [users, order, orderBy, filterName]);
+
   const isNotFound = !filteredUsers.length && !!filterName;
+
+  // }, [users]);
+
   useEffect(() => {
     if (showSuccess) {
       toast.success('Form submitted successfully!', {
@@ -132,6 +146,11 @@ export default function UserPage() {
       });
     }
   }, [isSuccessMessageShown]);
+
+  console.log('New  the users: ', filteredUsers);
+  if (isFetching) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
       <Container>
@@ -179,7 +198,8 @@ export default function UserPage() {
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar
                               sx={{ cursor: 'pointer' }}
-                              src={`http://192.168.18.131:3333/Images/${row?.profileImages
+                              alt=""
+                              src={`http://localhost:3333/Images/${row?.profileImages
                                 ?.find((item) => item?.orderId === 1)
                                 ?.uri?.split('/')
                                 ?.pop()}`}
@@ -189,7 +209,7 @@ export default function UserPage() {
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{row?.email}</TableCell>
+                        <TableCell align="left">{row?.mobileNumber}</TableCell>
                         <TableCell align="left">
                           <Label color={(row?.status === 'banned' && 'error') || 'success'}>{row?.status}</Label>
                         </TableCell>

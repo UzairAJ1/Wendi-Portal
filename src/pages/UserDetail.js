@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { TailSpin } from 'react-loader-spinner'
+import { TailSpin } from 'react-loader-spinner';
+
 import {
   Card,
   CardContent,
@@ -20,9 +21,13 @@ import {
 import { styled } from '@mui/system';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import man from '../assets/man.avif';
-import { useGetUserByIdQuery, useSetUserByIdMutation } from '../redux/userManagement/userManagementApi';
+import {
+  useGetUserByIdQuery,
+  useSetUserByIdMutation,
+  useDeleteUserByIdMutation,
+} from '../redux/userManagement/userManagementApi';
 import { prepareSetUserDetailsData } from './utils';
 
 const StyledCard = styled(Card)({
@@ -40,6 +45,7 @@ const UserDetail = ({ user }) => {
   const [setUserDetails] = useSetUserByIdMutation();
   const { _id } = useParams();
   const { data: specificUser, isFetching, refetch } = useGetUserByIdQuery({ _id });
+  const [deleteUser] = useDeleteUserByIdMutation();
   const [image, setImage] = useState(null);
   // const [imageURI, setImageURI] = useState('');
   const [imageError, setImageError] = useState(false);
@@ -47,6 +53,8 @@ const UserDetail = ({ user }) => {
   // const [editedUser, setEditedUser] = useState({ ...user });
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedImageURL, setSelectedImageURL] = useState(null);
+  console.log('Img url: ', selectedImageURL);
   const navigate = useNavigate();
   const [editedUser, setEditedUser] = useState({
     fullName: '',
@@ -71,14 +79,14 @@ const UserDetail = ({ user }) => {
     //     colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
     //   />;
     // } elseU
-      setEditedUser({ 
-        fullName: specificUser?.data?.fullName,
-        gender: specificUser?.data?.gender,
-        sexualOrientation: specificUser?.data?.sexualOrientation,
-        // email: specificUser?.data?.email,
-        aboutYou: specificUser?.data?.aboutYou,
-        // password: specificUser?.data?.password,
-      });
+    setEditedUser({
+      fullName: specificUser?.data?.fullName,
+      gender: specificUser?.data?.gender,
+      sexualOrientation: specificUser?.data?.sexualOrientation,
+      // email: specificUser?.data?.email,
+      aboutYou: specificUser?.data?.aboutYou,
+      // password: specificUser?.data?.password,
+    });
   }, [specificUser]);
 
   const [userArray, setUserArray] = useState([]);
@@ -176,38 +184,43 @@ const UserDetail = ({ user }) => {
       }
     }
   };
+  const handleDelete = (userId) => {
+    deleteUser(userId);
+    navigate('/dashboard/user');
+  };
+
+  const handleBack = () => {
+    navigate('/dashboard/user');
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
     if (file) {
       // You can also add validation here for the file type and size if needed
-      const myURI = URL.createObjectURL(e.target.files[0]);
-      console.log('OKOKO =======', file);
+      const imageURL = URL.createObjectURL(file);
+      setSelectedImageURL(imageURL);
       setSelectedImage(file);
-      // const reader = new FileReader();
-
-      // reader.onloadend = () => {
-      //   setSelectedImage(reader.result);
-      // };
-
-      // reader.readAsDataURL(file);
     }
   };
 
-  useEffect(() => {
-    console.log('imageee', image);
-  }, [image]);
-
-
-
-    const myImg = `http://192.168.18.131:3333/Images/${specificUser?.data?.profileImages?.find((item) => item?.orderId === 1)
+  const myImg = `http://localhost:3333/Images/${specificUser?.data?.profileImages
+    ?.find((item) => item?.orderId === 1)
     ?.uri?.split('/')
-      ?.pop()}`
+    ?.pop()}`;
   console.log('editttttt', myImg);
 
   return loading ? (
-    <TailSpin color="red" radius={'8px'} />
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center', // Center horizontally
+        alignItems: 'center', // Center vertically
+        height: '100vh', // Adjust the height as needed
+      }}
+    >
+      <TailSpin color="blue" radius={'8px'} sx={{ width: '100%' }} />
+    </div>
   ) : (
     <Container component="main" maxWidth="lg" sx={{ width: '100%' }}>
       <StyledCard sx={{ width: '95%' }}>
@@ -218,11 +231,7 @@ const UserDetail = ({ user }) => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Paper elevation={3} sx={{ padding: 2, width: '200px', height: '200px' }}>
-             <img
-             alt=""
-        src={myImg}
-        style={{height:"100%",width:"100%",objectFit:"cover"}}
-             />
+                <img alt="" src={myImg} style={{ height: '100%', width: '100%', objectFit: 'cover' }} />
                 {/* <img src={selectedImage} alt="Selected" style={{ maxWidth: '100%' }} /> */}
                 {/* <Typography variant="subtitle1">
                   Profile Picture: {editedUser.pic}
@@ -266,16 +275,19 @@ const UserDetail = ({ user }) => {
               </Paper>
             </Grid> */}
           </Grid>
+
           <StyledButton
             variant="contained"
             color="primary"
-            onClick={() => {
-              navigate('/dashboard/user');
-            }}
+            // onClick={() => {
+            //   handleBack();
+            // }}
             sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
+            onClick={handleBack}
           >
             Back
           </StyledButton>
+
           <StyledButton
             variant="contained"
             color="primary"
@@ -292,7 +304,7 @@ const UserDetail = ({ user }) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              // handleSave();
+              handleDelete(_id);
             }}
             sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
           >
@@ -339,6 +351,19 @@ const UserDetail = ({ user }) => {
                   style={{ display: 'none' }}
                 />
               </Button>
+              {/* <div>
+                <img alt="" src="sdf" style={{ height: '100%', width: '100%', objectFit: 'cover' }} />
+              </div> */}
+
+              {selectedImageURL && (
+                <div>
+                  <img
+                    alt="Selected"
+                    src={selectedImageURL}
+                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'cover' }}
+                  />
+                </div>
+              )}
               <TextField
                 label="Username"
                 name="fullName"
