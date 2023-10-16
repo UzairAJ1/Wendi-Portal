@@ -137,19 +137,6 @@ function ReportAnalytics() {
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4}>
-        <AppCurrentSubject
-          title="Different trends"
-          chartLabels={['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4', 'Feature 5', 'Feature 6']}
-          chartData={[
-            { name: 'Male', data: [80, 50, 30, 40, 100, 20] },
-            { name: 'Female', data: [20, 30, 40, 80, 20, 80] },
-            // { name: 'Feature 3', data: [44, 76, 78, 13, 43, 10] },
-          ]}
-          chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
-        />
-      </Grid>
-
       {/* <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate
               title="News Update"
