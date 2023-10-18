@@ -97,6 +97,13 @@ export const dashboardApi = createApi({
         method: 'get',
       }),
     }),
+
+    getUsersByMonth: builder.query({
+      query: () => ({
+        url: 'user/usersByMonths',
+        method: 'get',
+      }),
+    }),
   }),
 });
 
@@ -112,4 +119,5 @@ export const {
   useGetLikesStatisticsQuery,
   useGetUserByTimeQuery,
   useGetLikesByTimeQuery,
+  useGetUsersByMonthQuery,
 } = dashboardApi;
