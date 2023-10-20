@@ -41,6 +41,7 @@ const Home = () => {
       dataToSend.zodiacLimit = zodiacLimit;
       dataToSend.zodiacTimeLimit = zodiacTimeLimit;
       toast.success('Zodiac details updated successfully');
+      console.log('zodiac settings:', dataToSend);
     } else if (type === 'giftInteractionLimit') {
       dataToSend.giftInteractionLimit = {
         freeGifts,

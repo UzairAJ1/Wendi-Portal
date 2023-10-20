@@ -27,6 +27,7 @@ import {
   useGetUserByIdQuery,
   useSetUserByIdMutation,
   useDeleteUserByIdMutation,
+  useSetStatusByidMutation,
 } from '../redux/userManagement/userManagementApi';
 import { prepareSetUserDetailsData } from './utils';
 
@@ -42,6 +43,7 @@ const StyledButton = styled(Button)({
 });
 
 const UserDetail = ({ user }) => {
+  const [setUserStatus] = useSetStatusByidMutation();
   const [setUserDetails] = useSetUserByIdMutation();
   const { _id } = useParams();
   const { data: specificUser, isFetching, refetch } = useGetUserByIdQuery({ _id });
@@ -54,7 +56,6 @@ const UserDetail = ({ user }) => {
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState(null);
-  console.log('Img url: ', selectedImageURL);
   const navigate = useNavigate();
   const [editedUser, setEditedUser] = useState({
     fullName: '',
@@ -62,6 +63,7 @@ const UserDetail = ({ user }) => {
     sexualOrientation: '',
     // email: specificUser?.data?.email || '',
     aboutYou: '',
+    status: '',
     // password: specificUser?.data?.password || '',
   });
   const [selectedImage, setSelectedImage] = useState(null);
@@ -85,6 +87,7 @@ const UserDetail = ({ user }) => {
       sexualOrientation: specificUser?.data?.sexualOrientation,
       // email: specificUser?.data?.email,
       aboutYou: specificUser?.data?.aboutYou,
+      status: specificUser?.data?.status,
       // password: specificUser?.data?.password,
     });
   }, [specificUser]);
@@ -93,6 +96,8 @@ const UserDetail = ({ user }) => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    console.log('name:', name);
+    console.log('value', value);
     setEditedUser((prevUser) => {
       // Check if the new value is different from the current value
       if (prevUser[name] !== value) {
@@ -101,11 +106,10 @@ const UserDetail = ({ user }) => {
           [name]: value,
         };
       }
-      return prevUser; // No change needed
+      return prevUser;
     });
-    // console.log("editedUser=====",editedUser)
   };
-
+  console.log('edited User:', editedUser);
   // const handleSave = async () => {
   //   setUserArray((prevArray) => [...prevArray, editedUser]);
   //   try {
@@ -134,7 +138,8 @@ const UserDetail = ({ user }) => {
       editedUser.fullName === '' ||
       editedUser.gender === '' ||
       editedUser.sexualOrientation === '' ||
-      editedUser.aboutYou === ''
+      editedUser.aboutYou === '' ||
+      editedUser.status === ''
     ) {
       toast.error('Please enter the credentials', {
         position: toast.POSITION.TOP_RIGHT,
@@ -144,14 +149,14 @@ const UserDetail = ({ user }) => {
       setLoading(true);
       try {
         const preparedData = prepareSetUserDetailsData(editedUser, selectedImage);
+
         const response = await setUserDetails({ preparedData, _id });
+        console.log('prepared Data: ', preparedData);
         if (response?.data?.status === 200) {
           refetch();
           setLoading(false);
           // setImageURI(response.data.uri);
         }
-        console.log('ideeeeeee', _id);
-        console.log('user details going to the api', response);
 
         // const response = await setUserDetails({ payload: editedUser }, _id);
         setEdit(false);
@@ -188,7 +193,13 @@ const UserDetail = ({ user }) => {
     deleteUser(userId);
     navigate('/dashboard/user');
   };
-
+  const handleSuspend = async () => {
+    setUserStatus({
+      status: 'banned',
+      userId: _id,
+    });
+    // }
+  };
   const handleBack = () => {
     navigate('/dashboard/user');
   };
@@ -208,7 +219,6 @@ const UserDetail = ({ user }) => {
     ?.find((item) => item?.orderId === 1)
     ?.uri?.split('/')
     ?.pop()}`;
-  console.log('editttttt', myImg);
 
   return loading ? (
     <div
@@ -314,7 +324,7 @@ const UserDetail = ({ user }) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              // handleSave();
+              handleSuspend();
             }}
             sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
           >

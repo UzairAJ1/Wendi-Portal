@@ -24,6 +24,10 @@ const tabs = {
   users: ['monthly', 'weekly', 'yearly', 'total'],
   likes: ['monthly', 'weekly', 'yearly', 'total'],
   gender: ['monthly', 'weekly', 'yearly', 'total'],
+  conversion: ['total', 'all'],
+  engagement: ['total', 'all'],
+  revenue: ['total', 'all'],
+  gifts: ['total', 'all'],
 };
 
 const Reports = () => {
@@ -156,6 +160,22 @@ const Reports = () => {
       yearly: [yearlyGenders],
       total: [totalGenders],
     },
+    conversion: {
+      total: [0],
+      all: [0],
+    },
+    engagement: {
+      total: [0],
+      all: [0],
+    },
+    revenue: {
+      total: [0],
+      all: [0],
+    },
+    gifts: {
+      total: [0],
+      all: [0],
+    },
   };
   console.log('MonthlyUsers :', monthlyUsers);
   console.log('MonthlyGenders :', monthlyGenders);
@@ -165,10 +185,10 @@ const Reports = () => {
         <MenuItem value="users">Users</MenuItem>
         <MenuItem value="likes">Likes</MenuItem>
         <MenuItem value="gender">Gender</MenuItem>
-        <MenuItem value="gender">User engagement</MenuItem>
-        <MenuItem value="gender">Conversion rates</MenuItem>
-        <MenuItem value="gender">Revenue</MenuItem>
-        <MenuItem value="gender">Gifts</MenuItem>
+        <MenuItem value="engagement">User engagement</MenuItem>
+        <MenuItem value="conversion">Conversion rates</MenuItem>
+        <MenuItem value="revenue">Revenue</MenuItem>
+        <MenuItem value="gifts">Gifts</MenuItem>
       </Select>
       <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
         {tabs[selectedOption].map((tab) => (
@@ -236,11 +256,78 @@ const Reports = () => {
             </TableBody>
           </Table>
         )}
+        {selectedOption === 'conversion' && (
+          <Table ref={tableRef}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Total</TableCell>
+                <TableCell>All</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>0</TableCell>
+                <TableCell>0</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        )}
+
+        {selectedOption === 'engagement' && (
+          <Table ref={tableRef}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Total</TableCell>
+                <TableCell>All</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>0</TableCell>
+                <TableCell>0</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        )}
+
+        {selectedOption === 'revenue' && (
+          <Table ref={tableRef}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Total</TableCell>
+                <TableCell>All</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>0</TableCell>
+                <TableCell>0</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        )}
+
+        {selectedOption === 'gifts' && (
+          <Table ref={tableRef}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Total</TableCell>
+                <TableCell>All</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>0</TableCell>
+                <TableCell>0</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        )}
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={tableData[selectedOption][activeTab].length}
+        count={tableData[selectedOption][activeTab]?.length || 0}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

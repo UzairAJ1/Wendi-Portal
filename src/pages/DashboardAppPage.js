@@ -10,9 +10,9 @@ import Iconify from '../components/iconify';
 import {
   useGetUserStatisticsQuery,
   useGetLikesStatisticsQuery,
-  useDailyActiveUsersQuery,
   useGenderDistributionQuery,
   useGetUsersByMonthQuery,
+  useActiveUsersStatsQuery,
 } from '../redux/dashboard/dashboardApi';
 import {
   AppTasks,
@@ -32,19 +32,23 @@ export default function DashboardAppPage() {
   const theme = useTheme();
   const { data: usersData, isFetching, isError } = useGetUserStatisticsQuery();
   const { data: likeData, isFetching: fetchingLikesStats, error } = useGetLikesStatisticsQuery();
-  const { data: dailyActiveUsers, isFetching: fetchingLikeUsers, isError1 } = useDailyActiveUsersQuery();
+  const { data: activeUsers, isFetching: fetchingLikeUsers, isError1 } = useActiveUsersStatsQuery();
   const { data: totalGenderDistribution } = useGenderDistributionQuery();
   const { data: usersByMonth, isFetching: fetchingUsersByMonth } = useGetUsersByMonthQuery();
 
   const totalUsers = usersData?.data?.totalUsers || 0;
   const maleUsers = usersData?.data?.maleUsers || 0;
   const femaleUsers = usersData?.data?.femaleUsers || 0;
-  const activeUsers = usersData?.data?.activeUsers || 0;
   const newUsers = usersData?.data?.newUsers || 0;
 
-  const totalFemales = totalGenderDistribution?.totalFemales || 0;
-  const totalMales = totalGenderDistribution?.totalMales || 0;
+  const totalFemales = totalGenderDistribution?.total?.totalFemales || 0;
+  const totalMales = totalGenderDistribution?.total?.totalMales || 0;
+  const dailyActiveMales = totalGenderDistribution?.totalDailyActive?.males || 0;
+  const dailyActiveFemales = totalGenderDistribution?.totalDailyActive?.females || 0;
+  const monthlyActiveMales = totalGenderDistribution?.totalMonthlyActive?.males || 0;
+  const monthlyActiveFemales = totalGenderDistribution?.totalMonthlyActive?.females || 0;
 
+  console.log(totalGenderDistribution);
   const [totalCount, setTotalCount] = useState(0);
   const [averageDailyLikes, setAverageDailyLikes] = useState(0);
   const [averageMonthlyLikes, setAverageMonthlyLikes] = useState(0);
@@ -54,20 +58,55 @@ export default function DashboardAppPage() {
   const [averageMonthlyLikesFemale, setAverageMonthlyLikesFemale] = useState(0);
   const [usersMonthly, setUsersMonthly] = useState();
   const [likesData, setLikesData] = useState([]);
+  const [activeUsersData, setActiveUsersData] = useState([]);
+
+  const [averageDailyUsers, setAverageDailyUsers] = useState(0);
+  const [averageMonthlyUsers, setAverageMonthlyUsers] = useState(0);
+
+  useEffect(() => {
+    setActiveUsersData(activeUsers);
+  }, [activeUsers]);
 
   useEffect(() => {
     setLikesData(likeData);
   }, [likeData]);
+
+  useEffect(() => {
+    setUsersMonthly(usersByMonth);
+  }, [usersByMonth]);
+
   const likesPerMonth = likesData?.data?.likesPerMonth || 0;
   const likesPerDay = likesData?.data?.likesPerDay || 0;
   const likesPerDayMale = likesData?.data?.likesPerDayMale || 0;
   const likesPerDayFemale = likesData?.data?.likesPerDayFemale || 0;
   const likesPerMonthFemale = likesData?.data?.likesPerMonthFemale || 0;
   const likesPerMonthMale = likesData?.data?.likesPerMonthMale || 0;
-  console.log('likes', likesData);
+
+  const totalActiveUsers = activeUsersData?.data?.totalActiveUsers || 0;
+  const dailyActiveUsers = activeUsersData?.data?.activeUsersPerDay || 0;
+  const monthlyActiveUsers = activeUsersData?.data?.activeUsersPerMonth || 0;
+  console.log('daily:', dailyActiveUsers);
   useEffect(() => {
-    setUsersMonthly(usersByMonth);
-  }, [usersByMonth]);
+    if (dailyActiveUsers) {
+      let total = 0;
+      Object.keys(dailyActiveUsers).forEach((key) => {
+        total += dailyActiveUsers[key].count || 0;
+      });
+      const average = total / Object.keys(dailyActiveUsers).length;
+      setTotalCount(total);
+      setAverageDailyUsers(average);
+    }
+
+    if (monthlyActiveUsers) {
+      let total = 0;
+      Object.keys(monthlyActiveUsers).forEach((key) => {
+        total += monthlyActiveUsers[key].count || 0;
+      });
+      const average = total / Object.keys(monthlyActiveUsers).length;
+      setTotalCount(total);
+      setAverageMonthlyUsers(average);
+    }
+  }, [dailyActiveUsers, monthlyActiveUsers]);
 
   useEffect(() => {
     if (likesPerMonthFemale) {
@@ -141,6 +180,52 @@ export default function DashboardAppPage() {
   let monthlyChartsLabels = [];
   let monthlyChartsData = [];
 
+  let latest7DatesActive = [];
+  let dailyActiveChartsLabels = [];
+  let dailyActiveChartsData = [];
+
+  let latest7MonthsActive = [];
+  let monthlyActiveChartsLabels = [];
+  let monthlyActiveChartsData = [];
+
+  if (monthlyActiveUsers) {
+    latest7MonthsActive = monthlyActiveUsers
+      .filter((item) => item._id)
+      .sort((a, b) => new Date(b._id) - new Date(a._id))
+      .slice(0, 7);
+
+    monthlyActiveChartsLabels = latest7MonthsActive.map((item) => {
+      const date = new Date(item._id);
+      const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date
+        .getDate()
+        .toString()
+        .padStart(2, '0')}/${date.getFullYear()}`;
+      return formattedDate;
+    });
+
+    monthlyActiveChartsData = latest7MonthsActive.map((item) => item.count);
+    // dailyChartsData.push(0);
+  }
+
+  if (dailyActiveUsers) {
+    latest7DatesActive = dailyActiveUsers
+      .filter((item) => item._id)
+      .sort((a, b) => new Date(b._id) - new Date(a._id))
+      .slice(0, 7);
+
+    dailyActiveChartsLabels = latest7DatesActive.map((item) => {
+      const date = new Date(item._id);
+      const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date
+        .getDate()
+        .toString()
+        .padStart(2, '0')}/${date.getFullYear()}`;
+      return formattedDate;
+    });
+
+    dailyActiveChartsData = latest7DatesActive.map((item) => item.count);
+    // dailyChartsData.push(0);
+  }
+
   if (likesPerDay) {
     latest7Dates = likesPerDay
       .filter((item) => item._id)
@@ -207,7 +292,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Active users currently using the app"
-                total={activeUsers}
+                total={1}
                 color="info"
                 icon={'ant-design:heart-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
@@ -233,20 +318,6 @@ export default function DashboardAppPage() {
               <AppWebsiteVisits
                 title="User Statistics:"
                 chartLabels={chartLabels}
-                // chartLabels={[
-                //   '01/01/2003',
-                //   '02/01/2003',
-                //   '03/01/2003',
-                //   '04/01/2003',
-                //   '05/01/2003',
-                //   '06/01/2003',
-                //   '07/01/2003',
-                //   '08/01/2003',
-                //   '09/01/2003',
-                //   '10/01/2003',
-                //   '11/01/2003',
-                // ]}
-                // chartData={'26'}
                 chartData={[
                   {
                     name: 'User Engagement',
@@ -380,33 +451,16 @@ export default function DashboardAppPage() {
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
               title="Monthly Likes:"
-              subheader="(+43%) than last year"
               chartLabels={monthlyChartsLabels}
               chartData={[
-                // {
-                //   name: 'User Retention',
-                //   type: 'column',
-                //   fill: 'solid',
-                //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                // },
+         
                 {
                   name: 'User Engagement',
                   type: 'area',
                   fill: 'gradient',
                   data: monthlyChartsData,
                 },
-                // {
-                //   name: 'Male',
-                //   type: 'line',
-                //   fill: 'solid',
-                //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                // },
-                // {
-                //   name: 'User Retention',
-                //   type: 'column',
-                //   fill: 'solid',
-                //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                // },
+         
               ]}
             />
           </Grid>
@@ -436,7 +490,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Total number of active users on daily basis"
-                total={activeUsers}
+                total={Math.round(averageDailyUsers)}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -466,44 +520,13 @@ export default function DashboardAppPage() {
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
               title="Daily Active Users"
-              subheader="(+43%) than last year"
-              chartLabels={[
-                '01/01/2003',
-                '02/01/2003',
-                '03/01/2003',
-                '04/01/2003',
-                '05/01/2003',
-                '06/01/2003',
-                '07/01/2003',
-                '08/01/2003',
-                '09/01/2003',
-                '10/01/2003',
-                '11/01/2003',
-              ]}
+              chartLabels={dailyActiveChartsLabels}
               chartData={[
-                // {
-                //   name: 'User Retention',
-                //   type: 'column',
-                //   fill: 'solid',
-                //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                // },
                 {
                   name: 'User Engagement',
                   type: 'area',
                   fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-                },
-                // {
-                //   name: 'Male',
-                //   type: 'line',
-                //   fill: 'solid',
-                //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                // },
-                {
-                  name: 'User Retention',
-                  type: 'column',
-                  fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                  data: dailyActiveChartsData,
                 },
               ]}
             />
@@ -513,8 +536,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Gender Distribution"
               chartData={[
-                { label: 'Male', value: 1 },
-                { label: 'Female', value: 1 },
+                { label: 'Male', value: dailyActiveMales },
+                { label: 'Female', value: dailyActiveFemales },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}
@@ -534,7 +557,7 @@ export default function DashboardAppPage() {
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="Total number of active users on monthly basis"
-                total={576}
+                total={Math.round(averageMonthlyUsers)}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -564,20 +587,7 @@ export default function DashboardAppPage() {
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
               title="Monthly Active Users"
-              subheader="(+43%) than last year"
-              chartLabels={[
-                '01/01/2003',
-                '02/01/2003',
-                '03/01/2003',
-                '04/01/2003',
-                '05/01/2003',
-                '06/01/2003',
-                '07/01/2003',
-                '08/01/2003',
-                '09/01/2003',
-                '10/01/2003',
-                '11/01/2003',
-              ]}
+              chartLabels={monthlyActiveChartsLabels}
               chartData={[
                 // {
                 //   name: 'User Retention',
@@ -589,7 +599,7 @@ export default function DashboardAppPage() {
                   name: 'User Engagement',
                   type: 'area',
                   fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                  data: monthlyActiveChartsData,
                 },
                 // {
                 //   name: 'Male',
@@ -597,12 +607,6 @@ export default function DashboardAppPage() {
                 //   fill: 'solid',
                 //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
                 // },
-                {
-                  name: 'User Retention',
-                  type: 'column',
-                  fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                },
               ]}
             />
           </Grid>
@@ -611,8 +615,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Gender Distribution"
               chartData={[
-                { label: 'Male', value: totalMales },
-                { label: 'Female', value: totalFemales },
+                { label: 'Male', value: monthlyActiveMales },
+                { label: 'Female', value: monthlyActiveFemales },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}
@@ -631,8 +635,8 @@ export default function DashboardAppPage() {
           <Grid container spacing={3} justifyContent="space-around">
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
-                title="Total number of registered users"
-                total={1}
+                title="Total number Male users"
+                total={totalMales}
                 icon={'ant-design:android-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
@@ -640,15 +644,15 @@ export default function DashboardAppPage() {
 
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
-                title="Active users currently using the app"
-                total={1}
+                title="Total number of Female users"
+                total={totalFemales}
                 color="info"
                 icon={'ant-design:apple-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={3}>
+            {/* <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
                 title="new user sign-ups within a specified time period"
                 total={1}
@@ -656,7 +660,7 @@ export default function DashboardAppPage() {
                 icon={'ant-design:windows-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}
               />
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
@@ -708,8 +712,8 @@ export default function DashboardAppPage() {
             <AppCurrentVisits
               title="Gender Distribution"
               chartData={[
-                { label: 'Male', value: 1 },
-                { label: 'Female', value: 1 },
+                { label: 'Male', value: totalMales },
+                { label: 'Female', value: totalFemales },
                 // { label: 'Europe', value: 1443 },
                 // { label: 'Africa', value: 4443 },
               ]}

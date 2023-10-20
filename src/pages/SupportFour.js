@@ -133,7 +133,7 @@ const Supportfour = () => {
                     ]}
                   />
                 </Grid>
-                <Grid item xs={12} md={6} lg={4} sx={{ marginY: '20px' }}>
+                {/* <Grid item xs={12} md={6} lg={4} sx={{ marginY: '20px' }}>
                   <AppCurrentSubject
                     title="Different trends"
                     chartLabels={['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4', 'Feature 5', 'Feature 6']}
@@ -144,7 +144,7 @@ const Supportfour = () => {
                     ]}
                     chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
                   />
-                </Grid>
+                </Grid> */}
               </FormContainer>
             </div>
           </TabPanel>
