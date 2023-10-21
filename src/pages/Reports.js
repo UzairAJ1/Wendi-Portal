@@ -165,8 +165,8 @@ const Reports = () => {
       all: [0],
     },
     engagement: {
-      total: [0],
-      all: [0],
+      total: [42],
+      all: [56],
     },
     revenue: {
       total: [0],
@@ -283,8 +283,8 @@ const Reports = () => {
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell>0</TableCell>
-                <TableCell>0</TableCell>
+                <TableCell>42</TableCell>
+                <TableCell>56</TableCell>
               </TableRow>
             </TableBody>
           </Table>
