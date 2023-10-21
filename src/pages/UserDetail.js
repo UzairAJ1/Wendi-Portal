@@ -67,7 +67,7 @@ const UserDetail = ({ user }) => {
     // password: specificUser?.data?.password || '',
   });
   const [selectedImage, setSelectedImage] = useState(null);
-  console.log('Source===', selectedImage);
+  console.log('Specific User:', specificUser);
 
   useEffect(() => {
     // if (editedUser.fullName || editedUser.gender || editedUser.sexualOrientation || editedUser.aboutYou) {
@@ -109,7 +109,6 @@ const UserDetail = ({ user }) => {
       return prevUser;
     });
   };
-  console.log('edited User:', editedUser);
   // const handleSave = async () => {
   //   setUserArray((prevArray) => [...prevArray, editedUser]);
   //   try {
@@ -192,14 +191,23 @@ const UserDetail = ({ user }) => {
   const handleDelete = (userId) => {
     deleteUser(userId);
     navigate('/dashboard/user');
+    toast.success('User has been Deleted');
   };
   const handleSuspend = async () => {
     setUserStatus({
       status: 'banned',
       userId: _id,
     });
-    // }
+    toast.success('User has been Suspended');
   };
+  const handleUnSuspend = async () => {
+    setUserStatus({
+      status: 'active',
+      userId: _id,
+    });
+    toast.success('User has been UnSuspended');
+  };
+
   const handleBack = () => {
     navigate('/dashboard/user');
   };
@@ -320,16 +328,32 @@ const UserDetail = ({ user }) => {
           >
             Delete User
           </StyledButton>
-          <StyledButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              handleSuspend();
-            }}
-            sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
-          >
-            Suspend User
-          </StyledButton>
+
+          {specificUser?.data?.status === 'active' && (
+            <StyledButton
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                handleSuspend();
+              }}
+              sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
+            >
+              Suspend User
+            </StyledButton>
+          )}
+
+          {specificUser?.data?.status === 'banned' && (
+            <StyledButton
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                handleUnSuspend();
+              }}
+              sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
+            >
+              UnSuspend User
+            </StyledButton>
+          )}
 
           <StyledButton
             variant="contained"

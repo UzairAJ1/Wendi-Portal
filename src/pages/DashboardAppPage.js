@@ -453,14 +453,12 @@ export default function DashboardAppPage() {
               title="Monthly Likes:"
               chartLabels={monthlyChartsLabels}
               chartData={[
-         
                 {
                   name: 'User Engagement',
                   type: 'area',
                   fill: 'gradient',
                   data: monthlyChartsData,
                 },
-         
               ]}
             />
           </Grid>
