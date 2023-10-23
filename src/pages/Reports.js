@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PDFDocument, rgb } from 'pdf-lib';
+import * as XLSX from 'xlsx';
 import {
   Tab,
   Tabs,
@@ -97,49 +98,49 @@ const Reports = () => {
   const startIndex = page * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
 
-  const handleExportClick = async () => {
-    const pdfDoc = await PDFDocument.create();
+  // const handleExportClick = async () => {
+  //   const pdfDoc = await PDFDocument.create();
 
-    const page = pdfDoc.addPage([600, 400]);
+  //   const page = pdfDoc.addPage([600, 400]);
 
-    const content = tableData[selectedOption][activeTab]
-      .slice(startIndex, endIndex)
-      .map((user) => {
-        const sanitizedText = new TextEncoder().encode(user.fullName).reduce((str, charCode) => {
-          if (charCode >= 32 && charCode <= 126) {
-            // Filter out non-printable ASCII characters
-            return str + String.fromCharCode(charCode);
-          }
-          return str;
-        }, '');
-        return `${user._id} | ${sanitizedText} | ${user.mobileNumber}`;
-      })
-      .join('\n');
+  //   const content = tableData[selectedOption][activeTab]
+  //     .slice(startIndex, endIndex)
+  //     .map((user) => {
+  //       const sanitizedText = new TextEncoder().encode(user.fullName).reduce((str, charCode) => {
+  //         if (charCode >= 32 && charCode <= 126) {
+  //           // Filter out non-printable ASCII characters
+  //           return str + String.fromCharCode(charCode);
+  //         }
+  //         return str;
+  //       }, '');
+  //       return `${user._id} | ${sanitizedText} | ${user.mobileNumber}`;
+  //     })
+  //     .join('\n');
 
-    page.drawText(`${selectedOption}-${activeTab}-report`, {
-      x: 50,
-      y: 370,
-      size: 16,
-      color: rgb(0, 0, 0),
-    });
+  //   page.drawText(`${selectedOption}-${activeTab}-report`, {
+  //     x: 50,
+  //     y: 370,
+  //     size: 16,
+  //     color: rgb(0, 0, 0),
+  //   });
 
-    page.drawText(content, {
-      x: 50,
-      y: 350,
-      size: 12,
-      color: rgb(0, 0, 0),
-    });
+  //   page.drawText(content, {
+  //     x: 50,
+  //     y: 350,
+  //     size: 12,
+  //     color: rgb(0, 0, 0),
+  //   });
 
-    const pdfBytes = await pdfDoc.save();
+  //   const pdfBytes = await pdfDoc.save();
 
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${selectedOption}-${activeTab}.pdf`;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
+  //   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  //   const url = window.URL.createObjectURL(blob);
+  //   const a = document.createElement('a');
+  //   a.href = url;
+  //   a.download = `${selectedOption}-${activeTab}.pdf`;
+  //   a.click();
+  //   window.URL.revokeObjectURL(url);
+  // };
 
   const tableData = {
     users: {
@@ -177,6 +178,41 @@ const Reports = () => {
       all: [0],
     },
   };
+  console.log('Table data:', tableData.users);
+  const handleExportClick = () => {
+    // console.log("SELECTED OPTION ======", selectedOption)
+
+    let allContent = [];
+
+    if (selectedOption === 'users') {
+      allContent = tableData.users.total.map((user) => [user?._id, user?.fullName, user?.mobileNumber]);
+    } else if (selectedOption === 'likes') {
+      allContent = tableData.likes.total.map((user) => [
+        user?._id,
+        user?.likedUserId?.fullName,
+        user?.likedUserId?.fullName,
+      ]);
+    } else if (selectedOption === 'gender') {
+      allContent = tableData.gender.total.map((user) => [user?.male, user?.female]);
+    }
+
+    console.log('all exports', allContent);
+
+    const header =
+      selectedOption === 'users'
+        ? ['ID', 'Full Name', 'Mobile Number']
+        : selectedOption === 'likes'
+        ? ['ID', 'Liker Full Name', 'Liked Full Name']
+        : selectedOption === 'gender'
+        ? ['Male', 'Female']
+        : [];
+
+    const ws = XLSX.utils.aoa_to_sheet([header, ...allContent]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${selectedOption}.xlsx`);
+  };
+
   console.log('MonthlyUsers :', monthlyUsers);
   console.log('MonthlyGenders :', monthlyGenders);
   return (

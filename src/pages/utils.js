@@ -21,7 +21,12 @@ export function prepareSetUserDetailsData(payload, image) {
   if (payload.aboutYou) {
     formData.append('aboutYou', payload.aboutYou);
   }
-
+  if (payload.wantToSee) {
+    formData.append('wantToSee', payload.wantToSee);
+  }
+  if (payload.lookingFor) {
+    formData.append('lookingFor', payload.lookingFor);
+  }
   if (image) {
     formData.append('orderIds', JSON.stringify([1]));
   }

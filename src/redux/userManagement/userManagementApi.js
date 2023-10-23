@@ -57,6 +57,13 @@ export const userManagement = createApi({
         body: payload,
       }),
     }),
+    deleteMultipleUserById: builder.mutation({
+      query: (payload) => ({
+        url: 'user/deleteMultipleUsers',
+        method: 'POST',
+        body: { userIds: payload },
+      }),
+    }),
 
     // setUserById: builder.mutation({
     //   query: ({ payload, _id }) => ({
@@ -75,4 +82,5 @@ export const {
   useSetUserByIdMutation,
   useDeleteUserByIdMutation,
   useSetStatusByidMutation,
+  useDeleteMultipleUserByIdMutation,
 } = userManagement;

@@ -32,7 +32,7 @@ export default function DashboardAppPage() {
   const theme = useTheme();
   const { data: usersData, isFetching, isError } = useGetUserStatisticsQuery();
   const { data: likeData, isFetching: fetchingLikesStats, error } = useGetLikesStatisticsQuery();
-  const { data: activeUsers, isFetching: fetchingLikeUsers, isError1 } = useActiveUsersStatsQuery();
+  const { data: activeUsers, isFetching: fetchingActiveUsers, isError1 } = useActiveUsersStatsQuery();
   const { data: totalGenderDistribution } = useGenderDistributionQuery();
   const { data: usersByMonth, isFetching: fetchingUsersByMonth } = useGetUsersByMonthQuery();
 
@@ -85,7 +85,7 @@ export default function DashboardAppPage() {
   const totalActiveUsers = activeUsersData?.data?.totalActiveUsers || 0;
   const dailyActiveUsers = activeUsersData?.data?.activeUsersPerDay || 0;
   const monthlyActiveUsers = activeUsersData?.data?.activeUsersPerMonth || 0;
-  console.log('daily:', dailyActiveUsers);
+  console.log('users:', activeUsers);
   useEffect(() => {
     if (dailyActiveUsers) {
       let total = 0;
@@ -263,6 +263,9 @@ export default function DashboardAppPage() {
     monthlyChartsData = latest7Months.map((item) => item.count);
     // dailyChartsData.push(0);
   }
+  if (isFetching && fetchingLikesStats && fetchingActiveUsers) {
+    return <div>Loading ...</div>;
+  }
 
   return (
     <>
@@ -291,8 +294,8 @@ export default function DashboardAppPage() {
 
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary
-                title="Active users currently using the app"
-                total={1}
+                title="Total Active Users"
+                total={totalActiveUsers}
                 color="info"
                 icon={'ant-design:heart-filled'}
                 sx={{ minHeight: '260px', padding: '40px 10px' }}

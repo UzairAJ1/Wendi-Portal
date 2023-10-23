@@ -15,13 +15,22 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  Button,
+  Checkbox,
 } from '@mui/material';
+import { styled } from '@mui/system';
+import { filter } from 'lodash';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 import { useSuccess } from '../SuccessContext';
-import { useGetUsersQuery } from '../redux/userManagement/userManagementApi';
+import { useGetUsersQuery, useDeleteMultipleUserByIdMutation } from '../redux/userManagement/userManagementApi';
+
+const StyledButton = styled(Button)({
+  fontSize: '15px',
+  marginTop: (theme) => theme.spacing(2),
+});
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
@@ -47,20 +56,29 @@ function applySortFilter(array, comparator, query) {
   if (!Array.isArray(array) || array.length === 0) {
     return [];
   }
+
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
+
   if (query) {
     return array.filter(
-      (_user) => _user && _user.fullName && _user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) =>
+        _user &&
+        ((_user.fullName && _user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1) ||
+          (_user.phoneNumber && _user.phoneNumber.toLowerCase().indexOf(query.toLowerCase()) !== -1) ||
+          (_user.mobileNumber && _user.mobileNumber.toLowerCase().indexOf(query.toLowerCase()) !== -1))
     );
   }
+
   return stabilizedThis.map((el) => el[0]);
 }
+
 export default function UserPage() {
+  const [deleteMultipleusers] = useDeleteMultipleUserByIdMutation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(null);
   const [page, setPage] = useState(0);
@@ -72,6 +90,10 @@ export default function UserPage() {
   const [isSuccessMessageShown, setSuccessMessageShown] = useState(false);
   const [showUserDetails, setShowUserDetails] = useState(false);
   const { showSuccess, setShowSuccess } = useSuccess();
+  const [test, setTest] = useState('');
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [suspendedUsers, setSuspendedUsers] = useState([]);
+  const [deletedUsers, setDeletedUsers] = useState([]);
   const {
     data: users,
     isFetching,
@@ -79,6 +101,7 @@ export default function UserPage() {
   } = useGetUsersQuery(null, {
     refetchOnMountOrArgChange: true,
   });
+  console.log('full Users:', users);
   const [filteredUsers, setFilteredUsers] = useState(users?.data || []);
 
   const handleOpenMenu = (event) => {
@@ -123,16 +146,26 @@ export default function UserPage() {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
   const handleFilterByName = (event) => {
+    const inputValue = event.target.value.toLowerCase();
     setPage(0);
     setFilterName(event.target.value);
-    // applySortFilter();
+
+    // const filtered = users?.data.filter((user) => {
+    //   const fullName = user.fullName.toLowerCase();
+    //   const phoneNumber = user.mobileNumber.toLowerCase();
+
+    //   return fullName.includes(inputValue) || phoneNumber.includes(inputValue);
+    // });
+
+    // setFilteredUsers(filtered);
   };
   // useEffect(() => {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (users?.data?.length || 0)) : 0;
+
   useEffect(() => {
     const filtered = applySortFilter(users?.data || [], getComparator(order, orderBy), filterName);
     setFilteredUsers(filtered);
-    console.log('new users: ', filteredUsers);
+    console.log('word Entered');
   }, [users, order, orderBy, filterName]);
 
   const isNotFound = !filteredUsers.length && !!filterName;
@@ -147,10 +180,30 @@ export default function UserPage() {
     }
   }, [isSuccessMessageShown]);
 
-  console.log('New  the users: ', filteredUsers);
+  const handleToggleUser = (userId) => {
+    if (selectedUsers.includes(userId)) {
+      setSelectedUsers(selectedUsers.filter((id) => id !== userId));
+    } else {
+      setSelectedUsers([...selectedUsers, userId]);
+    }
+  };
+  console.log('selected:', selectedUsers);
   if (isFetching) {
     return <div>Loading...</div>;
   }
+
+  const handleDeleteMultiple = async () => {
+    try {
+      const confirmation = window.confirm('Are you sure you want to delete these Users?');
+      if (confirmation) {
+        deleteMultipleusers(selectedUsers);
+        toast.success('Users has been Deleted');
+        refetch();
+      }
+    } catch (error) {
+      console.log('error');
+    }
+  };
   return (
     <>
       <Container>
@@ -167,6 +220,8 @@ export default function UserPage() {
             placeholder="Search user..."
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            // onSuspendUsers={handleSuspendUsers}
+            // onDeleteUsers={handleDeleteUsers}
           />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -196,6 +251,14 @@ export default function UserPage() {
                       >
                         <TableCell component="th" scope="row" sx={{ padding: '0px 0px 0px 40px' }}>
                           <Stack direction="row" alignItems="center" spacing={2}>
+                            <Checkbox
+                              checked={selectedUsers.includes(row._id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleUser(row._id);
+                              }}
+                            />
+
                             <Avatar
                               sx={{ cursor: 'pointer' }}
                               alt=""
@@ -216,6 +279,7 @@ export default function UserPage() {
                       </TableRow>
                     );
                   })}
+
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={3} />
@@ -247,16 +311,26 @@ export default function UserPage() {
               </Table>
             </TableContainer>
           </Scrollbar>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={users?.data?.length || 0}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          {selectedUsers.length !== 0 && (
+            <StyledButton
+              variant="contained"
+              color="primary"
+              sx={{ marginLeft: 12, marginTop: 6, background: '#4A276B' }}
+              onClick={handleDeleteMultiple}
+            >
+              Delete Selected Users
+            </StyledButton>
+          )}
         </Card>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={users?.data?.length || 0}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Container>
       <ToastContainer />
     </>

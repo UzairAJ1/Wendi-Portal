@@ -1,0 +1,1 @@
+export const baseUrl = "https://obstechnologia.slack.com/archives/D05U9B37SG7/p1698057469512309";

@@ -28,6 +28,7 @@ import {
   useSetUserByIdMutation,
   useDeleteUserByIdMutation,
   useSetStatusByidMutation,
+  
 } from '../redux/userManagement/userManagementApi';
 import { prepareSetUserDetailsData } from './utils';
 
@@ -46,7 +47,16 @@ const UserDetail = ({ user }) => {
   const [setUserStatus] = useSetStatusByidMutation();
   const [setUserDetails] = useSetUserByIdMutation();
   const { _id } = useParams();
-  const { data: specificUser, isFetching, refetch } = useGetUserByIdQuery({ _id });
+  const {
+    data: specificUser,
+    isFetching,
+    refetch,
+  } = useGetUserByIdQuery(
+    { _id },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const [deleteUser] = useDeleteUserByIdMutation();
   const [image, setImage] = useState(null);
   // const [imageURI, setImageURI] = useState('');
@@ -64,10 +74,11 @@ const UserDetail = ({ user }) => {
     // email: specificUser?.data?.email || '',
     aboutYou: '',
     status: '',
+    lookingFor: '',
+    wantToSee: '',
     // password: specificUser?.data?.password || '',
   });
   const [selectedImage, setSelectedImage] = useState(null);
-  console.log('Specific User:', specificUser);
 
   useEffect(() => {
     // if (editedUser.fullName || editedUser.gender || editedUser.sexualOrientation || editedUser.aboutYou) {
@@ -88,16 +99,17 @@ const UserDetail = ({ user }) => {
       // email: specificUser?.data?.email,
       aboutYou: specificUser?.data?.aboutYou,
       status: specificUser?.data?.status,
+      lookingFor: specificUser?.data?.lookingFor,
+      wantToSee: specificUser?.data?.wantToSee,
       // password: specificUser?.data?.password,
     });
   }, [specificUser]);
-
+  console.log('editiingggg:', editedUser);
   const [userArray, setUserArray] = useState([]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    console.log('name:', name);
-    console.log('value', value);
+
     setEditedUser((prevUser) => {
       // Check if the new value is different from the current value
       if (prevUser[name] !== value) {
@@ -138,7 +150,9 @@ const UserDetail = ({ user }) => {
       editedUser.gender === '' ||
       editedUser.sexualOrientation === '' ||
       editedUser.aboutYou === '' ||
-      editedUser.status === ''
+      editedUser.status === '' ||
+      editedUser.lookingFor === '' ||
+      editedUser.wantToSee === ''
     ) {
       toast.error('Please enter the credentials', {
         position: toast.POSITION.TOP_RIGHT,
@@ -150,7 +164,7 @@ const UserDetail = ({ user }) => {
         const preparedData = prepareSetUserDetailsData(editedUser, selectedImage);
 
         const response = await setUserDetails({ preparedData, _id });
-        console.log('prepared Data: ', preparedData);
+
         if (response?.data?.status === 200) {
           refetch();
           setLoading(false);
@@ -169,6 +183,8 @@ const UserDetail = ({ user }) => {
             sexualOrientation: '',
             // email: '',
             aboutYou: '',
+            wantToSee: '',
+            lookingFor: '',
             // password: '',
           });
           // Successful response handling
@@ -189,23 +205,37 @@ const UserDetail = ({ user }) => {
     }
   };
   const handleDelete = (userId) => {
-    deleteUser(userId);
-    navigate('/dashboard/user');
-    toast.success('User has been Deleted');
+    const confirmation = window.confirm('Are you sure you want to delete this user?');
+    if (confirmation) {
+      deleteUser(userId);
+      navigate('/dashboard/user');
+      toast.success('User has been Deleted');
+    }
   };
   const handleSuspend = async () => {
-    setUserStatus({
-      status: 'banned',
-      userId: _id,
-    });
-    toast.success('User has been Suspended');
+    try {
+      await setUserStatus({
+        status: 'banned',
+        userId: _id,
+      });
+      toast.success('User has been Successfully Banned');
+      await refetch(); // Wait for the refetch to complete
+    } catch (error) {
+      console.error('Error while suspending the user:', error);
+    }
   };
+
   const handleUnSuspend = async () => {
-    setUserStatus({
-      status: 'active',
-      userId: _id,
-    });
-    toast.success('User has been UnSuspended');
+    try {
+      await setUserStatus({
+        status: 'active',
+        userId: _id,
+      });
+      toast.success('User has been Successfully UnBanned');
+      await refetch(); // Wait for the refetch to complete
+    } catch (error) {
+      console.error('Error while unsuspending the user:', error);
+    }
   };
 
   const handleBack = () => {
@@ -227,7 +257,19 @@ const UserDetail = ({ user }) => {
     ?.find((item) => item?.orderId === 1)
     ?.uri?.split('/')
     ?.pop()}`;
-
+  console.log('editing User:', editedUser);
+  const transformGenderForDisplay = (value) => {
+    if (value === 'male') {
+      return 'Male';
+    }
+    if (value === 'female') {
+      return 'Female';
+    }
+    return value;
+  };
+  if (isFetching) {
+    return <div>Loading...</div>;
+  }
   return loading ? (
     <div
       style={{
@@ -268,12 +310,7 @@ const UserDetail = ({ user }) => {
                 <Typography variant="body1">{specificUser?.data?.gender}</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6}>
-              <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
-                <Typography variant="subtitle1">Sexual Orientation:</Typography>
-                <Typography variant="body1">{specificUser?.data?.sexualOrientation}</Typography>
-              </Paper>
-            </Grid>
+
             {/* <Grid item xs={6}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
                 <Typography variant="subtitle1">Email:</Typography>
@@ -292,6 +329,32 @@ const UserDetail = ({ user }) => {
                 <Typography variant="body1">dontAsk {editedUser.password}</Typography>
               </Paper>
             </Grid> */}
+          </Grid>
+
+          <Typography variant="h5" gutterBottom sx={{ marginTop: 4 }}>
+            User Preference
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
+                <Typography variant="subtitle1">Sexual Orientation:</Typography>
+                <Typography variant="body1">{specificUser?.data?.sexualOrientation}</Typography>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
+                <Typography variant="subtitle1">Looking For:</Typography>
+                <Typography variant="body1">{specificUser?.data?.lookingFor}</Typography>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
+                <Typography variant="subtitle1">Wants to See:</Typography>
+                <Typography variant="body1">{specificUser?.data?.wantToSee}</Typography>
+              </Paper>
+            </Grid>
           </Grid>
 
           <StyledButton
@@ -338,7 +401,7 @@ const UserDetail = ({ user }) => {
               }}
               sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
             >
-              Suspend User
+              Ban User
             </StyledButton>
           )}
 
@@ -351,7 +414,7 @@ const UserDetail = ({ user }) => {
               }}
               sx={{ margin: '20px 10px 0px 0px', background: '#4A276B' }}
             >
-              UnSuspend User
+              UnBan User
             </StyledButton>
           )}
 
@@ -412,25 +475,15 @@ const UserDetail = ({ user }) => {
               <Select
                 label="Gender"
                 name="gender"
-                value={editedUser.gender}
+                value={transformGenderForDisplay(editedUser.gender)}
                 // value={specificUser?.data?.gender}
-                disabled={!edit}
+
                 onChange={handleInputChange}
               >
                 <MenuItem value="Male">Male</MenuItem>
                 <MenuItem value="Female">Female</MenuItem>
               </Select>
 
-              <TextField
-                label="Sexual Orientation"
-                name="sexualOrientation"
-                value={editedUser.sexualOrientation}
-                // value={specificUser?.data?.sexualOrientation}
-                disabled={!edit}
-                fullWidth
-                margin="normal"
-                onChange={handleInputChange}
-              />
               {/* <TextField label="Email" 
               name = "email"
               value={editedUser.email}
@@ -446,6 +499,40 @@ const UserDetail = ({ user }) => {
                 margin="normal"
                 onChange={handleInputChange}
               />
+
+              <TextField
+                label="Sexual Orientation"
+                name="sexualOrientation"
+                value={editedUser.sexualOrientation}
+                // value={specificUser?.data?.sexualOrientation}
+                disabled={!edit}
+                fullWidth
+                margin="normal"
+                onChange={handleInputChange}
+              />
+
+              <TextField
+                label="Wants to see"
+                name="wantToSee"
+                value={editedUser.wantToSee}
+                // value={specificUser?.data?.sexualOrientation}
+                disabled={!edit}
+                fullWidth
+                margin="normal"
+                onChange={handleInputChange}
+              />
+
+              <TextField
+                label="Looking For"
+                name="lookingFor"
+                value={editedUser.lookingFor}
+                // value={specificUser?.data?.sexualOrientation}
+                disabled={!edit}
+                fullWidth
+                margin="normal"
+                onChange={handleInputChange}
+              />
+
               {/* <TextField label="New password" 
               name = "password"
               value = {editedUser.password}
