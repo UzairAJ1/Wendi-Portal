@@ -282,7 +282,7 @@ export default function UserPage() {
                           <Avatar
                             sx={{ cursor: 'pointer' }}
                             alt=""
-                            src={`http://192.168.18.131:3333/Images/${row?.profileImages
+                            src={`https://wendi-dating.com/Images/${row?.profileImages
                               ?.find((item) => item?.orderId === 1)
                               ?.uri?.split('/')
                               ?.pop()}`}
