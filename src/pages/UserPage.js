@@ -195,8 +195,9 @@ export default function UserPage() {
   const handleDeleteMultiple = async () => {
     try {
       const confirmation = window.confirm('Are you sure you want to delete these Users?');
+
       if (confirmation) {
-        deleteMultipleusers(selectedUsers);
+        await deleteMultipleusers(selectedUsers);
         toast.success('Users has been Deleted');
         refetch();
       }
@@ -236,49 +237,47 @@ export default function UserPage() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    return (
-                      <TableRow
-                        key={row._id}
-                        hover
-                        tabIndex={-1}
-                        role="none"
-                        sx={{ cursor: 'pointer' }}
-                        onClick={() => {
-                          setShowUserDetails(true);
-                          navigate(`/userdetails/${row._id}`);
-                        }}
-                      >
-                        <TableCell component="th" scope="row" sx={{ padding: '0px 0px 0px 40px' }}>
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Checkbox
-                              checked={selectedUsers.includes(row._id)}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleToggleUser(row._id);
-                              }}
-                            />
+                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                    <TableRow
+                      key={row._id}
+                      hover
+                      tabIndex={-1}
+                      role="none"
+                      sx={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        setShowUserDetails(true);
+                        navigate(`/userdetails/${row._id}`);
+                      }}
+                    >
+                      <TableCell component="th" scope="row" sx={{ padding: '0px 0px 0px 40px' }}>
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                          <Checkbox
+                            checked={selectedUsers.includes(row._id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleUser(row._id);
+                            }}
+                          />
 
-                            <Avatar
-                              sx={{ cursor: 'pointer' }}
-                              alt=""
-                              src={`https://wendi-dating.com/Images/${row?.profileImages
-                                ?.find((item) => item?.orderId === 1)
-                                ?.uri?.split('/')
-                                ?.pop()}`}
-                            />
-                            <Typography variant="subtitle2" noWrap>
-                              {row?.fullName}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
-                        <TableCell align="left">{row?.mobileNumber}</TableCell>
-                        <TableCell align="left">
-                          <Label color={(row?.status === 'banned' && 'error') || 'success'}>{row?.status}</Label>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                          <Avatar
+                            sx={{ cursor: 'pointer' }}
+                            alt=""
+                            src={`https://wendi-dating.com/Images/${row?.profileImages
+                              ?.find((item) => item?.orderId === 1)
+                              ?.uri?.split('/')
+                              ?.pop()}`}
+                          />
+                          <Typography variant="subtitle2" noWrap>
+                            {row?.fullName}
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="left">{row?.mobileNumber}</TableCell>
+                      <TableCell align="left">
+                        <Label color={(row?.status === 'banned' && 'error') || 'success'}>{row?.status}</Label>
+                      </TableCell>
+                    </TableRow>
+                  ))}
 
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
