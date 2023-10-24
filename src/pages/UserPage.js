@@ -25,7 +25,7 @@ import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 import { useSuccess } from '../SuccessContext';
-import { useGetUsersQuery, useDeleteMultipleUserByIdMutation } from '../redux/userManagement/userManagementApi';
+import { useGetUsersQuery, useDeleteMultipleUserByIdMutation, useBanMultipleUserByIdMutation } from '../redux/userManagement/userManagementApi';
 
 const StyledButton = styled(Button)({
   fontSize: '15px',
@@ -79,6 +79,8 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
   const [deleteMultipleusers] = useDeleteMultipleUserByIdMutation();
+  const [banMultipleUserByIds] = useBanMultipleUserByIdMutation()
+
   const navigate = useNavigate();
   const [open, setOpen] = useState(null);
   const [page, setPage] = useState(0);
@@ -205,6 +207,24 @@ export default function UserPage() {
       console.log('error');
     }
   };
+
+
+  const handleBanMultiple = async () => {
+    try {
+      const confirmation = window.confirm("Are you sure you want to ban these Users?")
+      if (confirmation) {
+        await banMultipleUserByIds({ userIds: selectedUsers, status: "banned" });
+        setSelectedUsers([]);
+        toast.success("Selected Users BANNED!")
+        refetch();
+      }
+    } catch (error) {
+      console.log('BAN ERROR ===== ', error)
+    }
+  };
+
+
+
   return (
     <>
       <Container>
@@ -250,6 +270,7 @@ export default function UserPage() {
                       }}
                     >
                       <TableCell component="th" scope="row" sx={{ padding: '0px 0px 0px 40px' }}>
+
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Checkbox
                             checked={selectedUsers.includes(row._id)}
@@ -262,7 +283,7 @@ export default function UserPage() {
                           <Avatar
                             sx={{ cursor: 'pointer' }}
                             alt=""
-                            src={`https://wendi-dating.com/Images/${row?.profileImages
+                            src={`http://192.168.18.131:3333/Images/${row?.profileImages
                               ?.find((item) => item?.orderId === 1)
                               ?.uri?.split('/')
                               ?.pop()}`}
@@ -271,6 +292,7 @@ export default function UserPage() {
                             {row?.fullName}
                           </Typography>
                         </Stack>
+
                       </TableCell>
                       <TableCell align="left">{row?.mobileNumber}</TableCell>
                       <TableCell align="left">
@@ -311,14 +333,25 @@ export default function UserPage() {
             </TableContainer>
           </Scrollbar>
           {selectedUsers.length !== 0 && (
-            <StyledButton
-              variant="contained"
-              color="primary"
-              sx={{ marginLeft: 12, marginTop: 6, background: '#4A276B' }}
-              onClick={handleDeleteMultiple}
-            >
-              Delete Selected Users
-            </StyledButton>
+            <>
+              <StyledButton
+                variant="contained"
+                color="primary"
+                sx={{ marginLeft: 12, marginTop: 6, background: '#4A276B' }}
+                onClick={handleDeleteMultiple}
+              >
+                Delete Selected Users
+              </StyledButton>
+
+              <StyledButton
+                variant="contained"
+                color="primary"
+                sx={{ marginLeft: 3, marginTop: 6, background: '#4A276B' }}
+                onClick={handleBanMultiple}
+              >
+                Ban Selected Users
+              </StyledButton>
+            </>
           )}
         </Card>
         <TablePagination

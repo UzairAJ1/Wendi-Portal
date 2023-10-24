@@ -144,66 +144,114 @@ const UserDetail = ({ user }) => {
   //   const res =  setUserDetails(editedUser)
   // };
 
-  const handleSave = async () => {
-    if (
-      editedUser.fullName === '' ||
-      editedUser.gender === '' ||
-      editedUser.sexualOrientation === '' ||
-      editedUser.aboutYou === '' ||
-      editedUser.status === '' ||
-      editedUser.lookingFor === '' ||
-      editedUser.wantToSee === ''
-    ) {
-      toast.error('Please enter the credentials', {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
-      });
-    } else {
-      setLoading(true);
-      try {
-        const preparedData = prepareSetUserDetailsData(editedUser, selectedImage);
+  // const handleSave = async () => {
+  //   if (
+  //     editedUser.fullName === '' ||
+  //     editedUser.gender === '' ||
+  //     editedUser.sexualOrientation === '' ||
+  //     editedUser.aboutYou === '' ||
+  //     editedUser.status === '' ||
+  //     editedUser.lookingFor === '' ||
+  //     editedUser.wantToSee === ''
+  //   ) {
+  //     toast.error('Please enter the credentials', {
+  //       position: toast.POSITION.TOP_RIGHT,
+  //       autoClose: 3000,
+  //     });
+  //   } else {
+  //     try {
+  //       setLoading(true);
+  //       const preparedData = prepareSetUserDetailsData(editedUser, selectedImage);
 
+  //       const response = await setUserDetails({ preparedData, _id });
+
+  //       if (response?.data?.status === 200) {
+  //         refetch();
+  //         // setImageURI(response.data.uri);
+  //         setLoading(false);
+  //       }
+
+  //       // const response = await setUserDetails({ payload: editedUser }, _id);
+  //       setEdit(false);
+  //       if (setUserDetails.isSuccess) {
+  //         toast.success('User details updated successfully');
+  //         console.log('User details updated successfully', response);
+
+  //         setEditedUser({
+  //           fullName: '',
+  //           gender: '',
+  //           sexualOrientation: '',
+  //           // email: '',
+  //           aboutYou: '',
+  //           wantToSee: '',
+  //           lookingFor: '',
+  //           // password: '',
+  //         });
+  //         // Successful response handling
+
+  //         // Fahad commented
+  //         // const data = response.data;
+  //         // showMessage({
+  //         //   type: 'success',
+  //         //   message: 'עודכן בהצלחה',
+  //         // });
+  //         //
+
+  //         // Handle further actions if needed
+  //       }
+  //     } catch (error) {
+  //       console.log('Error:', error);
+  //     }
+  //   }
+  // };
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+
+      const isUserDataValid =
+        editedUser.fullName &&
+        editedUser.gender &&
+        editedUser.sexualOrientation &&
+        editedUser.aboutYou &&
+        editedUser.status &&
+        editedUser.lookingFor &&
+        editedUser.wantToSee;
+
+      if (!isUserDataValid) {
+        toast.error('Please enter all the required credentials', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
+      } else {
+        const preparedData = prepareSetUserDetailsData(editedUser, selectedImage);
         const response = await setUserDetails({ preparedData, _id });
 
         if (response?.data?.status === 200) {
           refetch();
-          setLoading(false);
-          // setImageURI(response.data.uri);
-        }
-
-        // const response = await setUserDetails({ payload: editedUser }, _id);
-        setEdit(false);
-        if (setUserDetails.isSuccess) {
           toast.success('User details updated successfully');
-          console.log('User details updated successfully', response);
-
           setEditedUser({
             fullName: '',
             gender: '',
             sexualOrientation: '',
-            // email: '',
             aboutYou: '',
             wantToSee: '',
             lookingFor: '',
-            // password: '',
           });
-          // Successful response handling
-
-          // Fahad commented
-          // const data = response.data;
-          // showMessage({
-          //   type: 'success',
-          //   message: 'עודכן בהצלחה',
-          // });
-          //
-
-          // Handle further actions if needed
+          setEdit(false);
+        } else {
+          toast.error('Failed to update user details');
         }
-      } catch (error) {
-        console.log('Error:', error);
       }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('An error occurred while updating user details');
+    } finally {
+      setLoading(false);
     }
   };
+
+
+
   const handleDelete = (userId) => {
     const confirmation = window.confirm('Are you sure you want to delete this user?');
     if (confirmation) {
@@ -253,7 +301,7 @@ const UserDetail = ({ user }) => {
     }
   };
 
-  const myImg = `https://wendi-dating.com/Images/${specificUser?.data?.profileImages
+  const myImg = `http://192.168.18.131:3333/Images/${specificUser?.data?.profileImages
     ?.find((item) => item?.orderId === 1)
     ?.uri?.split('/')
     ?.pop()}`;

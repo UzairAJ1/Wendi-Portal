@@ -7,7 +7,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const userManagement = createApi({
   reducerPath: 'userManagement',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://wendi-dating.com/',
+    baseUrl: 'http://192.168.18.131:3333/',
     // baseUrl: 'http://127.0.0.1:3333/',
     prepareHeaders: (headers, { getState }) => {
       // @ts-ignore
@@ -65,6 +65,14 @@ export const userManagement = createApi({
       }),
     }),
 
+    banMultipleUserById: builder.mutation({
+      query: (payload) => ({
+        url: 'user/updateMultipleUsersStatus',
+        method: 'POST',
+        body: { userIds: payload?.userIds, status: payload?.status },
+      }),
+    }),
+
     // setUserById: builder.mutation({
     //   query: ({ payload, _id }) => ({
     //     url: `user/updateUser/${_id}`,
@@ -83,4 +91,5 @@ export const {
   useDeleteUserByIdMutation,
   useSetStatusByidMutation,
   useDeleteMultipleUserByIdMutation,
+  useBanMultipleUserByIdMutation
 } = userManagement;
