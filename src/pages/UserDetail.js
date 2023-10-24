@@ -28,7 +28,7 @@ import {
   useSetUserByIdMutation,
   useDeleteUserByIdMutation,
   useSetStatusByidMutation,
-  
+
 } from '../redux/userManagement/userManagementApi';
 import { prepareSetUserDetailsData } from './utils';
 
@@ -253,7 +253,7 @@ const UserDetail = ({ user }) => {
     }
   };
 
-  const myImg = `http://localhost:3333/Images/${specificUser?.data?.profileImages
+  const myImg = `https://wendi-dating.com/Images/${specificUser?.data?.profileImages
     ?.find((item) => item?.orderId === 1)
     ?.uri?.split('/')
     ?.pop()}`;

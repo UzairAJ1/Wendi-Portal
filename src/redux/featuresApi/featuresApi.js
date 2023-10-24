@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const featuresApi = createApi({
   reducerPath: 'features',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3333/',
+    baseUrl: 'https://wendi-dating.com/',
     // baseUrl: 'http://127.0.0.1:3333/',
   }),
   endpoints: (builder) => ({

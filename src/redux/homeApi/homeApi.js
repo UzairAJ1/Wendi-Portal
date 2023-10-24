@@ -4,10 +4,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const homeApi = createApi({
   reducerPath: 'homeApi',
   baseQuery: fetchBaseQuery({
-    // baseUrl: 'http://localhost:3333/',
+    // baseUrl: 'https://wendi-dating.com/',
     // baseUrl: 'http://127.0.0.1:3333/',
     //  baseUrl: 'https://3cb2-206-84-191-58.ngrok-free.app',
-    baseUrl: 'http://localhost:3333/',
+    baseUrl: 'https://wendi-dating.com/',
 
     prepareHeaders: (headers, { getState }) => {
       // @ts-ignore
@@ -40,4 +40,4 @@ export const homeApi = createApi({
   }),
 });
 
-export const {useGlobalSettingsGetQuery, useGlobalSettingsMutation } = homeApi;
+export const { useGlobalSettingsGetQuery, useGlobalSettingsMutation } = homeApi;

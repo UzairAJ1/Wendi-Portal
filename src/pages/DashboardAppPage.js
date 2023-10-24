@@ -48,7 +48,6 @@ export default function DashboardAppPage() {
   const monthlyActiveMales = totalGenderDistribution?.totalMonthlyActive?.males || 0;
   const monthlyActiveFemales = totalGenderDistribution?.totalMonthlyActive?.females || 0;
 
-  console.log(totalGenderDistribution);
   const [totalCount, setTotalCount] = useState(0);
   const [averageDailyLikes, setAverageDailyLikes] = useState(0);
   const [averageMonthlyLikes, setAverageMonthlyLikes] = useState(0);
@@ -165,6 +164,7 @@ export default function DashboardAppPage() {
     }
   }, [likesPerMonthFemale, likesPerMonthMale, likesPerDayMale, likesPerDayFemale, likesPerDay, likesPerMonth]);
 
+  console.log("MONTHLY USERS =====", usersMonthly)
   let chartLabels = '0';
   let chartData = '0';
   if (usersMonthly) {
@@ -390,7 +390,7 @@ export default function DashboardAppPage() {
               chartLabels={dailyChartsLabels}
               chartData={[
                 {
-                  name: 'User Engagement',
+                  name: 'Likes',
                   type: 'area',
                   fill: 'gradient',
                   data: dailyChartsData,
@@ -457,7 +457,7 @@ export default function DashboardAppPage() {
               chartLabels={monthlyChartsLabels}
               chartData={[
                 {
-                  name: 'User Engagement',
+                  name: 'Likes',
                   type: 'area',
                   fill: 'gradient',
                   data: monthlyChartsData,
@@ -666,7 +666,7 @@ export default function DashboardAppPage() {
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
               title="Gender Distribution"
-              subheader="(+43%) than last year"
+              // subheader="(+43%) than last year"
               chartLabels={[
                 '01/01/2003',
                 '02/01/2003',
@@ -748,7 +748,7 @@ export default function DashboardAppPage() {
           <Grid item xs={12} md={6} lg={8}>
             <AppConversionRates
               title="     7. Registration Statistics:"
-              subheader="(+43%) than last year"
+              // subheader="(+43%) than last year"
               chartData={[
                 { label: 'January', value: 400 },
                 { label: 'February', value: 430 },

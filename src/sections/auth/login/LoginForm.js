@@ -13,28 +13,28 @@ import { useGetDummyDataQuery, useLoginMutation } from '../../../redux/toolkitQu
 import Iconify from '../../../components/iconify';
 
 export default function LoginForm() {
-  const dispatch =  useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
- const [loginApi] =  useLoginMutation()
- const {userData} = useSelector(state=>state.auth)
- const {remember} = useSelector(state=>state.remember)
+  const [loginApi] = useLoginMutation()
+  const { userData } = useSelector(state => state.auth)
+  const { remember } = useSelector(state => state.remember)
 
-console.log("USER DATA =======",userData)
+  console.log("USER DATA =======", userData)
   // const { data, error, isLoading, isFetching, isSuccess } = useGetDummyDataQuery();
   const [isValid, setIsValid] = useState(true);
 
   const handleEmailChange = (e) => {
     // if(!rememberMe){
-      const newEmail = e.target.value;
-      setEmail(newEmail);
-      // Regular expression for email validation
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      setIsValid(emailPattern.test(newEmail));
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    // Regular expression for email validation
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    setIsValid(emailPattern.test(newEmail));
     // }
   };
 
@@ -57,42 +57,42 @@ console.log("USER DATA =======",userData)
       password,
     };
 
-    if(email === "" || password === ""){
+    if (email === "" || password === "") {
       toast.error('Please enter the credentials', {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
       });
       setLoading(false)
     }
-  
+
     else {
       setLoading(true);
-    const res = await loginApi(data)
-    console.log("RESPONSE =====",res)
-     if(res?.error){
-      toast.error('No access', {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
-      });
-      setLoading(false)
-      // alert("no access");
-    }
+      const res = await loginApi(data)
+      console.log("RESPONSE =====", res)
+      if (res?.error) {
+        toast.error('No access', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
+        setLoading(false)
+        // alert("no access");
+      }
 
-    else if (res?.data?.status === 200){
-      dispatch(setUser({
-        _id: res?.data?.data?._id,
-        userType:res?.data?.data?.userType,
-        email: res?.data?.data?.email,
-      }))
-      setLoading(false)
+      else if (res?.data?.status === 200) {
+        dispatch(setUser({
+          _id: res?.data?.data?._id,
+          userType: res?.data?.data?.userType,
+          email: res?.data?.data?.email,
+        }))
+        setLoading(false)
+        // navigate('/dashboard/home');
+      }
+      console.log("data to redux", data)
+
       // navigate('/dashboard/home');
-    } 
-  console.log("data to redux", data)
-  
-  // navigate('/dashboard/home');
 
 
-};
+    };
   }
   const handleForgotPasswordClick = () => {
     navigate('/forgotpassword');
@@ -101,7 +101,7 @@ console.log("USER DATA =======",userData)
   useEffect(() => {
     const savedEmail = Cookies.get('email');
     const savedPassword = Cookies.get('password');
-  console.log("savedmailll", savedEmail)
+    console.log("savedmailll", savedEmail)
     if (savedEmail && savedPassword) {
       // If credentials are found, pre-fill the input fields
       setEmail(savedEmail);
@@ -109,20 +109,20 @@ console.log("USER DATA =======",userData)
       // setRememberMe(true);
     }
   }, []);
-  
-  
+
+
 
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email" 
-        onChange = {(e)=>{
-          handleEmailChange(e);
-          // setEmail(e.target.value)
-        }}
-        value={email}
-        error={!isValid}
-        helperText={!isValid ? 'Invalid email address' : ''}
+        <TextField name="email" label="Email"
+          onChange={(e) => {
+            handleEmailChange(e);
+            // setEmail(e.target.value)
+          }}
+          value={email}
+          error={!isValid}
+          helperText={!isValid ? 'Invalid email address' : ''}
         />
 
         <TextField
@@ -139,47 +139,47 @@ console.log("USER DATA =======",userData)
               </InputAdornment>
             ),
           }}
-          onChange = {(e)=>{
-     
-              setPassword(e.target.value)
-              // console.log("Data approaching", e.target.innerText)
-            
+          onChange={(e) => {
+
+            setPassword(e.target.value)
+            // console.log("Data approaching", e.target.innerText)
+
           }}
-       
-       />
+
+        />
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-          <div>
-        <Checkbox name="remember" label="Remember me"  
-        onChange = {(e)=>{
-          setRememberMe(e.target.checked)
-        }}
-        defaultChecked
-        />
-       <Link style={{textDecoration:"none"}}
-        onClick={() => {
-          dispatch(setRemember(true));
-          console.log("remember===========", remember);
-        }}>
-          Remember me</Link> 
-       </div>
-        <Link variant="subtitle2" to="" underline="hover" style={{cursor:"pointer"}}>
+        <div>
+          <Checkbox name="remember" label="Remember me"
+            onChange={(e) => {
+              setRememberMe(e.target.checked)
+            }}
+            defaultChecked
+          />
+          <Link style={{ textDecoration: "none" }}
+            onClick={() => {
+              dispatch(setRemember(true));
+              console.log("remember===========", remember);
+            }}>
+            Remember me</Link>
+        </div>
+        {/* <Link variant="subtitle2" to="" underline="hover" style={{cursor:"pointer"}}>
          <Link onClick={()=>{handleForgotPasswordClick()
         
         }}>Forgot password?</Link> 
-        </Link>
+        </Link> */}
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" 
-     onClick={() => {
-      HandleClick();
-     
-      // navigate('/dashboard/home')
-    }}
-        loading={loading} sx={{background:"#4A276B"}}
+      <LoadingButton fullWidth size="large" type="submit" variant="contained"
+        onClick={() => {
+          HandleClick();
+
+          // navigate('/dashboard/home')
+        }}
+        loading={loading} sx={{ background: "#4A276B" }}
         disabled={loading}
-        >
+      >
         Login
       </LoadingButton>
     </>

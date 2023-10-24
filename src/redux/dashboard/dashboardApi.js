@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const dashboardApi = createApi({
   reducerPath: 'dashboardApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3333/',
+    baseUrl: 'https://wendi-dating.com/',
     // baseUrl: 'http://127.0.0.1:3333/',
     prepareHeaders: (headers, { getState }) => {
       // @ts-ignore
