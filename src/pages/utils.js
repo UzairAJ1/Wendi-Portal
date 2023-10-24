@@ -25,7 +25,7 @@ export function prepareSetUserDetailsData(payload, image) {
     formData.append('wantToSee', payload.wantToSee);
   }
   if (payload.lookingFor) {
-    formData.append('lookingFor', payload.lookingFor);
+    formData.append('lookingFor', JSON.stringify([payload.lookingFor]));
   }
   if (image) {
     formData.append('orderIds', JSON.stringify([1]));

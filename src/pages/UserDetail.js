@@ -92,6 +92,7 @@ const UserDetail = ({ user }) => {
     //     colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
     //   />;
     // } elseU
+
     setEditedUser({
       fullName: specificUser?.data?.fullName,
       gender: specificUser?.data?.gender,
@@ -392,15 +393,15 @@ const UserDetail = ({ user }) => {
 
             <Grid item xs={6}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
-                <Typography variant="subtitle1">Looking For:</Typography>
-                <Typography variant="body1">{specificUser?.data?.lookingFor}</Typography>
+                <Typography variant="subtitle1">Wants to see:</Typography>
+                <Typography variant="body1">{specificUser?.data?.wantToSee}</Typography>
               </Paper>
             </Grid>
 
             <Grid item xs={6}>
               <Paper elevation={3} sx={{ padding: 2, display: 'flex', gap: '2px' }}>
-                <Typography variant="subtitle1">Wants to See:</Typography>
-                <Typography variant="body1">{specificUser?.data?.wantToSee}</Typography>
+                <Typography variant="subtitle1">Looking For:</Typography>
+                <Typography variant="body1">{specificUser?.data?.lookingFor}</Typography>
               </Paper>
             </Grid>
           </Grid>
@@ -547,7 +548,7 @@ const UserDetail = ({ user }) => {
                 margin="normal"
                 onChange={handleInputChange}
               />
-
+              {/* 
               <TextField
                 label="Sexual Orientation"
                 name="sexualOrientation"
@@ -557,9 +558,24 @@ const UserDetail = ({ user }) => {
                 fullWidth
                 margin="normal"
                 onChange={handleInputChange}
-              />
+              /> */}
+              <InputLabel>Sexual Orientation</InputLabel>
+              <Select
+                label="Sexual Orientation"
+                name="sexualOrientation"
+                value={editedUser?.sexualOrientation}
+                margin='normal'
+                // value={specificUser?.data?.gender}
+                onChange={handleInputChange}
+                fullWidth
+              >
+                <MenuItem value="סטרייט">סטרייט</MenuItem>
+                <MenuItem value="הומוסקסואל">הומוסקסואל</MenuItem>
+                <MenuItem value="ביוסקסואל">ביוסקסואל</MenuItem>
+                <MenuItem value="לסבית">לסבית</MenuItem>
+              </Select>
 
-              <TextField
+              {/* <TextField
                 label="Wants to see"
                 name="wantToSee"
                 value={editedUser.wantToSee}
@@ -568,9 +584,26 @@ const UserDetail = ({ user }) => {
                 fullWidth
                 margin="normal"
                 onChange={handleInputChange}
-              />
+              /> */}
 
-              <TextField
+              <InputLabel>Wants to see</InputLabel>
+              <Select
+                label="Wants to see"
+                name="wantToSee"
+                value={editedUser?.wantToSee}
+                // value={specificUser?.data?.gender}
+                onChange={handleInputChange}
+                margin='normal'
+                fullWidth
+              >
+                <MenuItem value="גברים">גברים</MenuItem>
+                <MenuItem value="נשים">נשים</MenuItem>
+                <MenuItem value="גם וגם">גם וגם</MenuItem>
+              </Select>
+
+
+
+              {/* <TextField
                 label="Looking For"
                 name="lookingFor"
                 value={editedUser.lookingFor}
@@ -579,7 +612,28 @@ const UserDetail = ({ user }) => {
                 fullWidth
                 margin="normal"
                 onChange={handleInputChange}
-              />
+              /> */}
+
+              <InputLabel>Looking For</InputLabel>
+              <Select
+                label="Looking For"
+                name="lookingFor"
+                value={editedUser?.lookingFor}
+                // value={specificUser?.data?.gender}
+                onChange={handleInputChange}
+                margin='dense'
+                fullWidth
+
+              >
+                <MenuItem value="דייטינג">דייטינג</MenuItem>
+                <MenuItem value="דייטינג">דייטינג</MenuItem>
+                <MenuItem value="שיחות">שיחות</MenuItem>
+                <MenuItem value="קשר לטווח ארוך">קשר לטווח ארוך</MenuItem>
+              </Select>
+
+
+
+
 
               {/* <TextField label="New password" 
               name = "password"
