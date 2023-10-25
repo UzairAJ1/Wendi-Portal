@@ -302,7 +302,7 @@ const UserDetail = ({ user }) => {
     }
   };
 
-  const myImg = `https://wendi-dating.com/Images/${specificUser?.data?.profileImages
+  const myImg = `${process.env.REACT_APP_API_URL}Images/${specificUser?.data?.profileImages
     ?.find((item) => item?.orderId === 1)
     ?.uri?.split('/')
     ?.pop()}`;

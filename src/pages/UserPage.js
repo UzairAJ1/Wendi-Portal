@@ -282,7 +282,7 @@ export default function UserPage() {
                           <Avatar
                             sx={{ cursor: 'pointer' }}
                             alt=""
-                            src={`https://wendi-dating.com/Images/${row?.profileImages
+                            src={`${process.env.REACT_APP_API_URL}Images/${row?.profileImages
                               ?.find((item) => item?.orderId === 1)
                               ?.uri?.split('/')
                               ?.pop()}`}

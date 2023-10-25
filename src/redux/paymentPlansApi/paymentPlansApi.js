@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const paymentPlansApi = createApi({
   reducerPath: 'paymentPlans',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://wendi-dating.com/',
+    baseUrl: process.env.REACT_APP_API_URL,
     // baseUrl: 'http://127.0.0.1:3333/',
   }),
   endpoints: (builder) => ({

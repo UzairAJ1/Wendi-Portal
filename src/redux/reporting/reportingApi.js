@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const reporting = createApi({
   reducerPath: 'reportingApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://wendi-dating.com/',
+    baseUrl: process.env.REACT_APP_API_URL,
     prepareHeaders: (headers, { getState }) => {
       // @ts-ignore
       // const token = getCoo('token');

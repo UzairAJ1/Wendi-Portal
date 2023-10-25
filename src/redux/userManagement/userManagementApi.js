@@ -7,7 +7,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const userManagement = createApi({
   reducerPath: 'userManagement',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://wendi-dating.com/',
+    baseUrl: process.env.REACT_APP_API_URL,
     // baseUrl: 'http://127.0.0.1:3333/',
     prepareHeaders: (headers, { getState }) => {
       // @ts-ignore
