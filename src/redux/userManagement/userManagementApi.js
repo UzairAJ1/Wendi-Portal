@@ -52,9 +52,10 @@ export const userManagement = createApi({
     }),
     setStatusByid: builder.mutation({
       query: (payload) => ({
-        url: `user/updateUserStatus`,
+        url: `user/updateMultipleUsersStatus`,
         method: 'POST',
-        body: payload,
+        body: { userIds: [payload?.userId], status: payload?.status },
+
       }),
     }),
     deleteMultipleUserById: builder.mutation({

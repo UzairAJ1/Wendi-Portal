@@ -275,11 +275,15 @@ const UserDetail = ({ user }) => {
   };
 
   const handleUnSuspend = async () => {
+    console.log("ID =====", _id)
+
     try {
-      await setUserStatus({
+      const response = await setUserStatus({
         status: 'active',
         userId: _id,
       });
+
+      console.log('RESPONSE ======== ', response);
       toast.success('User has been Successfully UnBanned');
       await refetch(); // Wait for the refetch to complete
     } catch (error) {
