@@ -91,5 +91,5 @@ export const {
   useDeleteUserByIdMutation,
   useSetStatusByidMutation,
   useDeleteMultipleUserByIdMutation,
-  useBanMultipleUserByIdMutation
+  useBanMultipleUserByIdMutation,
 } = userManagement;

@@ -30,11 +30,40 @@ import {
 
 export default function DashboardAppPage() {
   const theme = useTheme();
-  const { data: usersData, isFetching, isError } = useGetUserStatisticsQuery();
-  const { data: likeData, isFetching: fetchingLikesStats, error } = useGetLikesStatisticsQuery();
-  const { data: activeUsers, isFetching: fetchingActiveUsers, isError1 } = useActiveUsersStatsQuery();
-  const { data: totalGenderDistribution } = useGenderDistributionQuery();
-  const { data: usersByMonth, isFetching: fetchingUsersByMonth } = useGetUsersByMonthQuery();
+  const {
+    data: usersData,
+    isFetching,
+    isError,
+    refetch: userRefetch,
+  } = useGetUserStatisticsQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
+  const {
+    data: likeData,
+    isFetching: fetchingLikesStats,
+    error,
+    refetch: likeRefetch,
+  } = useGetLikesStatisticsQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
+  const {
+    data: activeUsers,
+    isFetching: fetchingActiveUsers,
+    isError1,
+    refetch: activeUserRefetch,
+  } = useActiveUsersStatsQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
+  const { data: totalGenderDistribution, refetch: genderRefetch } = useGenderDistributionQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
+  const {
+    data: usersByMonth,
+    isFetching: fetchingUsersByMonth,
+    refetch: monthlyUserRefetch,
+  } = useGetUsersByMonthQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const totalUsers = usersData?.data?.totalUsers || 0;
   const maleUsers = usersData?.data?.maleUsers || 0;
@@ -164,7 +193,7 @@ export default function DashboardAppPage() {
     }
   }, [likesPerMonthFemale, likesPerMonthMale, likesPerDayMale, likesPerDayFemale, likesPerDay, likesPerMonth]);
 
-  console.log("MONTHLY USERS =====", usersMonthly)
+  console.log('MONTHLY USERS =====', usersMonthly);
   let chartLabels = '0';
   let chartData = '0';
   if (usersMonthly) {

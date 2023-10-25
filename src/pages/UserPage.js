@@ -25,7 +25,7 @@ import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 import { useSuccess } from '../SuccessContext';
-import { useGetUsersQuery, useDeleteMultipleUserByIdMutation, useBanMultipleUserByIdMutation } from '../redux/userManagement/userManagementApi';
+import { useGetUsersQuery, useDeleteMultipleUserByIdMutation } from '../redux/userManagement/userManagementApi';
 
 const StyledButton = styled(Button)({
   fontSize: '15px',
@@ -79,8 +79,6 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
   const [deleteMultipleusers] = useDeleteMultipleUserByIdMutation();
-  const [banMultipleUserByIds] = useBanMultipleUserByIdMutation()
-
   const navigate = useNavigate();
   const [open, setOpen] = useState(null);
   const [page, setPage] = useState(0);
@@ -197,9 +195,8 @@ export default function UserPage() {
   const handleDeleteMultiple = async () => {
     try {
       const confirmation = window.confirm('Are you sure you want to delete these Users?');
-
       if (confirmation) {
-        await deleteMultipleusers(selectedUsers);
+        deleteMultipleusers(selectedUsers);
         toast.success('Users has been Deleted');
         refetch();
       }
@@ -207,23 +204,6 @@ export default function UserPage() {
       console.log('error');
     }
   };
-
-
-  const handleBanMultiple = async () => {
-    try {
-      const confirmation = window.confirm("Are you sure you want to ban these Users?")
-      if (confirmation) {
-        await banMultipleUserByIds({ userIds: selectedUsers, status: "banned" });
-        setSelectedUsers([]);
-        toast.success("Selected Users BANNED!")
-        refetch();
-      }
-    } catch (error) {
-      console.log('BAN ERROR ===== ', error)
-    }
-  };
-
-
   return (
     <>
       <Container>
@@ -240,8 +220,8 @@ export default function UserPage() {
             placeholder="Search user..."
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          // onSuspendUsers={handleSuspendUsers}
-          // onDeleteUsers={handleDeleteUsers}
+            // onSuspendUsers={handleSuspendUsers}
+            // onDeleteUsers={handleDeleteUsers}
           />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -256,49 +236,49 @@ export default function UserPage() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                    <TableRow
-                      key={row._id}
-                      hover
-                      tabIndex={-1}
-                      role="none"
-                      sx={{ cursor: 'pointer' }}
-                      onClick={() => {
-                        setShowUserDetails(true);
-                        navigate(`/userdetails/${row._id}`);
-                      }}
-                    >
-                      <TableCell component="th" scope="row" sx={{ padding: '0px 0px 0px 40px' }}>
+                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                    return (
+                      <TableRow
+                        key={row._id}
+                        hover
+                        tabIndex={-1}
+                        role="none"
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          setShowUserDetails(true);
+                          navigate(`/userdetails/${row._id}`);
+                        }}
+                      >
+                        <TableCell component="th" scope="row" sx={{ padding: '0px 0px 0px 40px' }}>
+                          <Stack direction="row" alignItems="center" spacing={2}>
+                            <Checkbox
+                              checked={selectedUsers.includes(row._id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleUser(row._id);
+                              }}
+                            />
 
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          <Checkbox
-                            checked={selectedUsers.includes(row._id)}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleToggleUser(row._id);
-                            }}
-                          />
-
-                          <Avatar
-                            sx={{ cursor: 'pointer' }}
-                            alt=""
-                            src={`${process.env.REACT_APP_API_URL}Images/${row?.profileImages
-                              ?.find((item) => item?.orderId === 1)
-                              ?.uri?.split('/')
-                              ?.pop()}`}
-                          />
-                          <Typography variant="subtitle2" noWrap>
-                            {row?.fullName}
-                          </Typography>
-                        </Stack>
-
-                      </TableCell>
-                      <TableCell align="left">{row?.mobileNumber}</TableCell>
-                      <TableCell align="left">
-                        <Label color={(row?.status === 'banned' && 'error') || 'success'}>{row?.status}</Label>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                            <Avatar
+                              sx={{ cursor: 'pointer' }}
+                              alt=""
+                              src={`http://localhost:3333/Images/${row?.profileImages
+                                ?.find((item) => item?.orderId === 1)
+                                ?.uri?.split('/')
+                                ?.pop()}`}
+                            />
+                            <Typography variant="subtitle2" noWrap>
+                              {row?.fullName}
+                            </Typography>
+                          </Stack>
+                        </TableCell>
+                        <TableCell align="left">{row?.mobileNumber}</TableCell>
+                        <TableCell align="left">
+                          <Label color={(row?.status === 'banned' && 'error') || 'success'}>{row?.status}</Label>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
 
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
@@ -332,36 +312,38 @@ export default function UserPage() {
             </TableContainer>
           </Scrollbar>
           {selectedUsers.length !== 0 && (
-            <>
-              <StyledButton
-                variant="contained"
-                color="primary"
-                sx={{ marginLeft: 12, marginTop: 6, background: '#4A276B' }}
-                onClick={handleDeleteMultiple}
-              >
-                Delete Selected Users
-              </StyledButton>
-
-              <StyledButton
-                variant="contained"
-                color="primary"
-                sx={{ marginLeft: 3, marginTop: 6, background: '#4A276B' }}
-                onClick={handleBanMultiple}
-              >
-                Ban Selected Users
-              </StyledButton>
-            </>
+            <StyledButton
+              variant="contained"
+              color="primary"
+              sx={{ marginLeft: 12, marginTop: 6, background: '#4A276B' }}
+              onClick={handleDeleteMultiple}
+            >
+              Delete Selected Users
+            </StyledButton>
           )}
         </Card>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={users?.data?.length || 0}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        {!filterName && (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={users?.data?.length || 0}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
+        {filterName && (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={filteredUsers?.length || 0}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
       </Container>
       <ToastContainer />
     </>
