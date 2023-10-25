@@ -88,7 +88,7 @@ export default function UserPage() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isSuccessMessageShown, setSuccessMessageShown] = useState(false);
   const [showUserDetails, setShowUserDetails] = useState(false);
   const { showSuccess, setShowSuccess } = useSuccess();
@@ -352,7 +352,7 @@ export default function UserPage() {
         </Card>
         {!filterName && (
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[10, 20, 30]}
             component="div"
             count={users?.data?.length || 0}
             rowsPerPage={rowsPerPage}
@@ -363,7 +363,7 @@ export default function UserPage() {
         )}
         {filterName && (
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[10, 20, 30]}
             component="div"
             count={filteredUsers?.length || 0}
             rowsPerPage={rowsPerPage}
