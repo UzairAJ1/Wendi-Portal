@@ -280,7 +280,7 @@ export default function UserPage() {
                           <Avatar
                             sx={{ cursor: 'pointer' }}
                             alt=""
-                            src={`http://localhost:3333/Images/${row?.profileImages
+                            src={`${process.env.REACT_APP_API_URL}Images/${row?.profileImages
                               ?.find((item) => item?.orderId === 1)
                               ?.uri?.split('/')
                               ?.pop()}`}
