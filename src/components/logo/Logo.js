@@ -5,6 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { Box, Link } from '@mui/material';
 // import logo from '../../../public/assets/logo.png'
+import WendiLogo from "../../assets/logo.png"
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
@@ -21,7 +22,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   const logo = (
     <Box
       component="img"
-      src={"/assets/logo.png"} 
+      src={WendiLogo} 
       sx={{ width: 40, height: 40, cursor: 'pointer', ...sx }}
     />
   );
