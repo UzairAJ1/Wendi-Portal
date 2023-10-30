@@ -17,6 +17,7 @@ import {
   Paper,
   Box,
   Avatar,
+  Checkbox
 } from '@mui/material';
 import { styled } from '@mui/system';
 import { toast } from 'react-toastify';
@@ -74,7 +75,7 @@ const UserDetail = ({ user }) => {
     // email: specificUser?.data?.email || '',
     aboutYou: '',
     status: '',
-    lookingFor: '',
+    lookingFor: [],
     wantToSee: '',
     // password: specificUser?.data?.password || '',
   });
@@ -105,7 +106,7 @@ const UserDetail = ({ user }) => {
       // password: specificUser?.data?.password,
     });
   }, [specificUser]);
-  console.log('editiingggg:', editedUser);
+ 
   const [userArray, setUserArray] = useState([]);
 
   const handleInputChange = (event) => {
@@ -236,7 +237,7 @@ const UserDetail = ({ user }) => {
             sexualOrientation: '',
             aboutYou: '',
             wantToSee: '',
-            lookingFor: '',
+            lookingFor: [],
           });
           setEdit(false);
         } else {
@@ -310,7 +311,7 @@ const UserDetail = ({ user }) => {
     ?.find((item) => item?.orderId === 1)
     ?.uri?.split('/')
     ?.pop()}`;
-  console.log('editing User:', editedUser);
+  
   const transformGenderForDisplay = (value) => {
     if (value === 'male') {
       return 'Male';
@@ -323,6 +324,30 @@ const UserDetail = ({ user }) => {
   if (isFetching) {
     return <div>Loading...</div>;
   }
+  
+  const handleCheckboxChange = (value) => {
+    setEditedUser((prevUser) => {
+      // Clone the existing array to avoid modifying it directly
+      const updatedLookingFor = [...prevUser.lookingFor];
+  console.log("updatedLookingFor",updatedLookingFor);
+      // Check if the value is already in the array
+      const index = updatedLookingFor.indexOf(value);
+  
+      if (index !== -1) {
+        // If it's already in the array, remove it
+        updatedLookingFor.splice(index, 1);
+      } else {
+        // If it's not in the array, add it
+        updatedLookingFor.push(value);
+      }
+  
+      return {
+        ...prevUser,
+        lookingFor: updatedLookingFor,
+      };
+    });
+  };
+  console.log("True User:",editedUser);
   return loading ? (
     <div
       style={{
@@ -618,7 +643,7 @@ const UserDetail = ({ user }) => {
                 onChange={handleInputChange}
               /> */}
 
-              <InputLabel>Looking For</InputLabel>
+              {/* <InputLabel>Looking For</InputLabel>
               <Select
                 label="Looking For"
                 name="lookingFor"
@@ -630,10 +655,50 @@ const UserDetail = ({ user }) => {
 
               >
                 <MenuItem value="דייטינג">דייטינג</MenuItem>
-                <MenuItem value="דייטינג">דייטינג</MenuItem>
+                <MenuItem value="קשר לטווח קצר">קשר לטווח קצר</MenuItem>
                 <MenuItem value="שיחות">שיחות</MenuItem>
                 <MenuItem value="קשר לטווח ארוך">קשר לטווח ארוך</MenuItem>
-              </Select>
+              </Select> */}
+<Typography>
+Looking For
+  </Typography>
+<div   style={{
+        display: 'flex',
+         // Center vertically
+         alignItems: 'center',
+         marginTop:'10px',
+        height: '40px', // Adjust the height as needed
+      }} >
+<Typography>
+דייטינג
+  </Typography>
+    <Checkbox 
+    checked={editedUser.lookingFor.includes('דייטינג')}
+      onChange={() => handleCheckboxChange('דייטינג')}/>
+
+<Typography>
+קשר לטווח קצר
+  </Typography>
+    <Checkbox 
+    checked={editedUser.lookingFor.includes('קשר לטווח קצר')}
+      onChange={() => handleCheckboxChange('קשר לטווח קצר')}/>
+
+<Typography>
+שיחות
+  </Typography>
+    <Checkbox 
+    checked={editedUser.lookingFor.includes('שיחות')}
+      onChange={() => handleCheckboxChange('שיחות')}/>
+
+<Typography>
+קשר לטווח ארוך
+  </Typography>
+    <Checkbox 
+    checked={editedUser.lookingFor.includes('קשר לטווח ארוך')}
+      onChange={() => handleCheckboxChange('קשר לטווח ארוך')}/>
+    
+ 
+</div>
 
 
 

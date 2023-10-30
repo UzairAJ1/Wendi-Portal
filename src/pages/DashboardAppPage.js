@@ -77,6 +77,7 @@ export default function DashboardAppPage() {
   const monthlyActiveMales = totalGenderDistribution?.totalMonthlyActive?.males || 0;
   const monthlyActiveFemales = totalGenderDistribution?.totalMonthlyActive?.females || 0;
 
+
   const [totalCount, setTotalCount] = useState(0);
   const [averageDailyLikes, setAverageDailyLikes] = useState(0);
   const [averageMonthlyLikes, setAverageMonthlyLikes] = useState(0);
@@ -90,6 +91,9 @@ export default function DashboardAppPage() {
 
   const [averageDailyUsers, setAverageDailyUsers] = useState(0);
   const [averageMonthlyUsers, setAverageMonthlyUsers] = useState(0);
+
+  console.log("male likes:",averageDailyLikesMale);
+  console.log("Female likes:",averageDailyLikesFemale); 
 
   useEffect(() => {
     setActiveUsersData(activeUsers);

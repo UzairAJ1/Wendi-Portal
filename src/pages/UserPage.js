@@ -362,6 +362,7 @@ export default function UserPage() {
           />
         )}
         {filterName && (
+          
           <TablePagination
             rowsPerPageOptions={[10, 20, 30]}
             component="div"
