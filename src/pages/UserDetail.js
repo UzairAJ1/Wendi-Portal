@@ -107,10 +107,9 @@ const UserDetail = ({ user }) => {
     });
   }, [specificUser]);
  
-  const [userArray, setUserArray] = useState([]);
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+  const { name, value } = event.target;
 console.log("name:",name);
 console.log("value:",value);
     setEditedUser((prevUser) => {
@@ -343,7 +342,7 @@ console.log("value:",value);
     return <div>Loading...</div>;
   }
   
-
+console.log("array:",editedUser.lookingFor)
   console.log("True User:",editedUser);
   return loading ? (
     <div
@@ -635,7 +634,7 @@ console.log("value:",value);
               <Select
                 label="Looking For"
                 name="lookingFor"
-                value={editedUser?.lookingFor[0]}
+                value={editedUser.lookingFor}
                 // value={specificUser?.data?.gender}
                 onChange={handleInputChange}
                 margin='normal'
