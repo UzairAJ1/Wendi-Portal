@@ -643,14 +643,14 @@ const UserDetail = ({ user }) => {
                 onChange={handleInputChange}
               /> */}
 
-              {/* <InputLabel>Looking For</InputLabel>
+              <InputLabel>Looking For</InputLabel>
               <Select
                 label="Looking For"
                 name="lookingFor"
                 value={editedUser?.lookingFor}
                 // value={specificUser?.data?.gender}
                 onChange={handleInputChange}
-                margin='dense'
+                margin='normal'
                 fullWidth
 
               >
@@ -658,8 +658,9 @@ const UserDetail = ({ user }) => {
                 <MenuItem value="קשר לטווח קצר">קשר לטווח קצר</MenuItem>
                 <MenuItem value="שיחות">שיחות</MenuItem>
                 <MenuItem value="קשר לטווח ארוך">קשר לטווח ארוך</MenuItem>
-              </Select> */}
-<Typography>
+              </Select>
+
+{/* <Typography>
 Looking For
   </Typography>
 <div   style={{
@@ -698,7 +699,7 @@ Looking For
       onChange={() => handleCheckboxChange('קשר לטווח ארוך')}/>
     
  
-</div>
+</div> */}
 
 
 
