@@ -111,7 +111,8 @@ const UserDetail = ({ user }) => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-
+console.log("name:",name);
+console.log("value:",value);
     setEditedUser((prevUser) => {
       // Check if the new value is different from the current value
       if (prevUser[name] !== value) {
@@ -123,6 +124,23 @@ const UserDetail = ({ user }) => {
       return prevUser;
     });
   };
+
+  const handleCheckboxChange=(event)=>
+  {
+    const name="lookingFor";
+    const {value}=event.target;
+    setEditedUser((prevUser) => {
+      // Check if the new value is different from the current value
+      if (prevUser[name] !== value) {
+        return {
+          ...prevUser,
+          [name]: value,
+        };
+      }
+      return prevUser;
+    });
+  }
+
   // const handleSave = async () => {
   //   setUserArray((prevArray) => [...prevArray, editedUser]);
   //   try {
@@ -325,28 +343,7 @@ const UserDetail = ({ user }) => {
     return <div>Loading...</div>;
   }
   
-  const handleCheckboxChange = (value) => {
-    setEditedUser((prevUser) => {
-      // Clone the existing array to avoid modifying it directly
-      const updatedLookingFor = [...prevUser.lookingFor];
-  console.log("updatedLookingFor",updatedLookingFor);
-      // Check if the value is already in the array
-      const index = updatedLookingFor.indexOf(value);
-  
-      if (index !== -1) {
-        // If it's already in the array, remove it
-        updatedLookingFor.splice(index, 1);
-      } else {
-        // If it's not in the array, add it
-        updatedLookingFor.push(value);
-      }
-  
-      return {
-        ...prevUser,
-        lookingFor: updatedLookingFor,
-      };
-    });
-  };
+
   console.log("True User:",editedUser);
   return loading ? (
     <div
@@ -632,22 +629,13 @@ const UserDetail = ({ user }) => {
 
 
 
-              {/* <TextField
-                label="Looking For"
-                name="lookingFor"
-                value={editedUser.lookingFor}
-                // value={specificUser?.data?.sexualOrientation}
-                disabled={!edit}
-                fullWidth
-                margin="normal"
-                onChange={handleInputChange}
-              /> */}
+             
 
               <InputLabel>Looking For</InputLabel>
               <Select
                 label="Looking For"
                 name="lookingFor"
-                value={editedUser?.lookingFor}
+                value={editedUser?.lookingFor[0]}
                 // value={specificUser?.data?.gender}
                 onChange={handleInputChange}
                 margin='normal'
@@ -659,6 +647,8 @@ const UserDetail = ({ user }) => {
                 <MenuItem value="שיחות">שיחות</MenuItem>
                 <MenuItem value="קשר לטווח ארוך">קשר לטווח ארוך</MenuItem>
               </Select>
+
+{/* code for Multiple CheckBoxes */}
 
 {/* <Typography>
 Looking For
